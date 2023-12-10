@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Controllers\Htmx;
+
+use App\Models\Symbol;
+use App\Support\Helpers;
+use Illuminate\Support\Str;
+use App\Models\Trade;
+use App\Http\Controllers\Controller;
+use App\Models\Signal;
+
+class HTMXSymbolController extends Controller
+{
+    public function show(Symbol $symbol)
+    {   
+        $trades = Trade::where('symbol_id',$symbol->id)->get();
+        $signals = Signal::where('symbol_id',$symbol->id)->get();
+        $data=[$trades,$signals];
+        return view('symbol.partials.show', [
+            'symbol' => $symbol,
+
+        ])
+        .view('components.navbar', ['navbar_active' => ''])
+        .view('components.htmx.head', [
+            'page_title' => Str::words($symbol->name, 40, '') . ' —'])
+        .view('symbol.partials.signal-wrapper', [
+            'data' => $data
+        ]);
+    }
+    public function data(Symbol $symbol)
+    {
+        $trades = Trade::where('symbol_id',$symbol->id)->get();
+        $signals = Signal::where('symbol_id',$symbol->id)->get();
+        $data=[$trades,$signals];
+        return view('symbol.partials.signal-wrapper', [
+            'data' => $data
+        ]);
+    }
+}
