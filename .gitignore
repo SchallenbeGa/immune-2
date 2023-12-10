@@ -20,3 +20,14 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+app/Console/.DS_Store
+app/Http/.DS_Store
+app/.DS_Store
+bootstrap/.DS_Store
+database/.DS_Store
+portfolio_server-radvisor_plus/.DS_Store
+public/.DS_Store
+resources/views/.DS_Store
+storage/.DS_Store
+tests/.DS_Store
+.DS_Store
