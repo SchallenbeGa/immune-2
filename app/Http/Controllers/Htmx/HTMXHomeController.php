@@ -62,7 +62,7 @@ class HTMXHomeController extends Controller
 
     public function globalFeed()
     {
-        $symb = Symbol::orderBy('updated_at','DESC')->get();
+        $symb = Symbol::orderBy('updated_at','DESC')->limit(25)->get();
         $data = [];
         foreach($symb as $sy){
             $pnl = "";
@@ -70,7 +70,7 @@ class HTMXHomeController extends Controller
             $p = 0;
             $l =0;
             $nb=0;
-            $all_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->limit(25)->get();
+            $all_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->get();
             if($all_trade!=null && count($all_trade)>1){
                 foreach($all_trade as $trade){
                     if($nb<count($all_trade)){
@@ -132,10 +132,10 @@ class HTMXHomeController extends Controller
 
     public function tradeFeed()
     {
-        $symb = Trade::orderBy('updated_at','DESC')->get();
+        $symb = Trade::orderBy('updated_at','DESC')->limit(25)->get();
         
         foreach($symb as $sy){
-            $symbol = Symbol::where('id',$sy->symbol_id)->orderBy('updated_at','DESC')->limit(25)->first();
+            $symbol = Symbol::where('id',$sy->symbol_id)->orderBy('updated_at','DESC')->first();
             if($symbol!=null){
                 $sy->name = $symbol->name;
             }
