@@ -343,11 +343,10 @@ def on_message(ws, message):
     cur.execute(sql_b,valb)
     trades = cur.fetchall()
     print(trades)
-    if (cur.rowcount == 0):
-        buy = True
-    else : 
+    if(cur.rowcount != 0 and trades[0]['side'] == "sell"):
         buy = False
-
+    else:
+        buy = True
     if buy:
         if close > sma and close < sma_long:
             sql_o = "INSERT INTO trades (price,side,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s)"
