@@ -11,7 +11,7 @@
     
       <div class="col-md-9">
       @include('settings.partials.form-message')
-      <input class="form-control" type="search" name="content" placeholder="Search for symbol or ISIN" 
+      <input class="form-control" type="search" name="content" placeholder="Search for symbol" 
        hx-post="/htmx/home/search" 
        hx-trigger="input changed delay:500ms, search" 
        hx-target="#symbol-list" 
