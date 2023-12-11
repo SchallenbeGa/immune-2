@@ -394,4 +394,4 @@ def on_message(ws, message):
         asyncio.run(twet_graph(data,"test",True,id,json_message['data']['s']))
 
 ws = websocket.WebSocketApp(SOCKET, on_open=on_open, on_close=on_close, on_message=on_message)
-ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
+ws.run_forever()
