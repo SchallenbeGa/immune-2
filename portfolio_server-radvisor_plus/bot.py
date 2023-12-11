@@ -295,7 +295,7 @@ def on_close(ws):
     print('closed connection')
 
 def on_message(ws, message):
-    global in_position,order_id,api,added_val,sma_d,sma_l,buy,sell
+    global in_position,order_id,added_val,sma_d,sma_l,buy
     # retrieve last trade
 
     json_message = json.loads(message)  
