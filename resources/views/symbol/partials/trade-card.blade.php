@@ -4,6 +4,6 @@
     <p class="card-text">{{ $entry->side }}</p>
   </div>
   <div class="card-footer">
-    <span class="date-posted">{{ $entry->created_at->format('F jS') }}</span>
+    <span class="date-posted">{{ $entry->created_at }}</span>
   </div>
 </div>
