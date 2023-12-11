@@ -65,7 +65,7 @@ class HTMXHomeController extends Controller
         $symb = Symbol::orderBy('updated_at','DESC')->limit(25)->get();
         $data = [];
         foreach($symb as $sy){
-            $pnl = "";
+            $pnl = "0.00 % - No trade";
             $sy->pnl = $pnl;
             $p = 0;
             $l =0;
