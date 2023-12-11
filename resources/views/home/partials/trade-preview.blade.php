@@ -1,5 +1,5 @@
 <div id="feed-post-preview" hx-swap-oob="true">
-  @forelse ($symbol as $entry)
+  @forelse ($trades as $entry)
     <div class="post-preview">
       <div class="post-meta">
         <div class="info">
@@ -12,10 +12,8 @@
         hx-target="#app-body"
         class="preview-link"
       >
-        <h1>{{ $entry->name }} | PNL : {{$entry->pnl}}</h1>
-        <p>{{ $entry->last_trade }}</p>
-        <p>{{ $entry->last_msg }}</p>
-        <img src="{{ $entry->graph }}" class="img-fluid" alt="unresolved chart">
+        <h1>Latest trade for : {{ $entry->name }}</h1>
+        <p>{{ $entry->side}} at {{ $entry->price}}</p>
         <div class="m-t-1">
           <span>See symbol</span>
         </div>

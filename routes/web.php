@@ -73,6 +73,7 @@ Route::prefix('htmx')->group(function() {
     Route::post('/home/search', [HTMXHomeController::class, 'search']);
     Route::get('/home/feed-navigation', [HTMXHomeController::class, 'feedNavigation']);
     Route::get('/home/global-feed', [HTMXHomeController::class, 'globalFeed']);
+    Route::get('/home/trade-feed', [HTMXHomeController::class, 'tradeFeed']);
     Route::get('/home/your-feed', [HTMXHomeController::class, 'yourFeed']);
     Route::get('/home/tag-list', [HTMXHomeController::class, 'tagList']);
     Route::get('/home/symbol-list', [HTMXHomeController::class, 'symbolList']);

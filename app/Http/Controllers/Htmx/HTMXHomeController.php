@@ -155,6 +155,55 @@ class HTMXHomeController extends Controller
             ]);
 
     }
+
+    public function tradeFeed()
+    {
+        // $articles = Article::with(['user', 'tags', 'favoritedUsers']);
+
+        // $feedNavbarItems = Helpers::feedNavbarItems();
+        // $feedNavbarItems['global']['is_active'] = true;
+
+        // $articles = $articles->paginate(5);
+
+        // return view('home.partials.post-preview', ['articles' => $articles])
+        //     .view('home.partials.pagination', [
+        //         'paginator' => $articles,
+        //         'page_number' => request()->page ?? 1
+        //     ])
+        //     .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
+        //     .view('components.htmx.head', [
+        //         'page_title' => ''
+        //     ]);
+        $symb = Trade::orderBy('updated_at','DESC')->limit(5)->get();
+        
+        foreach($symb as $sy){
+            $symbol = Symbol::where('id',$sy->symbol_id)->orderBy('updated_at','DESC')->first();
+            if($symbol!=null){
+                $sy->name = $symbol->name;
+            }
+        }
+        $feedNavbarItems = Helpers::feedNavbarItems();
+        $feedNavbarItems['trade']['is_active'] = true;
+        
+        // $ohlvc = $ohlvc->paginate(10);
+        // return view('home.partials.ohlvc-preview', ['ohlvc' => $ohlvc])
+        //     .view('home.partials.pagination', [
+        //         'paginator' => $ohlvc,
+        //         'page_number' => request()->page ?? 1
+        //     ])
+        //     .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
+        //     .view('components.htmx.head', [
+        //         'page_title' => ''
+        //     ]);
+
+        return view('home.partials.trade-preview', ['trades' => $symb])
+            .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
+            .view('components.htmx.head', [
+                'page_title' => ''
+            ]);
+
+    }
+
     public function search(Request $request)
     {
         if($request->content==null){
