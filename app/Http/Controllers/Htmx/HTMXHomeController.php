@@ -85,17 +85,21 @@ class HTMXHomeController extends Controller
             $sy->pnl = $pnl;
             $p = 0;
             $l =0;
+            $nb=0;
             $all_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->get();
             if($all_trade!=null && count($all_trade)>1){
                 foreach($all_trade as $trade){
-                    switch($trade->side){
-                        case "buy":
-                            $p += $trade->price*$trade->quantity;
-                            break;
-                        case "sell":
-                            $l += $trade->price*$trade->quantity;
-                            break;
+                    if($nb<count($all_trade)){
+                        switch($trade->side){
+                            case "buy":
+                                $p += $trade->price*$trade->quantity;
+                                break;
+                            case "sell":
+                                $l += $trade->price*$trade->quantity;
+                                break;
+                        }  
                     }
+                    $nb++;
                 }
                 $ol = ($sy->last_price)-($p-$l);
                 $percent = round((float)$ol/100,4) . '%';

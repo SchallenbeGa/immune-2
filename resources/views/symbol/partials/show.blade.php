@@ -10,7 +10,7 @@
           
             {{ $symbol->name }}
           </a>
-          <span class="date">{{ $symbol->created_at->format('F jS') }}</span>
+          <span class="date">{{ $symbol->created_at }}</span>
         </div>
 
         
