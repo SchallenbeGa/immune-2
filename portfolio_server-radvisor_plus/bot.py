@@ -57,7 +57,7 @@ if config('DEBUG_BINANCE') == False:
     client.API_URL = 'https://testnet.binance.vision/api'
 else:
     cur = immune_db.cursor(dictionary=True)
-    cur.execute("SELECT id,name FROM symbols limit 3")
+    cur.execute("SELECT id,name FROM symbols limit 25")
     socket_with_pairs = ""
     pairs = cur.fetchall()
     fetched = False
@@ -74,7 +74,7 @@ else:
                 val = (s['symbol'],"/img/"+s['symbol']+".png",last,last)
                 cur.execute(sql, val)
                 immune_db.commit()
-        cur.execute("SELECT id,name FROM symbols limit 3")
+        cur.execute("SELECT id,name FROM symbols limit 25")
         pairs = cur.fetchall()
     for x in pairs:
         print(x)
