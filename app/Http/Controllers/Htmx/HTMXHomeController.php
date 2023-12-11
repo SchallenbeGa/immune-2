@@ -70,7 +70,7 @@ class HTMXHomeController extends Controller
             $p = 0;
             $l =0;
             $nb=0;
-            $all_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->get();
+            $all_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->limit(25)->get();
             if($all_trade!=null && count($all_trade)>1){
                 foreach($all_trade as $trade){
                     if($nb<count($all_trade)){
@@ -135,7 +135,7 @@ class HTMXHomeController extends Controller
         $symb = Trade::orderBy('updated_at','DESC')->get();
         
         foreach($symb as $sy){
-            $symbol = Symbol::where('id',$sy->symbol_id)->orderBy('updated_at','DESC')->first();
+            $symbol = Symbol::where('id',$sy->symbol_id)->orderBy('updated_at','DESC')->limit(25)->first();
             if($symbol!=null){
                 $sy->name = $symbol->name;
             }
