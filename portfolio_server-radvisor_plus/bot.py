@@ -343,8 +343,11 @@ def on_message(ws, message):
     cur.execute(sql_b,valb)
     trades = cur.fetchall()
     print(trades)
-    if(cur.rowcount != 0 and trades[0]['side'] == "sell"):
-        buy = False
+    if(cur.rowcount != 0):
+        if(trades[0]['side'] == "sell"):
+            buy = False
+        else:
+            buy = True
     else:
         buy = True
     if buy:
