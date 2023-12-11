@@ -12,7 +12,7 @@
         hx-target="#app-body"
         class="preview-link"
       >
-        <h1>{{ $entry->name }}</h1>
+        <h1>{{ $entry->name }} | PNL : {{$entry->pnl}}</h1>
         <p>{{ $entry->last_trade }}</p>
         <p>{{ $entry->last_msg }}</p>
         <img src="{{ $entry->graph }}" class="img-fluid" alt="unresolved chart">

@@ -57,7 +57,7 @@ if config('DEBUG_BINANCE') == False:
     client.API_URL = 'https://testnet.binance.vision/api'
 else:
     cur = immune_db.cursor(dictionary=True)
-    cur.execute("SELECT id,name FROM symbols limit 10")
+    cur.execute("SELECT id,name FROM symbols limit 3")
     socket_with_pairs = ""
     pairs = cur.fetchall()
     fetched = False
@@ -74,7 +74,7 @@ else:
                 val = (s['symbol'],"/img/"+s['symbol']+".png",last,last)
                 cur.execute(sql, val)
                 immune_db.commit()
-        cur.execute("SELECT id,name FROM symbols limit 10")
+        cur.execute("SELECT id,name FROM symbols limit 3")
         pairs = cur.fetchall()
     for x in pairs:
         print(x)
@@ -367,14 +367,16 @@ def on_message(ws, message):
             print(cur.rowcount, " oorecord inserted.")
         
     else:
-        print("selll1")
-        if close < sma and close > sma_long and close > trades[0]['price']:
-            print("sell")
+        print("selll1",close,trades[0]['price'])
+        if close < sma and close > sma_long and float(close) > float(trades[0]['price']):
+            print("sell4")
             sql_o = "INSERT INTO trades (price,side,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             vale = (close,"sell",id,"20",last,last)
+            print(vale)
             cur.execute(sql_o, vale)
             immune_db.commit()
+            print("WONT SELl------------------------------")
             print(cur.rowcount, " oorecord inserted.")
         else:
             print("waiting to sell")

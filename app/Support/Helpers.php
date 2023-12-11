@@ -25,6 +25,12 @@ class Helpers
             'hx_get_url' => '/htmx/home/global-feed',
             'hx_push_url' => '/'
         ];
+        $navbarItems['trade'] = [
+            'title' => 'Trades',
+            'is_active' => false,
+            'hx_get_url' => '/htmx/home/trade-feed',
+            'hx_push_url' => '/'
+        ];
 
         return $navbarItems;
     }

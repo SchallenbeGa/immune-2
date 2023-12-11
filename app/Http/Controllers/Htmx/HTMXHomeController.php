@@ -81,7 +81,27 @@ class HTMXHomeController extends Controller
         $symb = Symbol::orderBy('updated_at','DESC')->limit(5)->get();
         $data = [];
         foreach($symb as $sy){
-            
+            $pnl = "";
+            $sy->pnl = $pnl;
+            $p = 0;
+            $l =0;
+            $all_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->get();
+            if($all_trade!=null && count($all_trade)>1){
+                foreach($all_trade as $trade){
+                    switch($trade->side){
+                        case "buy":
+                            $p += $trade->price*$trade->quantity;
+                            break;
+                        case "sell":
+                            $l += $trade->price*$trade->quantity;
+                            break;
+                    }
+                }
+                $ol = ($sy->last_price)-($p-$l);
+                $percent = round((float)$ol/100,4) . '%';
+                $sy->pnl = $percent;
+                
+            }
             $last_candle = Ohlvc::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
             if($last_candle!=null){
                 $sy->last_price = $last_candle->close;
@@ -96,7 +116,10 @@ class HTMXHomeController extends Controller
                     $ol = ($last_sell)-$last_trade->price;
                     $percent = round((float)$ol*100,4) . '%';
                 }
-                $last_trade = "Last trade : ".$last_trade->side." at ".$last_trade->price." soo ".$percent;
+                if($sy->pnl==""){
+                    $sy->pnl  = $percent;
+                }
+                $last_trade = "Last trade : ".$last_trade->side." at ".$last_trade->price;
             }
             $sy->last_trade = $last_trade;
             $last_msg = Signal::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
