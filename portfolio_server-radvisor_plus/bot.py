@@ -81,7 +81,7 @@ else:
         if(fetched):
             save_data(x['id'],x['name'])
         socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
-    SOCKET = "wss://stream.binance.com:9443/stream?streams=bnbusdt@kline_1m"+socket_with_pairs
+    SOCKET = "wss://stream.binance.com/stream?streams=bnbusdt@kline_1m"+socket_with_pairs
 
 sql = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
 last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
