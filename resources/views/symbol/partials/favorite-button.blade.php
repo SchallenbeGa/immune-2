@@ -1,5 +1,5 @@
 <button class="btn btn-outline-primary btn-sm {{ $is_favorited ? 'active' : '' }} favorite-button"
-  hx-post="/htmx/articles/{{ $article->slug }}/favorite"
+  hx-post="/htmx/symbol/{{ $entry->name }}/favorite"
 
   @if (isset($oob_swap))
   hx-swap-oob="outerHTML:.favorite-button"

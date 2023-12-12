@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Symbol extends Model
 {
@@ -17,12 +18,24 @@ class Symbol extends Model
     {
         return 'name';
     }
+
     /**
-     * Symbol mov.
+     * Check if user favored the article.
      */
+    public function favoritedByUser(User $user): bool
+    {
+        return $this->favoritedUsers()
+            ->whereKey($user->getKey())
+            ->exists();
+    }
     /**
-     * Get user written articles.
+     * Get users that favorited the article.
      */
+    public function favoritedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'symbol_favorite');
+    }
+
     public function data()
     {
         return $this->hasMany(Ohlvc::class, 'symbol_id');
@@ -34,5 +47,18 @@ class Symbol extends Model
     public function data_t()
     {
         return $this->hasMany(Trade::class, 'symbol_id');
+    }
+    public function toggleUserFavorite(User $user): bool
+    {
+        $isFavorited = false;
+
+        if ($this->favoritedByUser($user)) {
+            $user->favorites()->detach($this);
+        } else {
+            $user->favorites()->syncWithoutDetaching($this);
+            $isFavorited = true;
+        }
+
+        return $isFavorited;
     }
 }

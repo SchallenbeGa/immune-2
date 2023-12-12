@@ -27,6 +27,21 @@ class HTMXSymbolController extends Controller
             'data' => $data
         ]);
     }
+    public function favorite(Symbol $symbol)
+    {
+        if (auth()->guest()) {
+            return Helpers::redirectToSignIn();
+        }
+
+        $isSymbolFavoritedByUser = $symbol->toggleUserFavorite(auth()->user());
+        dd($isSymbolFavoritedByUser);
+        return view('symbol.partials.favorite-button', [
+            'symbol' => $symbol,
+            'favorite_count' => $symbol->favoritedUsers->count(),
+            'is_favorited' => $isSymbolFavoritedByUser,
+            'oob_swap' => true
+        ]);
+    }
     public function data(Symbol $symbol)
     {
         $trades = Trade::where('symbol_id',$symbol->id)->get();

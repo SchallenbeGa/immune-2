@@ -21,7 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'username'
+        'username',
+        'bio',
+        'image'
     ];
 
     /**
@@ -98,13 +100,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Article::class, 'user_id');
     }
-
     /**
      * Get user favorite articles.
      */
     public function favorites()
     {
-        return $this->belongsToMany(Article::class, 'article_favorite');
+        return $this->belongsToMany(Symbol::class, 'symbol_favorite');
+    }
+
+    public function favorites_symbol()
+    {
+        return $this->belongsToMany(Symbol::class, 'symbol_favorite');
     }
 
     public function getRouteKeyName()

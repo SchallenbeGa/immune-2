@@ -30,19 +30,10 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <div class="posts-toggle">
-          <ul id="user-feed-navigation" class="nav nav-pills outline-active"></ul>
-        </div>
-        
+      <div class="col-md-18 col-md-offset-1">
         <div id="user-post-preview"
-          @if (isset($load_favorites))
             hx-get="/htmx/users/{{ $user->username }}/favorites"
-          @else
-            hx-get="/htmx/users/{{ $user->username }}/articles"
-          @endif
-          
-          hx-trigger="load"
+            hx-trigger="every 1s"
         ></div>
       </div>
     </div>

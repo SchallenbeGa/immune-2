@@ -29,7 +29,7 @@
     </div>
     <hr />
     <div class="row">
-      <div class="col-md-8 col-md-offset-2" hx-get="/htmx/symbol/{{ $symbol->name }}/data" hx-trigger="load"></div>
+      <div class="col-md-12" hx-get="/htmx/symbol/{{ $symbol->name }}/data" hx-trigger="load"></div>
     </div>
   </div>
 </div>

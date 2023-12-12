@@ -17,7 +17,7 @@
        hx-target="#symbol-list" 
        hx-indicator=".htmx-indicator">
        <span class="htmx-indicator"> 
-    <img src="/img/bars.svg"/> Searching... 
+    <img width="10px" height="10px" src="/searching.svg"/> Searching... 
    </span> 
        <div id="symbol-list" class="tag-list"
        hx-trigger="every 1s"
@@ -29,8 +29,7 @@
         </div>
 
         <div id="feed-post-preview"
-        hx-trigger="every 1s"
-
+        hx-trigger="every 1s, revealed"
           @if (isset($tag))
             hx-get="/htmx/home/tag-feed/{{ $tag->name }}{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
           @elseif (isset($personal))

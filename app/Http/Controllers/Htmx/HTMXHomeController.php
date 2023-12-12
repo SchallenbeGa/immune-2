@@ -39,19 +39,32 @@ class HTMXHomeController extends Controller
             'is_favorited' => $isArticleFavoritedByUser,
         ]);
     }
+    public function favorite_symbol(Symbol $symbol)
+    {
+        if (auth()->guest()) {
+            return Helpers::redirectToSignIn();
+        }
+        $isSymbolFavoritedByUser = $symbol->toggleUserFavorite(auth()->user());
+
+        return view('home.partials.symbol-favorite-button', [
+            'symbol' => $symbol,
+            'favorite_count' => $symbol->favoritedUsers->count(),
+            'is_favorited' => $isSymbolFavoritedByUser,
+        ]);
+    }
 
     public function yourFeed()
     {
-        $articles = Article::with(['user', 'tags', 'favoritedUsers']);
-
+        $symbols = Symbol::with(['favoritedUsers']);;
+        
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['personal']['is_active'] = true;
 
-        $articles = $articles->ofAuthorsFollowedByUser(auth()->user())->paginate(5);
-
-        return view('home.partials.post-preview', ['articles' => $articles])
+        $symbols = $symbols->paginate(5);
+    
+        return view('home.partials.symbol-preview', ['symbol' => $symbols])
             .view('home.partials.pagination', [
-                'paginator' => $articles,
+                'paginator' => $symbols,
                 'page_number' => request()->page ?? 1
             ])
             .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
@@ -62,85 +75,91 @@ class HTMXHomeController extends Controller
 
     public function globalFeed()
     {
-        $symb = Symbol::orderBy('updated_at','DESC')->limit(25)->get();
+        $symb = Symbol::with(['favoritedUsers']);
+        $symb = $symb->paginate(5);
         $data = [];
-        foreach($symb as $sy){
-            $pnl = "0.00 %";
-            $sy->pnl = $pnl;
-            $p = 0;
-            $l =0;
-            $nb_p=[];
-            $nb_s=[];
-            $all_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->get();
-            if($all_trade!=null && count($all_trade)>1){
-                foreach($all_trade as $trade){
-                    switch($trade->side){
-                        case "buy":
-                            $nb_p[] = $trade->price*$trade->quantity;
-                            break;
-                        case "sell":
-                            $nb_s[] = $trade->price*$trade->quantity;
-                            break;
-                    }  
-                }
-                $p = 0;
-                $l = 0;
-                $nb_t = 0;
-                for ($i = 0; $i < count($nb_s); $i++) {
-                    $nb_t++;
-                    $p+= $nb_p[$i];
-                    $l+= $nb_s[$i];
-                }
+        // dd($symb);
+        // foreach($symb as $sy){
+        //     $pnl = "0.00 %";
+        //     $sy->pnl = $pnl;
+        //     $p = 0;
+        //     $l =0;
+        //     $nb_p=[];
+        //     $nb_s=[];
+        //     $all_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->get();
+        //     if($all_trade!=null && count($all_trade)>1){
+        //         foreach($all_trade as $trade){
+        //             switch($trade->side){
+        //                 case "buy":
+        //                     $nb_p[] = $trade->price*$trade->quantity;
+        //                     break;
+        //                 case "sell":
+        //                     $nb_s[] = $trade->price*$trade->quantity;
+        //                     break;
+        //             }  
+        //         }
+        //         $p = 0;
+        //         $l = 0;
+        //         $nb_t = 0;
+        //         for ($i = 0; $i < count($nb_s); $i++) {
+        //             $nb_t++;
+        //             $p+= $nb_p[$i];
+        //             $l+= $nb_s[$i];
+        //         }
 
-                $ol = ($sy->last_price)-($p-$l);
-                $percent = round((float)$ol/100,4) . '%';
-                $sy->pnl = $percent;
+        //         $ol = ($sy->last_price)-($p-$l);
+        //         $percent = round((float)$ol/100,4) . '%';
+        //         $sy->pnl = $percent;
                 
-            }
-            $last_candle = Ohlvc::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
-            if($last_candle!=null){
-                $sy->last_price = $last_candle->close;
-            }
-            $last_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
-            if($last_trade!=null){
-                if($last_trade->side=="buy"){
-                    $ol = ($sy->last_price)-$last_trade->price;
-                    $percent = round((float)$ol/100,4) . '%';
-                }else{
-                    $last_sell = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->skip(1)->first()->price;
-                    $ol = ($last_sell)-$last_trade->price;
-                    $percent = round((float)$ol*100,4) . '%';
-                }
-                if($sy->pnl==""){
-                    $sy->pnl  = $percent;
-                }
-                $last_trade = "Last trade : ".$last_trade->side." at ".$last_trade->price;
-            }
-            $sy->last_trade = $last_trade;
-            $last_msg = Signal::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
-            if($last_msg!=null){
-                $last_msg = $last_msg->msg;
-            }
-            $sy->last_msg = $last_msg;
-            array_push($data,$sy);
-        }
+        //     }
+        //     $last_candle = Ohlvc::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
+        //     if($last_candle!=null){
+        //         $sy->last_price = $last_candle->close;
+        //     }
+        //     $last_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
+        //     if($last_trade!=null){
+        //         if($last_trade->side=="buy"){
+        //             $ol = ($sy->last_price)-$last_trade->price;
+        //             $percent = round((float)$ol/100,4) . '%';
+        //         }else{
+        //             $last_sell = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->skip(1)->first()->price;
+        //             $ol = ($last_sell)-$last_trade->price;
+        //             $percent = round((float)$ol*100,4) . '%';
+        //         }
+        //         if($sy->pnl==""){
+        //             $sy->pnl  = $percent;
+        //         }
+        //         $last_trade = "Last trade : ".$last_trade->side." at ".$last_trade->price;
+        //     }
+        //     $sy->last_trade = $last_trade;
+        //     $last_msg = Signal::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
+        //     if($last_msg!=null){
+        //         $last_msg = $last_msg->msg;
+        //     }
+        //     $sy->last_msg = $last_msg;
+        //     array_push($data,$sy);
+        // }
        
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['global']['is_active'] = true;
-        
 
-        return view('home.partials.symbol-preview', ['symbol' => $data])
+        return view('home.partials.symbol-preview', ['symbol' => $symb])
+            .view('home.partials.pagination', [
+                'paginator' => $symb,
+                'page_number' => request()->page ?? 1
+            ])
             .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
             .view('components.htmx.head', [
                 'page_title' => ''
             ]);
-
     }
 
     public function tradeFeed()
     {
+        //todo
         $symb = Trade::orderBy('updated_at','DESC')->limit(25)->get();
-        
+        $sa = $symb->paginate(5);
+        $symb->get();
         foreach($symb as $sy){
             $symbol = Symbol::where('id',$sy->symbol_id)->orderBy('updated_at','DESC')->first();
             if($symbol!=null){
@@ -150,8 +169,11 @@ class HTMXHomeController extends Controller
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['trade']['is_active'] = true;
 
-
         return view('home.partials.trade-preview', ['trades' => $symb])
+        .view('home.partials.pagination', [
+            'paginator' => $sa,
+            'page_number' => request()->page ?? 1
+        ])
             .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
             .view('components.htmx.head', [
                 'page_title' => ''

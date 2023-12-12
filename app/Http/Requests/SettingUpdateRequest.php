@@ -25,11 +25,11 @@ class SettingUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image_url' => 'required',
+            'image_url' => 'nullable',
             'name' => 'required',
             'email' => ['required', Rule::unique('users', 'email')->ignore(auth()->user()->id)],
             'bio' => 'nullable',
-            'password' => 'nullable'
+            'password' => 'required'
         ];
     }
     

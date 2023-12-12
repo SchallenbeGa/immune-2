@@ -46,7 +46,7 @@ Route::get('/logout', [SignInController::class, 'logout'])->middleware('auth');
 Route::get('/sign-up', [SignUpController::class, 'index'])->middleware('guest');
 
 Route::get('/articles/{article}', [ArticleController::class, 'show']);
-Route::get('/signal/{signal}', [SignalController::class, 'show']);
+
 Route::get('/symbol/{symbol}', [SymbolController::class, 'show']);
 
 //Route::get('/editor', [EditorController::class, 'create'])->middleware('auth');
@@ -61,11 +61,13 @@ Route::prefix('htmx')->group(function() {
 
     Route::get('/home', [HTMXHomeController::class, 'index']);
     Route::post('/home/articles/{article}/favorite', [HTMXHomeController::class, 'favorite']);
+    Route::post('/home/symbol/{symbol}/favorite', [HTMXHomeController::class, 'favorite_symbol']);
     Route::get('/symbol/{symbol}', [HTMXSymbolController::class, 'show']);
     Route::get('/symbol/{symbol}/data', [HTMXSymbolController::class, 'data']);
     Route::get('/articles/{article}', [HTMXArticleController::class, 'show']);
     Route::get('/symbol/{symbol}', [HTMXSymbolController::class, 'show']);
     Route::post('/articles/{article}/favorite', [HTMXArticleController::class, 'favorite']);
+    Route::post('/symbol/{symbol}/favorite', [HTMXSymbolController::class, 'favorite_symbol']);
     Route::post('/articles/follow-user/{user}', [HTMXArticleController::class, 'follow']);
     Route::get('/articles/{article}/comments', [HTMXArticleController::class, 'comments']);
     Route::post('/articles/{article}/comments', [HTMXArticleController::class, 'postComment']);
@@ -98,7 +100,8 @@ Route::prefix('htmx')->group(function() {
 
     Route::get('/users/{user}', [HTMXUserController::class, 'show']);
     Route::get('/users/{user}/articles', [HTMXUserController::class, 'articles']);
-    Route::get('/users/{user}/favorites', [HTMXUserController::class, 'favoriteArticles']);
+    Route::get('/users/{user}/favorites', [HTMXUserController::class, 'favoriteSymbols']);
     Route::post('/users/{user}/follow', [HTMXUserController::class, 'follow']);
     Route::post('/users/articles/{article}/favorite', [HTMXUserController::class, 'favorite']);
+    Route::post('/users/symbol/{symbol}/favorite', [HTMXUserController::class, 'favorite']);
 });

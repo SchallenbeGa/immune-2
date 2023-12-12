@@ -38,14 +38,8 @@ class Helpers
     public static function userFeedNavbarItems(User $user): array
     {
         return [
-            'personal' => [
-                'title' => 'My Articles',
-                'is_active' => true,
-                'url' => '/users/' . $user->username,
-                'hx_get_url' => '/htmx/users/' . $user->username . '/articles'
-            ],
             'favorite' => [
-                'title' => 'Favorited Articles',
+                'title' => 'Favorited',
                 'is_active' => false,
                 'url' => '/users/' . $user->username . '/favorites',
                 'hx_get_url' => '/htmx/users/' . $user->username . '/favorites'
