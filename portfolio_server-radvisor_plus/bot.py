@@ -1,4 +1,5 @@
-import websocket, json, pandas as pd,asyncio,numpy as np,mplfinance as mpf
+import websocket, json, pandas as pd,asyncio ,mplfinance as mpf
+from math import nan as np
 from binance.client import Client
 from binance.enums import *
 from datetime import datetime
