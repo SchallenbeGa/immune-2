@@ -22,10 +22,8 @@ class HTMXSymbolController extends Controller
         ])
         .view('components.navbar', ['navbar_active' => ''])
         .view('components.htmx.head', [
-            'page_title' => Str::words($symbol->name, 40, '') . ' —'])
-        .view('symbol.partials.signal-wrapper', [
-            'data' => $data
-        ]);
+            'page_title' => Str::words($symbol->name, 40, '') . ' —']);
+    
     }
     public function favorite(Symbol $symbol)
     {
