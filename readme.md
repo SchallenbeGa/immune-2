@@ -9,15 +9,6 @@
     API_KEY = 'ndSdbjSmijYKsKabl4eue3nBexampleuawHro9SgRgXVctvJ0YvoozJl3'
     API_SECRET = 'c5dnUZ3sD4G1OzMFzcLUtieamplePbikmFmje8nPsUeadeeObTielDeyU'
 
-## COMMAND
-
-    python3 bot.py
-
-
-## IMPORT
-
-      pip install python-binance websocket-client pandas asyncio numpy matplotlib mplfinance mysql-connector
-
 ## EXTERNAL SERVER ROUTINE (take care)
 
       php artisan migrate:fresh
