@@ -1,7 +1,6 @@
+import websocket, json, aiofiles,pandas as pd,asyncio,numpy as np,mplfinance as mpf
 from binance.client import Client
-import datetime; import matplotlib
 from binance.enums import *
-import numpy as np,websocket, json, pandas as pd,asyncio,mplfinance as mpf
 from datetime import datetime
 from decouple import config
 import ssl
