@@ -13,7 +13,7 @@ immune_db = mysql.connector.connect(
   database=config('DB_DATABASE')
 )
 #websocket.enableTrace(True)
-
+cur = immune_db.cursor(dictionary=True)
 pairs = ""
 
 
@@ -48,53 +48,6 @@ def save_data(id,pair):
     #print(cur.rowcount, "record inserted.")
 
 
-if config('DEBUG_BINANCE') == False:
-    #print(config('DEBUG_BINANCE'))
-    # trace websocket exchange
-    
-    # use testnet api
-    SOCKET = "wss://testnet.binance.vision/ws/bnbusdt@kline_1m"
-    client.API_URL = 'https://testnet.binance.vision/api'
-else:
-    cur = immune_db.cursor(dictionary=True)
-    cur.execute("SELECT id,name FROM symbols limit 10")
-    socket_with_pairs = ""
-    pairs = cur.fetchall()
-    fetched = False
-    if cur.rowcount == 0:
-        #print("fetch all pairs and insert them in db")
-        #fetch all pairs and insert them in db
-        exchange_info = client.get_exchange_info()
-        sql = "INSERT INTO symbols (name,graph,created_at,updated_at) VALUES (%s,%s,%s,%s)"
-        fetched=True
-        limit = 5
-        fetched = 0
-        
-        for s in exchange_info['symbols']:
-            if fetched<=limit:
-                if("USDT" in s['quoteAsset']) and (s['status']=='TRADING'):
-                    #print(s)
-                    fetched+=1
-                    last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    val = (s['symbol'],"/img/"+s['symbol']+".png",last,last)
-                    cur.execute(sql, val)
-                    immune_db.commit()
-        cur.execute("SELECT id,name FROM symbols limit 10")
-        pairs = cur.fetchall()
-    for x in pairs:
-        #print(x)
-        if(fetched):
-            save_data(x['id'],x['name'])
-        socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
-    SOCKET = "wss://stream.binance.com/stream?streams=bnbusdt@kline_1m"+socket_with_pairs
-
-sql = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
-last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-id = "1"
-l = "Good short signal (awd), if current price is lower than long avg(awd) and higher than short avg : "
-val = (l,id,last,last)
-cur.execute(sql, val)
-immune_db.commit()
 #print(cur.rowcount, " oorecord inserted.")
 # cur = immune_db.cursor(dictionary=True)
 # cur.execute("SELECT symbols.name FROM symbols RIGHT JOIN symbol_favorite ON symbol_favorite.symbol_id = symbols.id")
@@ -415,6 +368,56 @@ def on_message(ws, message):
     if is_candle_closed:
         asyncio.run(save_close(id,candle))
         asyncio.run(twet_graph(data,"test",True,id,json_message['data']['s']))
+
+if config('DEBUG_BINANCE') == False:
+    #print(config('DEBUG_BINANCE'))
+    # trace websocket exchange
+    
+    # use testnet api
+    SOCKET = "wss://testnet.binance.vision/ws/bnbusdt@kline_1m"
+    client.API_URL = 'https://testnet.binance.vision/api'
+else:
+    cur = immune_db.cursor(dictionary=True)
+    cur.execute("SELECT id,name FROM symbols limit 10")
+    socket_with_pairs = ""
+    pairs = cur.fetchall()
+    fetched = False
+    if cur.rowcount == 0:
+        #print("fetch all pairs and insert them in db")
+        #fetch all pairs and insert them in db
+        exchange_info = client.get_exchange_info()
+        sql = "INSERT INTO symbols (name,graph,created_at,updated_at) VALUES (%s,%s,%s,%s)"
+        fetched=True
+        limit = 5
+        fetched = 0
+        
+        for s in exchange_info['symbols']:
+            if fetched<=limit:
+                if("USDT" in s['quoteAsset']) and (s['status']=='TRADING'):
+                    #print(s)
+                    fetched+=1
+                    last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    val = (s['symbol'],"/img/"+s['symbol']+".png",last,last)
+                    cur.execute(sql, val)
+                    immune_db.commit()
+        cur.execute("SELECT id,name FROM symbols limit 10")
+        pairs = cur.fetchall()
+    for x in pairs:
+        #print(x)
+        if(fetched):
+            save_data(x['id'],x['name'])
+            sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
+            adr = (x['id'],)
+            cur.execute(sq, adr)
+            #print("ok")
+            #print(id)
+            df = pd.DataFrame(cur.fetchall())
+            df.columns = cur.column_names
+            data = df
+            asyncio.run(twet_graph(data,"test",True,x['id'],x['name']))
+        socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
+    SOCKET = "wss://stream.binance.com/stream?streams=bnbusdt@kline_1m"+socket_with_pairs
+
 
 ws = websocket.WebSocketApp(SOCKET, on_open=on_open, on_close=on_close, on_message=on_message)
 ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
