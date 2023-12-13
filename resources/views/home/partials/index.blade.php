@@ -14,22 +14,18 @@
       <input class="form-control" type="search" name="content" placeholder="Search for symbol" 
        hx-post="/htmx/home/search" 
        hx-trigger="input changed delay:500ms, search" 
-       hx-target="#symbol-list" 
+       hx-target="#feed-post-preview" 
        hx-indicator=".htmx-indicator">
        <span class="htmx-indicator"> 
     <img width="10px" height="10px" src="/searching.svg"/> Searching... 
    </span> 
-       <div id="symbol-list" class="tag-list"
-       hx-trigger="every 1s"
-            hx-get="/htmx/home/symbol-list"
-        ></div>
 
         <div class="feed-toggle">
           <ul id="feed-navigation" class="nav nav-pills outline-active"></ul>
         </div>
 
         <div id="feed-post-preview"
-        hx-trigger="every 1s, revealed"
+          hx-trigger="load, every 2s"
           @if (isset($tag))
             hx-get="/htmx/home/tag-feed/{{ $tag->name }}{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
           @elseif (isset($personal))
@@ -45,7 +41,10 @@
       <div class="col-md-3">
         <div class="sidebar">
          
-
+        <div id="symbol-list" class="tag-list"
+        hx-trigger="load, every 2s"
+            hx-get="/htmx/home/symbol-list"
+        ></div>
           
         </div>
       </div>

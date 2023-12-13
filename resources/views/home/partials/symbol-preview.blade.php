@@ -18,6 +18,7 @@
         class="preview-link"
       >
         <h1>{{ $entry->name }}</h1>
+        <h3>1k $ invested {{ $entry->created_at->format('F jS') }} would have make : {{$entry->profit}}</h3>
         <img src="{{ $entry->graph }}" class="img-fluid" alt="unresolved chart">
         <div class="m-t-1">
           <span>See symbol</span>

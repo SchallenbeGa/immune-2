@@ -96,7 +96,10 @@ val = (l,id,last,last)
 cur.execute(sql, val)
 immune_db.commit()
 #print(cur.rowcount, " oorecord inserted.")
-
+# cur = immune_db.cursor(dictionary=True)
+# cur.execute("SELECT symbols.name FROM symbols RIGHT JOIN symbol_favorite ON symbol_favorite.symbol_id = symbols.id")
+# pairs = cur.fetchall()
+# print(pairs)
 # print("---------------------------------------------ole")
 # sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s LIMIT 1"
 # pair="1"
@@ -154,10 +157,10 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
                 else:
                     #print("here")
                     if (data.index.array[x].minute == trade.index.array[y].minute) & (data.index.array[x].hour == trade.index.array[y].hour) :
-                        if(trade['side'][y]=="buy"):
+                        if(trade.iloc['side'][y]=="buy"):
                             #print("okay")
                             if not inCandleTrade:
-                                buys.append(trade['price'][y])
+                                buys.append(trade.iloc['price'][y])
                                 one_buy = True
                                 inCandleTrade = True
                             else:
@@ -165,7 +168,7 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
                             n = True
                         else:
                             one_sell=True
-                            sells.append(trade['price'][y])
+                            sells.append(trade.iloc['price'][y])
                             n = True
                     if len(buys)>len(sells):
                         sells.append(np.nan)
