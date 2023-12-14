@@ -1,5 +1,5 @@
 <div id="feed-post-preview" hx-swap-oob="true">
-<span class="date">1000$ made {{ $total }} / fee rate 0.1000%</span>
+<span class="date">{{$total_invested}} made {{ $total }} / fee rate 0.1000%</span>
   @forelse ($symbol as $entry)
     <div class="post-preview">
       <div class="post-meta">
