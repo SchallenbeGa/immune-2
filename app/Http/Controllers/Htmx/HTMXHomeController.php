@@ -85,7 +85,7 @@ class HTMXHomeController extends Controller
         foreach($sa->get() as $sy){
             $pnl = "0.00 %";
             $sy->pnl = $pnl;
-            $sy->profit = "nothing ah ah.";
+            $sy->profit = "0";
             $p = 0;
             $l =0;
             $nb_p=[];
@@ -148,8 +148,11 @@ class HTMXHomeController extends Controller
                 $last_msg = $last_msg->msg;
             }
             $sy->last_msg = $last_msg;
-            $total_profit+=$sy->profit;
-            $sy->profit = (round($l,5)-(($l/100)*0.1000))."$";
+            if(is_int($sy->profit)){
+                $total_profit+=$sy->profit;
+                $sy->profit = (round($l,5)-(($l/100)*0.1000))."$";
+            }
+            
             array_push($data,$sy);
         }
 
