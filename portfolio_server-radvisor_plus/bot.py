@@ -15,7 +15,7 @@ immune_db = mysql.connector.connect(
 #websocket.enableTrace(True)
 cur = immune_db.cursor(dictionary=True)
 pairs = ""
-
+limit_sql = "1"
 
 # get average price for x last trade
 sma_d = 2
@@ -31,7 +31,7 @@ client = Client(config('BINANCE_K'),config('BINANCE_S'), tld='com')
 #print(config('DEBUG_BINANCE'))
 
 def save_data(id,pair):
-    #print("store data")
+    print("store data")
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     klines = client.get_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "1 hour ago UTC")
     sql = "INSERT INTO ohlvcs (slug, symbol_id,open,high,low,close,volume,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -43,9 +43,9 @@ def save_data(id,pair):
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
     ad = (current_time,pair)
     cur.execute(sql,ad)
-    #print("store data")
+    print("store data")
     immune_db.commit()
-    #print(cur.rowcount, "record inserted.")
+    print(cur.rowcount, "record inserted.")
 
 
 #print(cur.rowcount, " oorecord inserted.")
@@ -63,15 +63,15 @@ def save_data(id,pair):
 
 # create/save graph with buy/sell indicators (& post on twitter) format PNG
 async def twet_graph(data,tweet_content,fav,pair,pair_name):
-    global api,sma_d
-    #print("ole")
+    global sma_d
+    print("ole")
     buys = []
     sells = []
 
     one_sell = False
     one_buy = False
 
-    #print("start graph")
+    print("start graph")
     data['open']=data['open'].astype(float)
     data['close']=data['close'].astype(float)
     data['high']=data['high'].astype(float)
@@ -84,8 +84,8 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
     sq = "SELECT * FROM trades WHERE symbol_id = %s"
     adr = (pair,)
     cur.execute(sq, adr)
-    #print("ok")
     trade = pd.DataFrame(cur.fetchall())
+    print(trade)
     if cur.rowcount > 0 :
         trade.columns = cur.column_names
         trade.index = pd.to_datetime(trade['created_at'],format="%Y-%m-%d %H:%M:%S")
@@ -98,7 +98,6 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
         gridcolor="#212121",
         rc={'xtick.color':'#f8f8f8','ytick.color':'#f8f8f8','axes.labelcolor':'#f8f8f8'})
     # check if there is at least 1 trade
-    #print(data)
     if (len(trade)>0):
         for x in range(len(data)):
             n = False
@@ -108,10 +107,10 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
                     print(trade.index.array[y].hour)
                     print(data.index.array[0].hour)
                 else:
-                    #print("here")
+                    print("here")
                     if (data.index.array[x].minute == trade.index.array[y].minute) & (data.index.array[x].hour == trade.index.array[y].hour) :
                         if(trade.iloc['side'][y]=="buy"):
-                            #print("okay")
+                            print("okay")
                             if not inCandleTrade:
                                 buys.append(trade.iloc['price'][y])
                                 one_buy = True
@@ -130,27 +129,27 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
             if not n:
                 buys.append(np.nan)
                 sells.append(np.nan)
-        #print(len(data),len(buys),len(sells))
-        #print(buys)
-        #print(sells)
+        print(len(data),len(buys),len(sells))
+        print(buys)
+        print(sells)
         if one_sell & one_buy :
             apd = [
                 mpf.make_addplot(buys, scatter=True, markersize=120, marker=r'^', color='green'),
                 mpf.make_addplot(sells, scatter=True, markersize=120, marker=r'v', color='red')
             ]
         elif one_sell:
-            #print("one sell")
+            print("one sell")
             apd = [mpf.make_addplot(sells, scatter=True, markersize=120, marker=r'v', color='red')]
         elif one_buy :
-            #print("one buy")
+            print("one buy")
             apd = [mpf.make_addplot(buys, scatter=True, markersize=120, marker=r'^', color='green')]
-        #print("repartition done")
+        print("repartition done")
         data.rename(columns={"open": "Open","close":"Close","high":"High","low":"Low","volume":"Volume"},inplace=True)
         data.index.name = 'Date'
         data.drop(columns=['created_at','symbol_id','updated_at','slug','id'],inplace=True)
         # cols = ['Date', 'Open', 'High', 'Low','Close','Volume']
         # data = data[cols]
-        #print(data)
+        print(data)
         fig,ax = mpf.plot(
             data,
             addplot=apd,
@@ -164,13 +163,13 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
             xrotation=0,
             returnfig=True)
     else: 
-        #print("empty graph") 
+        print("empty graph") 
         data.rename(columns={"open": "Open","close":"Close","high":"High","low":"Low","volume":"Volume"},inplace=True)
         data.index.name = 'Date'
         data.drop(columns=['created_at','symbol_id','updated_at','slug','id'],inplace=True)
         # cols = [ 'Open', 'High', 'Low','Close','Volume']
         # data = data[cols]
-        #print(data)
+        print(data)
         fig,ax = mpf.plot(
             data,
             type='candle',
@@ -182,29 +181,29 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
             datetime_format="%d %H:%M:%S",
             xrotation=0,
             returnfig=True)
-        #print("pain generating")
+        print("pain generating")
     # save graph in png 
-    #print("about to save") 
+    print("about to save") 
     fig.savefig('../public/img/'+pair_name+'.png',facecolor='#282828')
     print("savegraph")
 
 # save trade form the bot in trade.csv
 async def save_trade(b_s,price,pair):
-    #print("store data")
+    print("store data")
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     cur = immune_db.cursor(dictionary=True)
     sql = "INSERT INTO trades (price,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     val = str(current_time),pair,str(data['o']),str(data['h']),str(data['l']),str(data['v']),str(data['c']),current_time,current_time
-    #print("store data : ",val)
+    print("store data : ",val)
     cur.execute(sql, val)
     immune_db.commit()
-    #print(cur.rowcount, "record inserted.")
+    print(cur.rowcount, "record inserted.")
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
     ad = (current_time,pair)
     cur.execute(sql,ad)
-    #print("store data")
+    print("store data")
     immune_db.commit()
-    #print(cur.rowcount, "record inserted.")
+    print(cur.rowcount, "record inserted.")
 
 
     # async with aiofiles.open('trade.csv', mode='r') as f:
@@ -219,24 +218,25 @@ async def save_trade(b_s,price,pair):
 
 # save last candle/close in tst.csv
 async def save_close(pair,data):
+    print("save_close")
     cur = immune_db.cursor(dictionary=True)
-    sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s LIMIT 1"
+    sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s LIMIT "+limit_sql
     cur.execute(sql_Delete_query,(pair,))
     immune_db.commit()
     print("store data")
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     sql = "INSERT INTO ohlvcs (slug, symbol_id,open,high,low,volume,close,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     val = str(current_time),pair,str(data['o']),str(data['h']),str(data['l']),str(data['v']),str(data['c']),current_time,current_time
-    #print("store data : ",val)
+    print("store data : ",val)
     cur.execute(sql, val)
     immune_db.commit()
-    #print(cur.rowcount, "record inserted.")
+    print(cur.rowcount, "record inserted.")
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
     ad = (current_time,pair)
     cur.execute(sql,ad)
-    #print("store data")
+    print("store data")
     immune_db.commit()
-    #print(cur.rowcount, "record inserted.")
+    print(cur.rowcount, "record inserted.")
 
 # place order on binance
 def order(limit,side, quantity=config('TRADE_QUANTITY'), symbol=config('TRADE_SYMBOL'),order_type=ORDER_TYPE_MARKET):
@@ -250,28 +250,28 @@ def order(limit,side, quantity=config('TRADE_QUANTITY'), symbol=config('TRADE_SY
             # place market order
             order = client.create_order(symbol=symbol,side=side,type=order_type, quantity=quantity)
 
-        #print("sending order")
-        #print(order)
+        print("sending order")
+        print(order)
         order_id = order['orderId']
     except Exception as e:
-        #print("an exception occured - {}".format(e))
+        print("an exception occured - {}".format(e))
         return False
     return True
 
 def on_open(ws):
     pass
-    #print('opened connection')
+    print('opened connection')
 
 def on_close(ws):
     pass
-    #print('closed connection')
+    print('closed connection')
 
 def on_message(ws, message):
     global in_position,order_id,added_val,sma_d,sma_l,buy
     # retrieve last trade
 
     json_message = json.loads(message)  
-    #print("-------------")
+    print("-------------")
 
     candle = json_message['data']['k']
     # is_candle_closed = candle['x']
@@ -282,39 +282,35 @@ def on_message(ws, message):
  
     id = next(item for item in pairs if item["name"] == json_message['data']['s'])['id']
 
-    #print("----------------------")
-    #print("next")
+    print("----------------------")
+    print("next")
     sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
     adr = (id,)
     cur.execute(sq, adr)
-    #print("ok")
-    #print(id)
+    print("ok")
+    print(id)
     df = pd.DataFrame(cur.fetchall())
     df.columns = cur.column_names
     df['close']=df['close'].astype(float)
     data = df
-    #print("-----------------------------")
-    #print(candle)
-    #print("--------------hey--------------")
+    print("-----------------------------")
+    print(candle)
+    print("--------------hey--------------")
     # calculate moving average
     sma = data['close'][-sma_d:].mean()
-    #print(sma)
+    print(sma)
     sma_long = data['close'][-sma_l:].mean()
-    #print(sma_long)
-    #print("calc ok")
+    print(sma_long)
+    print("calc ok")
     # retrieve last close price
     close = float(candle['c'])
 
-   
-
-    
-
-    #print(json_message['data']['s']+" - start to trade -")
+    print(json_message['data']['s']+" - start to trade -")
     sql_b = "SELECT * FROM trades WHERE symbol_id = %s ORDER BY id DESC LIMIT 1"
     valb = (id,)
     cur.execute(sql_b,valb)
     trades = cur.fetchall()
-    #print(trades)
+    print(trades)
     if(cur.rowcount != 0):
         if(trades[0]['side'] == "sell"):
             buy = True
@@ -330,7 +326,7 @@ def on_message(ws, message):
             vale = (close,"buy",id,"20",last,last)
             cur.execute(sql_o, vale)
             immune_db.commit()
-            #print(cur.rowcount, " oorecord inserted.")
+            print(cur.rowcount, " oorecord inserted.")
         else:
             print(json_message['data']['s']+" - current price :",close)
             sql_o = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
@@ -339,20 +335,20 @@ def on_message(ws, message):
             vale = (l,id,last,last)
             cur.execute(sql_o, vale)
             immune_db.commit()
-            #print(cur.rowcount, " oorecord inserted.")
+            print(cur.rowcount, " oorecord inserted.")
         
     else:
-        #print("selll1",close,trades[0]['price'])
+        print("selll1",close,trades[0]['price'])
         if close < sma and close > sma_long and float(close) > float(trades[0]['price']):
             print("sell4")
             sql_o = "INSERT INTO trades (price,side,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             vale = (close,"sell",id,"20",last,last)
-            #print(vale)
+            print(vale)
             cur.execute(sql_o, vale)
             immune_db.commit()
-            #print("WONT SELl------------------------------")
-            #print(cur.rowcount, " oorecord inserted.")
+            print("WONT SELl------------------------------")
+            print(cur.rowcount, " oorecord inserted.")
         else:
             print("waiting to sell")
             sql_o = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
@@ -361,54 +357,49 @@ def on_message(ws, message):
             vale = (l,id,last,last)
             cur.execute(sql_o, vale)
             immune_db.commit()
-            #print(cur.rowcount, " oorecord inserted.")
+            print(cur.rowcount, " oorecord inserted.")
     is_candle_closed = candle['x']
     if is_candle_closed:
         asyncio.run(save_close(id,candle))
         asyncio.run(twet_graph(data,"test",True,id,json_message['data']['s']))
 
 if config('DEBUG_BINANCE') == False:
-    #print(config('DEBUG_BINANCE'))
-    # trace websocket exchange
-    
-    # use testnet api
     SOCKET = "wss://testnet.binance.vision/ws/bnbusdt@kline_1m"
     client.API_URL = 'https://testnet.binance.vision/api'
 else:
     cur = immune_db.cursor(dictionary=True)
-    cur.execute("SELECT id,name FROM symbols limit 5")
+    cur.execute("SELECT id,name FROM symbols LIMIT "+limit_sql)
     socket_with_pairs = ""
     pairs = cur.fetchall()
-    fetched = False
+    symb_fetched = False
     if cur.rowcount == 0:
-        #print("fetch all pairs and insert them in db")
+        print("fetch all pairs and insert them in db")
         #fetch all pairs and insert them in db
         exchange_info = client.get_exchange_info()
         sql = "INSERT INTO symbols (name,graph,created_at,updated_at) VALUES (%s,%s,%s,%s)"
-        fetched=True
         limit = 5
         fetched = 0
-        
+        symb_fetched=True
         for s in exchange_info['symbols']:
             if fetched<=limit:
                 if("USDT" in s['quoteAsset']) and (s['status']=='TRADING'):
-                    #print(s)
+                    print(s)
                     fetched+=1
                     last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     val = (s['symbol'],"/img/"+s['symbol']+".png",last,last)
                     cur.execute(sql, val)
                     immune_db.commit()
-        cur.execute("SELECT id,name FROM symbols limit 5")
+        cur.execute("SELECT id,name FROM symbols LIMIT "+limit_sql)
         pairs = cur.fetchall()
     for x in pairs:
-        #print(x)
-        if(fetched):
+        print(x)
+        if(symb_fetched):
             save_data(x['id'],x['name'])
             sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
             adr = (x['id'],)
             cur.execute(sq, adr)
-            #print("ok")
-            #print(id)
+            print("ok")
+            print(id)
             df = pd.DataFrame(cur.fetchall())
             df.columns = cur.column_names
             data = df
