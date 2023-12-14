@@ -186,7 +186,7 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
     # save graph in png 
     #print("about to save") 
     fig.savefig('../public/img/'+pair_name+'.png',facecolor='#282828')
-    #print("savegraph")
+    print("savegraph")
 
 # save trade form the bot in trade.csv
 async def save_trade(b_s,price,pair):
@@ -362,8 +362,6 @@ def on_message(ws, message):
             cur.execute(sql_o, vale)
             immune_db.commit()
             #print(cur.rowcount, " oorecord inserted.")
-   
-
     is_candle_closed = candle['x']
     if is_candle_closed:
         asyncio.run(save_close(id,candle))
@@ -378,7 +376,7 @@ if config('DEBUG_BINANCE') == False:
     client.API_URL = 'https://testnet.binance.vision/api'
 else:
     cur = immune_db.cursor(dictionary=True)
-    cur.execute("SELECT id,name FROM symbols limit 10")
+    cur.execute("SELECT id,name FROM symbols limit 5")
     socket_with_pairs = ""
     pairs = cur.fetchall()
     fetched = False
@@ -400,7 +398,7 @@ else:
                     val = (s['symbol'],"/img/"+s['symbol']+".png",last,last)
                     cur.execute(sql, val)
                     immune_db.commit()
-        cur.execute("SELECT id,name FROM symbols limit 10")
+        cur.execute("SELECT id,name FROM symbols limit 5")
         pairs = cur.fetchall()
     for x in pairs:
         #print(x)
