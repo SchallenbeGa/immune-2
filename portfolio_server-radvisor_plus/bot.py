@@ -210,10 +210,13 @@ async def save_trade(b_s,price,pair):
 # save last candle/close in tst.csv
 async def save_close(pair,data):
     print("save_close")
+    print(data)
     cur = immune_db.cursor(dictionary=True)
-    sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s LIMIT "+limit_sql
-    cur.execute(sql_Delete_query,(pair,))
-    immune_db.commit()
+    number_of_rows = cur.execute("SELECT id FROM ohlvcs WHERE symbol_id=%s")
+    if(number_of_rows>250):
+        sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s LIMIT 1"
+        cur.execute(sql_Delete_query,(pair,))
+        immune_db.commit()
     print("store data")
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     sql = "INSERT INTO ohlvcs (slug, symbol_id,open,high,low,volume,close,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"

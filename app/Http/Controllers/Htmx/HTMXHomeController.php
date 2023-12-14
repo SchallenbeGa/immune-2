@@ -148,17 +148,15 @@ class HTMXHomeController extends Controller
                 $last_msg = $last_msg->msg;
             }
             $sy->last_msg = $last_msg;
-            if(is_int($sy->profit)){
-                $total_profit+=$sy->profit;
-                $sy->profit = (round($l,5)-(($l/100)*0.1000))."$";
-            }
+            $total_profit+=$sy->profit;
+            $sy->profit = (round($l,5)-(($l/100)*0.1000))."$";
+            
             
             array_push($data,$sy);
         }
 
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['global']['is_active'] = true;
-
         return view('home.partials.symbol-preview', ['symbol' => $data,'total'=>$total_profit,'total_invested'=>($sa->count()*1000)])
             .view('home.partials.pagination', [
                 'paginator' => $so,
