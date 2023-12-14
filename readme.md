@@ -13,7 +13,8 @@
 
       php artisan migrate:fresh
       rm -rf public/img/*
-      nohup /opt/alt/python310/bin/python3 portfolio_server-radvisor_plus/bot.py &
+      cd portfolio_server-radvisor_plus
+      nohup /opt/alt/python310/bin/python3 bot.py > my.log 2>&1 
       
 
 ## LIBRARIES
