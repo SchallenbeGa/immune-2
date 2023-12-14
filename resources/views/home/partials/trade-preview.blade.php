@@ -12,8 +12,7 @@
         hx-target="#app-body"
         class="preview-link"
       >
-        <h1>Latest trade for : {{ $entry->name }}</h1>
-        <p>{{ $entry->side}} at {{ $entry->price}}</p>
+        <p>{{ $entry->name }} - {{ $entry->side}} at {{ $entry->price}}</p>
         <div class="m-t-1">
           <span>See symbol</span>
         </div>
@@ -22,7 +21,7 @@
   @empty
   <div class="post-preview">
     <div class="alert alert-warning" role="alert">
-      No trends here...
+      No trades yet...
     </div>
   </div>
   @endforelse

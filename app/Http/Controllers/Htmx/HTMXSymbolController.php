@@ -7,6 +7,7 @@ use App\Support\Helpers;
 use Illuminate\Support\Str;
 use App\Models\Trade;
 use App\Http\Controllers\Controller;
+use App\Models\Ohlvc;
 use App\Models\Signal;
 
 class HTMXSymbolController extends Controller
@@ -16,8 +17,11 @@ class HTMXSymbolController extends Controller
         $trades = Trade::where('symbol_id',$symbol->id)->get();
         $signals = Signal::where('symbol_id',$symbol->id)->get();
         $data=[$trades,$signals];
+        $oh=Ohlvc::where('symbol_id',$symbol->id)->get();
+
         return view('symbol.partials.show', [
             'symbol' => $symbol,
+            'oh'=> $oh
 
         ])
         .view('components.navbar', ['navbar_active' => ''])

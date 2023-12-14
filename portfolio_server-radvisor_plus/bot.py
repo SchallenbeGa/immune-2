@@ -31,7 +31,7 @@ client = Client(config('BINANCE_K'),config('BINANCE_S'), tld='com')
 #print(config('DEBUG_BINANCE'))
 
 def save_data(id,pair):
-    print("store data")
+    print("store data start")
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     klines = client.get_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "1 hour ago UTC")
     sql = "INSERT INTO ohlvcs (slug, symbol_id,open,high,low,close,volume,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -43,9 +43,9 @@ def save_data(id,pair):
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
     ad = (current_time,pair)
     cur.execute(sql,ad)
-    print("store data")
+    print("store data about to finish")
     immune_db.commit()
-    print(cur.rowcount, "record inserted.")
+    print(cur.rowcount, "data row executed, result 0 expected")
 
 
 #print(cur.rowcount, " oorecord inserted.")
@@ -64,14 +64,13 @@ def save_data(id,pair):
 # create/save graph with buy/sell indicators (& post on twitter) format PNG
 async def twet_graph(data,tweet_content,fav,pair,pair_name):
     global sma_d
-    print("ole")
+    print("generate graph")
     buys = []
     sells = []
 
     one_sell = False
     one_buy = False
 
-    print("start graph")
     data['open']=data['open'].astype(float)
     data['close']=data['close'].astype(float)
     data['high']=data['high'].astype(float)
@@ -85,7 +84,7 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
     adr = (pair,)
     cur.execute(sq, adr)
     trade = pd.DataFrame(cur.fetchall())
-    print(trade)
+    print("graph trade ",trade)
     if cur.rowcount > 0 :
         trade.columns = cur.column_names
         trade.index = pd.to_datetime(trade['created_at'],format="%Y-%m-%d %H:%M:%S")
@@ -109,10 +108,10 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
                 else:
                     print("here")
                     if (data.index.array[x].minute == trade.index.array[y].minute) & (data.index.array[x].hour == trade.index.array[y].hour) :
-                        if(trade.iloc['side'][y]=="buy"):
+                        if(trade['side'][y]=="buy"):
                             print("okay")
                             if not inCandleTrade:
-                                buys.append(trade.iloc['price'][y])
+                                buys.append(trade['price'][y])
                                 one_buy = True
                                 inCandleTrade = True
                             else:
@@ -120,12 +119,15 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
                             n = True
                         else:
                             one_sell=True
-                            sells.append(trade.iloc['price'][y])
+                            sells.append(trade['price'][y])
                             n = True
+                            
                     if len(buys)>len(sells):
                         sells.append(np.nan)
                     elif len(buys)<len(sells):
                         buys.append(np.nan)
+                    else:
+                        print("something broken with data")
             if not n:
                 buys.append(np.nan)
                 sells.append(np.nan)
@@ -149,7 +151,6 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
         data.drop(columns=['created_at','symbol_id','updated_at','slug','id'],inplace=True)
         # cols = ['Date', 'Open', 'High', 'Low','Close','Volume']
         # data = data[cols]
-        print(data)
         fig,ax = mpf.plot(
             data,
             addplot=apd,
@@ -169,7 +170,7 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
         data.drop(columns=['created_at','symbol_id','updated_at','slug','id'],inplace=True)
         # cols = [ 'Open', 'High', 'Low','Close','Volume']
         # data = data[cols]
-        print(data)
+        #print(data)
         fig,ax = mpf.plot(
             data,
             type='candle',
@@ -204,16 +205,6 @@ async def save_trade(b_s,price,pair):
     print("store data")
     immune_db.commit()
     print(cur.rowcount, "record inserted.")
-
-
-    # async with aiofiles.open('trade.csv', mode='r') as f:
-    #     contents = await f.read()
-    #     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #     contents = contents+str(str(current_time)+","+str(b_s)+","+str(price)+","+str(config('TRADE_QUANTITY'))+"\n")
-    # async with aiofiles.open('trade.csv', mode='w') as f:
-    #     await f.write(contents)
-
-# save older candle in tst.csv
 
 
 # save last candle/close in tst.csv
@@ -271,52 +262,49 @@ def on_message(ws, message):
     # retrieve last trade
 
     json_message = json.loads(message)  
-    print("-------------")
+    print("----------------------------START----------------------------------")
 
     candle = json_message['data']['k']
-    # is_candle_closed = candle['x']
-    # if is_candle_closed:
-    #     asyncio.run(twet_graph(":)",False))
 
-    ##print("about to save : ",candle)  
- 
     id = next(item for item in pairs if item["name"] == json_message['data']['s'])['id']
 
-    print("----------------------")
-    print("next")
+    print("about to get every mov for symbol ",json_message['data']['s'])
     sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
     adr = (id,)
     cur.execute(sq, adr)
-    print("ok")
-    print(id)
+    print("every mov for symbol loaded")
+    print("symbol ",id)
     df = pd.DataFrame(cur.fetchall())
     df.columns = cur.column_names
     df['close']=df['close'].astype(float)
     data = df
-    print("-----------------------------")
+    print("------------candle---------------")
     print(candle)
-    print("--------------hey--------------")
+    print("----------candle-end------------")
     # calculate moving average
     sma = data['close'][-sma_d:].mean()
     print(sma)
     sma_long = data['close'][-sma_l:].mean()
     print(sma_long)
-    print("calc ok")
+    print("sma solved")
     # retrieve last close price
     close = float(candle['c'])
 
-    print(json_message['data']['s']+" - start to trade -")
+    print(json_message['data']['s']+" - start to evaluate")
     sql_b = "SELECT * FROM trades WHERE symbol_id = %s ORDER BY id DESC LIMIT 1"
     valb = (id,)
     cur.execute(sql_b,valb)
     trades = cur.fetchall()
-    print(trades)
+    print("trades : ",trades)
     if(cur.rowcount != 0):
         if(trades[0]['side'] == "sell"):
             buy = True
+            print("looking to buy")
         else:
             buy = False
+            print("looking to sell")
     else:
+        print("looking to buy")
         buy = True
     if buy:
         if close > sma and close < sma_long:
@@ -328,7 +316,7 @@ def on_message(ws, message):
             immune_db.commit()
             print(cur.rowcount, " oorecord inserted.")
         else:
-            print(json_message['data']['s']+" - current price :",close)
+            print("waiting to buy")
             sql_o = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             l = "Automatic buy if current price ("+str(close)+") is lower than long avg("+str(sma_long)+") and higher than short avg : "+str(sma)
@@ -360,8 +348,12 @@ def on_message(ws, message):
             print(cur.rowcount, " oorecord inserted.")
     is_candle_closed = candle['x']
     if is_candle_closed:
+        print("check candle")
+        print(candle)
         asyncio.run(save_close(id,candle))
         asyncio.run(twet_graph(data,"test",True,id,json_message['data']['s']))
+        print("candle closed, everything saved")
+    print("-----------------------------END-----------------------------------")
 
 if config('DEBUG_BINANCE') == False:
     SOCKET = "wss://testnet.binance.vision/ws/bnbusdt@kline_1m"
@@ -377,11 +369,11 @@ else:
         #fetch all pairs and insert them in db
         exchange_info = client.get_exchange_info()
         sql = "INSERT INTO symbols (name,graph,created_at,updated_at) VALUES (%s,%s,%s,%s)"
-        limit = 5
+        limit = int(limit_sql)
         fetched = 0
         symb_fetched=True
         for s in exchange_info['symbols']:
-            if fetched<=limit:
+            if fetched<limit:
                 if("USDT" in s['quoteAsset']) and (s['status']=='TRADING'):
                     print(s)
                     fetched+=1
@@ -391,6 +383,7 @@ else:
                     immune_db.commit()
         cur.execute("SELECT id,name FROM symbols LIMIT "+limit_sql)
         pairs = cur.fetchall()
+    socket_with_pairs+=pairs[0]['name'].lower()
     for x in pairs:
         print(x)
         if(symb_fetched):
@@ -399,13 +392,12 @@ else:
             adr = (x['id'],)
             cur.execute(sq, adr)
             print("ok")
-            print(id)
             df = pd.DataFrame(cur.fetchall())
             df.columns = cur.column_names
             data = df
             asyncio.run(twet_graph(data,"test",True,x['id'],x['name']))
         socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
-    SOCKET = "wss://stream.binance.com/stream?streams=bnbusdt@kline_1m"+socket_with_pairs
+    SOCKET = "wss://stream.binance.com/stream?streams="+socket_with_pairs
 
 
 ws = websocket.WebSocketApp(SOCKET, on_open=on_open, on_close=on_close, on_message=on_message)

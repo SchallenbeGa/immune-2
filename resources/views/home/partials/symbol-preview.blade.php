@@ -1,4 +1,5 @@
 <div id="feed-post-preview" hx-swap-oob="true">
+<span class="date">1000$ made {{ $total }} / fee rate 0.1000%</span>
   @forelse ($symbol as $entry)
     <div class="post-preview">
       <div class="post-meta">
@@ -18,7 +19,7 @@
         class="preview-link"
       >
         <h1>{{ $entry->name }}</h1>
-        <h3>1k $ invested {{ $entry->created_at->format('F jS') }} would have make : {{$entry->profit}}</h3>
+        <span>1k $ invested {{ $entry->created_at->format('F jS') }} would have make : {{$entry->profit}} ( {{$entry->nb_trade }} trades)</span>
         <img src="{{ $entry->graph }}" class="img-fluid" alt="unresolved chart">
         <div class="m-t-1">
           <span>See symbol</span>
@@ -28,7 +29,7 @@
   @empty
   <div class="post-preview">
     <div class="alert alert-warning" role="alert">
-      No trends here...
+      Nothing to see here...
     </div>
   </div>
   @endforelse

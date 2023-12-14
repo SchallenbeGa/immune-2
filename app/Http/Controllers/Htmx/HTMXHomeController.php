@@ -80,6 +80,8 @@ class HTMXHomeController extends Controller
         $sa = $symb;
         $so = $symb->paginate(20);
         $data = [];
+        $fees = 0;
+        $total_profit = 0;
         foreach($sa->get() as $sy){
             $pnl = "0.00 %";
             $sy->pnl = $pnl;
@@ -115,11 +117,11 @@ class HTMXHomeController extends Controller
                     $p+= $nb_p[$i];
                     $l+= $nb_s[$i];
                 }
-                
+                $sy->nb_trade = ($nb_t+1);
                 $ol = ($sy->last_price)-($p-$l);
                 $percent = round((float)$ol/100,4) . '%';
                 $sy->pnl = $percent;
-                $sy->profit = round($l)."$";
+                $sy->profit = $l;
             }
             $last_candle = Ohlvc::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
             if($last_candle!=null){
@@ -146,13 +148,15 @@ class HTMXHomeController extends Controller
                 $last_msg = $last_msg->msg;
             }
             $sy->last_msg = $last_msg;
+            $total_profit+=$sy->profit;
+            $sy->profit = (round($l,5)-(($l/100)*0.1000))."$";
             array_push($data,$sy);
         }
 
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['global']['is_active'] = true;
 
-        return view('home.partials.symbol-preview', ['symbol' => $data])
+        return view('home.partials.symbol-preview', ['symbol' => $data,'total'=>$total_profit])
             .view('home.partials.pagination', [
                 'paginator' => $so,
                 'page_number' => request()->page ?? 1

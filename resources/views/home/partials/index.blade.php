@@ -17,7 +17,7 @@
        hx-target="#feed-post-preview" 
        hx-indicator=".htmx-indicator">
        <span class="htmx-indicator"> 
-    <img width="10px" height="10px" src="/searching.svg"/> Searching... 
+    <img width="10px" height="10px" src="/searching.svg" alt="search logo"/> Searching... 
    </span> 
 
         <div class="feed-toggle">
