@@ -15,7 +15,7 @@ immune_db = mysql.connector.connect(
 #websocket.enableTrace(True)
 cur = immune_db.cursor(dictionary=True)
 pairs = ""
-limit_sql = "1"
+limit_sql = "5"
 
 # get average price for x last trade
 sma_d = 2
@@ -121,7 +121,7 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
                             one_sell=True
                             sells.append(trade['price'][y])
                             n = True
-                            
+
                     if len(buys)>len(sells):
                         sells.append(np.nan)
                     elif len(buys)<len(sells):
