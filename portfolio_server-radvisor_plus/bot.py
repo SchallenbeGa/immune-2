@@ -185,7 +185,7 @@ async def twet_graph(data,tweet_content,fav,pair,pair_name):
         #print("pain generating")
     # save graph in png 
     #print("about to save") 
-    fig.savefig('../public/img/'+pair_name+'.png',facecolor='#282828')
+    fig.savefig('../public/img/'+pair_name+'.webp',facecolor='#282828')
     #print("savegraph")
 
 # save trade form the bot in trade.csv
@@ -389,7 +389,7 @@ else:
                     #print(s)
                     fetched+=1
                     last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    val = (s['symbol'],"/img/"+s['symbol']+".png",last,last)
+                    val = (s['symbol'],"/img/"+s['symbol']+".webp",last,last)
                     cur.execute(sql, val)
                     immune_db.commit()
         cur.execute("SELECT id,name FROM symbols LIMIT "+limit_sql)
