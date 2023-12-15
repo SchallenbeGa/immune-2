@@ -209,22 +209,26 @@ async def save_trade(b_s,price,pair):
 
 # save last candle/close in tst.csv
 async def save_close(pair,data):
-    print("save_close")
-    #print(data)
+    print("store data")
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     cur = immune_db.cursor(dictionary=True)
-    number_of_rows = cur.execute("SELECT * FROM ohlvcs WHERE symbol_id=%s",(pair,))
+
+    cur.execute("SELECT * FROM ohlvcs WHERE symbol_id=%s",(pair,))
+    number_of_rows = cur.fetchall()
     print(number_of_rows,pair)
-    if(number_of_rows):
+    if(number_of_rows != None):
         print("ouch")
         sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s LIMIT 1"
         cur.execute(sql_Delete_query,(pair,))
         immune_db.commit()
-    print("store data")
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    else:
+        print("none")
+        immune_db.commit()
+    cur = immune_db.cursor(dictionary=True)
     sql = "INSERT INTO ohlvcs (slug, symbol_id,open,high,low,volume,close,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     val = str(current_time),pair,str(data['o']),str(data['h']),str(data['l']),str(data['v']),str(data['c']),current_time,current_time
     print("store data : ",val)
-    cur.execute(sql, (val,))
+    cur.execute(sql, val)
     immune_db.commit()
     print(cur.rowcount, "record inserted.")
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
@@ -351,15 +355,15 @@ def on_message(ws, message):
             cur.execute(sql_o, vale)
             immune_db.commit()
             #print(cur.rowcount, " oorecord inserted.")
-    # is_candle_closed = candle['x']
-    # if is_candle_closed:
-        #print("check candle")
-        #print(candle)
-    print(candle)
-    print(pairs['id'],candle)
-    asyncio.run(save_close(pairs['id'],candle))
-    asyncio.run(twet_graph(data,"test",True,pairs['id'],json_message['data']['s']))
-    print("candle closed, everything saved")
+    is_candle_closed = candle['x']
+    if is_candle_closed:
+        print("check candle")
+        print(candle)
+        print(candle)
+        print(pairs['id'],candle)
+        asyncio.run(save_close(pairs['id'],candle))
+        asyncio.run(twet_graph(data,"test",True,pairs['id'],json_message['data']['s']))
+        print("candle closed, everything saved")
     print("-----------------------------END-----------------------------------")
 
 if config('DEBUG_BINANCE') == False:
