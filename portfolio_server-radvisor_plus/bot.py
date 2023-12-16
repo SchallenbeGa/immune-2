@@ -33,7 +33,7 @@ client = Client(config('BINANCE_K'),config('BINANCE_S'), tld='com')
 def save_data(id,pair):
     #print("store data start")
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    klines = client.get_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "1 hour ago UTC")
+    klines = client.get_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "24 hour ago UTC")
     sql = "INSERT INTO ohlvcs (slug, symbol_id,open,high,low,close,volume,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     for line in klines:
             val = datetime.fromtimestamp(line[0]/1000),id, line[1], line[2], line[3], line[4],line[5],datetime.fromtimestamp(line[0]/1000),datetime.fromtimestamp(line[0]/1000)
@@ -60,133 +60,6 @@ def save_data(id,pair):
 # immune_db.commit()
 # #print(cur.rowcount, " oorecord inserted.")
 # #print("---------------------------------------------ola")
-
-# create/save graph with buy/sell indicators (& post on twitter) format PNG
-async def twet_graph(data,tweet_content,fav,pair,pair_name):
-    global sma_d
-    #print("generate graph")
-    buys = []
-    sells = []
-
-    one_sell = False
-    one_buy = False
-
-    data['open']=data['open'].astype(float)
-    data['close']=data['close'].astype(float)
-    data['high']=data['high'].astype(float)
-    data['low']=data['low'].astype(float)
-    data['volume']=data['volume'].astype(float)
-    # retrieve chart data
-    data.index = pd.to_datetime(data['created_at'],format="%Y-%m-%d %H:%M:%S")
-
-
-    sq = "SELECT * FROM trades WHERE symbol_id = %s"
-    adr = (pair,)
-    cur.execute(sq, adr)
-    trade = pd.DataFrame(cur.fetchall())
-    #print("graph trade ",trade)
-    if cur.rowcount > 0 :
-        trade.columns = cur.column_names
-        trade.index = pd.to_datetime(trade['created_at'],format="%Y-%m-%d %H:%M:%S")
-        trade['price'] = trade['price'].astype(float)
-    ###print(trade,data)
-    # create custom style for graph
-    s  = mpf.make_mpf_style(
-        base_mpf_style="yahoo",
-        facecolor="#282828",
-        gridcolor="#212121",
-        rc={'xtick.color':'#f8f8f8','ytick.color':'#f8f8f8','axes.labelcolor':'#f8f8f8'})
-    # check if there is at least 1 trade
-    if (len(trade)>0):
-        for x in range(len(data)):
-            n = False
-            inCandleTrade = False
-            for y in range(len(trade)):
-                if trade.index.array[y].hour < data.index.array[0].hour: #remove old trade
-                    print(trade.index.array[y].hour)
-                    print(data.index.array[0].hour)
-                else:
-                    #print("here")
-                    if (data.index.array[x].minute == trade.index.array[y].minute) & (data.index.array[x].hour == trade.index.array[y].hour) :
-                        if(trade['side'][y]=="buy"):
-                            #print("okay")
-                            if not inCandleTrade:
-                                buys.append(trade['price'][y])
-                                one_buy = True
-                                inCandleTrade = True
-                            else:
-                                print("buy in same candle "+str(y))
-                            n = True
-                        else:
-                            one_sell=True
-                            sells.append(trade['price'][y])
-                            n = True
-
-                    if len(buys)>len(sells):
-                        sells.append(np.nan)
-                    elif len(buys)<len(sells):
-                        buys.append(np.nan)
-                    else:
-                        print("something broken with data")
-            if not n:
-                buys.append(np.nan)
-                sells.append(np.nan)
-        #print(len(data),len(buys),len(sells))
-        #print(buys)
-        #print(sells)
-        if one_sell & one_buy :
-            apd = [
-                mpf.make_addplot(buys, scatter=True, markersize=120, marker=r'^', color='green'),
-                mpf.make_addplot(sells, scatter=True, markersize=120, marker=r'v', color='red')
-            ]
-        elif one_sell:
-            #print("one sell")
-            apd = [mpf.make_addplot(sells, scatter=True, markersize=120, marker=r'v', color='red')]
-        elif one_buy :
-            #print("one buy")
-            apd = [mpf.make_addplot(buys, scatter=True, markersize=120, marker=r'^', color='green')]
-        #print("repartition done")
-        data.rename(columns={"open": "Open","close":"Close","high":"High","low":"Low","volume":"Volume"},inplace=True)
-        data.index.name = 'Date'
-        data.drop(columns=['created_at','symbol_id','updated_at','slug','id'],inplace=True)
-        # cols = ['Date', 'Open', 'High', 'Low','Close','Volume']
-        # data = data[cols]
-        fig,ax = mpf.plot(
-            data,
-            addplot=apd,
-            type='candle',
-            volume=True,
-            style=s,
-            mav=(sma_d,sma_l),
-            figscale=1,
-            figratio=(20,10),
-            datetime_format="%d %H:%M:%S",
-            xrotation=0,
-            returnfig=True)
-    else: 
-        #print("empty graph") 
-        data.rename(columns={"open": "Open","close":"Close","high":"High","low":"Low","volume":"Volume"},inplace=True)
-        data.index.name = 'Date'
-        data.drop(columns=['created_at','symbol_id','updated_at','slug','id'],inplace=True)
-        # cols = [ 'Open', 'High', 'Low','Close','Volume']
-        # data = data[cols]
-        ##print(data)
-        fig,ax = mpf.plot(
-            data,
-            type='candle',
-            volume=True,
-            style=s,
-            figscale=1,
-            mav=(sma_d,sma_l),
-            figratio=(20,10),
-            datetime_format="%d %H:%M:%S",
-            xrotation=0,
-            returnfig=True)
-        #print("pain generating")
-    # save graph in png 
-    #print("about to save") 
-    fig.savefig('../public/img/'+pair_name+'.webp',facecolor='#282828')
-    #print("savegraph")
 
 # save trade form the bot in trade.csv
 async def save_trade(b_s,price,pair):
@@ -362,7 +235,6 @@ def on_message(ws, message):
         print(candle)
         print(pairs['id'],candle)
         asyncio.run(save_close(pairs['id'],candle))
-        asyncio.run(twet_graph(data,"test",True,pairs['id'],json_message['data']['s']))
         print("candle closed, everything saved")
     print("-----------------------------END-----------------------------------")
 
@@ -406,7 +278,6 @@ else:
             df = pd.DataFrame(cur.fetchall())
             df.columns = cur.column_names
             data = df
-            asyncio.run(twet_graph(data,"test",True,x['id'],x['name']))
         socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
     SOCKET = "wss://stream.binance.com/stream?streams="+socket_with_pairs
 

@@ -20,7 +20,6 @@
       >
         <h1>{{ $entry->name }}</h1>
         <span>1k $ invested {{ $entry->created_at->format('F jS') }} (without orderbook !) : {{$entry->profit}} ( {{$entry->nb_trade ?? 0}} trades)</span>
-        <img src="{{ $entry->graph }}" class="img-fluid" alt="unresolved chart">
         <div class="m-t-1">
           <span>See symbol</span>
         </div>

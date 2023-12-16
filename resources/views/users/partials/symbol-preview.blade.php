@@ -2,7 +2,6 @@
   @forelse ($symbols as $entry)
     <div class="post-preview">
       <div class="post-meta">
-          <img src="{{ $entry->graph }}" class="img-fluid" alt="unresolved chart">
         <div class="info">
         <h1>{{ $entry->name }}</h1>
         

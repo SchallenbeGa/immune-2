@@ -16,12 +16,19 @@ class HTMXSymbolController extends Controller
     {   
         $trades = Trade::where('symbol_id',$symbol->id)->orderBy('updated_at','DESC')->get();
         $signals = Signal::where('symbol_id',$symbol->id)->orderBy('updated_at','DESC')->get();
-        $data=[$trades,$signals];
+ 
         $oh=Ohlvc::where('symbol_id',$symbol->id)->get();
-
+        $td =[];
+        foreach($oh as $o){
+            $td["open"][]=$o["open"];
+            $td["high"][]=$o["high"];
+            $td["low"][]=$o["low"];
+            $td["close"][]=$o["close"];
+            $td["x"][]=$o["slug"];
+        }
         return view('symbol.partials.show', [
             'symbol' => $symbol,
-            'oh'=> $oh
+            'oh'=> $td
 
         ])
         .view('components.navbar', ['navbar_active' => ''])
