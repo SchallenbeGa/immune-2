@@ -73,53 +73,9 @@
               range: [114.609999778, 137.410004222],
               type: 'linear'
             },
-            annotations: [{
-              x: '2023-12-15',
-              y: 0.9,
-              xref: 'x',
-              yref: 'paper',
-              text: 'largest movement',
-              font: {
-                color: 'magenta'
-              },
-              showarrow: true,
-              xanchor: 'right',
-              ax: -20,
-              ay: 0
-            }],
-
-            shapes: [{
-                type: 'rect',
-                xref: 'x',
-                yref: 'paper',
-                x0: '2023-12-15',
-                y0: 0,
-                x1: '2023-12-16',
-                y1: 1,
-                fillcolor: '#d3d3d3',
-                opacity: 0.2,
-                line: {
-                  width: 0
-                }
-              },
-              {
-                type: 'rect',
-                xref: 'x',
-                yref: 'paper',
-                x0: '2023-12-18',
-                y0: 0,
-                x1: '2023-12-20',
-                y1: 1,
-                fillcolor: '#d3d3d3',
-                opacity: 0.2,
-                line: {
-                  width: 0
-                }
-              }
-            ]
           };
 
-          Plotly.newPlot('prev', data, layout);
+          Plotly.newPlot('prev', data, layout,{responsive: true});
         </script>
       </div>
 

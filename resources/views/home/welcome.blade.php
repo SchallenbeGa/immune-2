@@ -1,5 +1,4 @@
 @extends('layouts.welcome')
-
 @section('content')
-  @include('sign-in.partials.index')
+  @include('home.partials.index')
 @endsection

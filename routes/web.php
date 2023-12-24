@@ -17,6 +17,7 @@ use App\Http\Controllers\Htmx\HTMXArticleController;
 use App\Http\Controllers\Htmx\HTMXSettingsController;
 use App\Http\Controllers\Htmx\HTMXSymbolController;
 use App\Http\Controllers\SymbolController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,11 +31,16 @@ use App\Http\Controllers\SymbolController;
 */
 
 Route::fallback(function () {
-    return redirect()->route('index');
+    if(Auth()){
+        return redirect()->back();
+    }else{
+        return redirect()->route('index');
+    }
 });
 
-Route::get('/', [HomeController::class, 'index'])->name('index');
-Route::get('/global-feed', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
+Route::get('/home', [HomeController::class, 'index'])->name('index')->middleware('auth');
+Route::get('/global-feed', [HomeController::class, 'index'])->middleware('auth');
 
 Route::get('/your-feed', [HomeController::class, 'yourFeed'])->middleware('auth');
 Route::get('/tag-feed/{tag}', [HomeController::class, 'tags']);

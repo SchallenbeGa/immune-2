@@ -1,4 +1,4 @@
-@extends('layouts.app', [
+@extends('layouts.welcome', [
   'navbar_active' => $navbar_active ?? null
 ])
 

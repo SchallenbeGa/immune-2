@@ -23,6 +23,13 @@ class HTMXHomeController extends Controller
                 'navbar_active' => 'home'
             ]);
     }
+    public function welcome()
+    {
+        return view('home.welcome')
+            .view('components.navbar', [
+                'navbar_active' => 'home'
+            ]);
+    }
 
     public function favorite(Article $article)
     {
