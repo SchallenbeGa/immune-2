@@ -212,6 +212,7 @@
       <a href="#">Back to top</a>
     </p>
   </footer>
+  <script src="{{ asset('js/htmx.js') }}"></script>
   <script src="{{ asset('js/htmx-head-support.js') }}"></script>
   <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
