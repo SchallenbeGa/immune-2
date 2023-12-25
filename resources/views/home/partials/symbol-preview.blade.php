@@ -1,6 +1,19 @@
 <div id="feed-post-preview" hx-swap-oob="true">
 <span class="date">{{$total_invested}} made {{ $total }} / fee rate 0.1000%</span>
   @forelse ($symbol as $entry)
+  <article class="blog-post">
+        <h2 class="display-5 link-body-emphasis mb-1">{{ $entry->name }}</h2>
+        <p class="blog-post-meta">{{ $entry->updated_at }} <a href="#">Gabriel</a></p>
+        @include('home.partials.symbol-favorite-button', [
+          'symbol' => $entry,
+          'favorite_count' => $entry->favoritedUsers->count(),
+          'is_favorited' => auth()->user() ? $entry->favoritedByUser(auth()->user()) : false
+        ])
+        <p>1k $ invested {{ $entry->created_at->format('F jS') }} (without orderbook !) : {{$entry->profit}} ( {{$entry->nb_trade ?? 0}} trades)</p>
+        <hr>
+        <p>See symbol.</p>
+      </article>
+
     <div class="post-preview">
       <div class="post-meta">
         <div class="info">
