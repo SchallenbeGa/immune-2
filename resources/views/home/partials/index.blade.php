@@ -20,7 +20,19 @@
       <h3 class="pb-4 mb-4 fst-italic border-bottom">
         From the Firehose
       </h3>
+      <div id="feed-post-preview"
+          hx-trigger="load, every 2s"
+          @if (isset($tag))
+            hx-get="/htmx/home/tag-feed/{{ $tag->name }}{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
+          @elseif (isset($personal))
+            hx-get="/htmx/home/your-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
+          @else
+            hx-get="/htmx/home/global-feed"
+          @endif
+        ></div>
 
+        <nav id="feed-pagination"></nav>
+      </div>
       <article class="blog-post">
         <h2 class="display-5 link-body-emphasis mb-1">Sample blog post</h2>
         <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>

@@ -10,13 +10,7 @@ class HTMXSignUpController extends Controller
 {
     public function index()
     {
-        return view('sign-up.partials.index')
-            .view('components.navbar', [
-                'navbar_active' => 'sign-up'
-            ])
-            .view('components.htmx.head', [
-                'page_title' => 'Sign Up —'
-            ]);
+        return view('sign-up.partials.index');
     }
 
     public function signUp(SignUpRequest $request)

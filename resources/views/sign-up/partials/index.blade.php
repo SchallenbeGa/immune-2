@@ -1,6 +1,4 @@
 <main class="container">
-  <div class="feed-navigation nav-scroller py-1 mb-3 border-bottom">
-  </div>
   <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
     <div class="col-lg-6 px-0">
       <h1 class="display-4 fst-italic">immune-web</h1>
