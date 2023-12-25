@@ -1,4 +1,7 @@
 <div id="feed-post-preview" hx-swap-oob="true">
+<h3 class="pb-4 mb-4 fst-italic border-bottom">
+      {{$total_invested}} made {{ $total }} / fee rate 0.1000%
+      </h3>
   @forelse ($symbol as $entry)
   <a href="/symbol/{{ $entry->name }}" hx-push-url="/symbol/{{ $entry->name }}" hx-get="/htmx/symbol/{{ $entry->name }}" hx-target="#app-body" class="preview-link">
     <article class="blog-post">
