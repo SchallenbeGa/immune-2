@@ -30,8 +30,7 @@ class HTMXSymbolController extends Controller
             'symbol' => $symbol,
             'oh'=> $td
 
-        ])
-        .view('components.navbar', ['navbar_active' => ''])
+        ])       
         .view('components.htmx.head', [
             'page_title' => Str::words($symbol->name, 40, '') . ' —']);
     
