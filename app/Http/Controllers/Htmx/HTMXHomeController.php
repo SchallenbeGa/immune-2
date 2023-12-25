@@ -18,17 +18,11 @@ class HTMXHomeController extends Controller
 {
     public function index()
     {
-        return view('home.partials.index')
-            .view('components.navbar', [
-                'navbar_active' => 'home'
-            ]);
+        return view('home.partials.index');
     }
     public function welcome()
     {
-        return view('home.welcome')
-            .view('components.navbar', [
-                'navbar_active' => 'home'
-            ]);
+        return view('home.welcome');
     }
 
     public function favorite(Article $article)
