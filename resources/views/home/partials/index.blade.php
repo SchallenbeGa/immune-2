@@ -18,7 +18,7 @@
   <div class="row g-5">
     <div class="col-md-8">
       <h3 class="pb-4 mb-4 fst-italic border-bottom">
-        From the Firehose
+      {{$total_invested}} made {{ $total }} / fee rate 0.1000%
       </h3>
       <div id="feed-post-preview"
           hx-trigger="load, every 2s"
