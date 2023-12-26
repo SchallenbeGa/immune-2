@@ -188,15 +188,7 @@ class HTMXHomeController extends Controller
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['trade']['is_active'] = true;
 
-        return view('home.partials.trade-preview', ['trades' => $symb])
-        .view('home.partials.pagination', [
-            'paginator' => $sa,
-            'page_number' => request()->page ?? 1
-        ])
-            .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
-            .view('components.htmx.head', [
-                'page_title' => ''
-            ]);
+        return view('home.partials.trade-preview', ['trades' => $symb]);
     }
 
     public function search(Request $request)

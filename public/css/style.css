@@ -50,4 +50,5 @@
   @media only screen and (max-width: 600px) {
     .sub { display: none; }
     .user-pic { display: none; }
+    .more { display: none; }
   }
