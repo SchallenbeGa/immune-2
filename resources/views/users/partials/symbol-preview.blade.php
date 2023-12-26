@@ -1,5 +1,5 @@
 <div id="feed-post-preview" hx-swap-oob="true">
-<p>{{$total_invested}}$ invested from {{$invested_on}} <br> made {{ $total }} / fee rate 0.1000%</p>
+<p>{{$total_invested}}$ invested from {{$invested_on}} <br> made ~<span style="color:green">{{ $total }}$</span> / fee rate 0.1000%</p>
   @forelse ($symbols as $entry)
   
     <article class="blog-post">
