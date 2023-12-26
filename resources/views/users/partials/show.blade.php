@@ -19,7 +19,7 @@
     @endif
   </div>
 
-  <div class="row g-5">
+  <div class="row">
     <div class="col-md-12">
       <div id="feed-post-preview" hx-get="/htmx/users/{{ $user->username }}/favorites" hx-trigger="every 1s"></div>
     </div>
