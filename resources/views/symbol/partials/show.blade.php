@@ -1,14 +1,18 @@
 <div class="post-page">
   <div class="banner">
     <div class="container">
-
-      <h1>{{ $symbol->name }}</h1>
-      <div id='prev'></div>
-      </script>
+      <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="margin-top:10px">
+        <div class="col-lg-6 px-0">
+          <h1 class="display-4 fst-italic">{{ $symbol->name }}</h1>
+          <span class="date">started at : {{ $symbol->created_at }}</span>
+          <br>
+          <span class="date">updated : {{ $symbol->updated_at }}</span>
+          <div id='prev'></div>
+        </div>
+      </div>
       <div class="post-meta">
         <div class="info">
-          <span class="date">started at : {{ $symbol->created_at }}</span>
-          <span class="date">updated : {{ $symbol->updated_at }}</span>
+          
         </div>
 
         <script>
@@ -75,7 +79,9 @@
             },
           };
 
-          Plotly.newPlot('prev', data, layout,{responsive: true});
+          Plotly.newPlot('prev', data, layout, {
+            responsive: true
+          });
         </script>
       </div>
 
@@ -87,7 +93,7 @@
     <div class="row post-content">
 
     </div>
-    <hr />
+    <hr style="border: 10px solid;border-radius: 5px;">
     <div class="row" hx-get="/htmx/symbol/{{ $symbol->name }}/data" hx-trigger="load">
 
     </div>

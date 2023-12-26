@@ -1,10 +1,10 @@
 <div id="feed-post-preview" hx-swap-oob="true">
   <p>{{$total_invested}}$ invested from {{$invested_on}}  made {{ $total }} / fee rate 0.1000%</p>
+  <hr style="border: 10px solid;border-radius: 5px;">
   @forelse ($symbol as $entry)
   
     <article class="blog-post">
-      <a href="/symbol/{{ $entry->name }}" style="text-decoration: none;" hx-push-url="/symbol/{{ $entry->name }}" hx-get="/htmx/symbol/{{ $entry->name }}" hx-target="#app-body" class="preview-link">
-        <h2 class="display-5 link-body-emphasis mb-1">{{ $entry->name }} @include('home.partials.symbol-favorite-button', [
+        <h2 class="display-5 link-body-emphasis mb-1" style="  display: flex;flex-flow: row wrap;align-items: center;"> <a href="/symbol/{{ $entry->name }}" style="text-decoration: none;color:grey" hx-push-url="/symbol/{{ $entry->name }}" hx-get="/htmx/symbol/{{ $entry->name }}" hx-target="#app-body" class="preview-link">{{ $entry->name }}</a> @include('home.partials.symbol-favorite-button', [
         'symbol' => $entry,
         'favorite_count' => $entry->favoritedUsers->count(),
         'is_favorited' => auth()->user() ? $entry->favoritedByUser(auth()->user()) : false

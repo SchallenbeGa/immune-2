@@ -15,6 +15,7 @@ class UserController extends Controller
             'user' => $user,
             'navbar_active' => 'profile',
             'symbols' => $user->favorites,
+            'total'=>0,'invested_on'=>0,'total_invested'=>($user->favorites->count()*1000),
             'personal' => true,
             'page_title' => 'Your profil —'
         ]);
@@ -25,6 +26,7 @@ class UserController extends Controller
 
         return view('users.show', [
             'user' => $user,
+            'total'=>0,'invested_on'=>0,'total_invested'=>($user->favorites->count()*1000),
             'personal' => true,
             'page_title' => 'Your feed —'
         ]);

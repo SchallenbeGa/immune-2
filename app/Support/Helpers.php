@@ -49,6 +49,7 @@ class Helpers
 
     public static function redirectToHome()
     {
+        return redirect('/');
         return response()->view('components.redirect', [
                 'hx_get' => '/htmx/home',
                 'hx_target' => '#app-body',

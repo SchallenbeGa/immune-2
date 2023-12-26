@@ -201,6 +201,7 @@
 
    
    <div id="app-body">
+    @csrf
       @yield('content')
     </div>
     <div id="htmx-redirect"></div>

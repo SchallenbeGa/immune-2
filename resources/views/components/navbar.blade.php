@@ -1,8 +1,8 @@
 <header class="border-bottom lh-1 py-3">
       <div class="row flex-nowrap justify-content-between align-items-center">
-        <div class="col pt-1">
+        <div class="col pt-1 sub">
        
-          <a class="link-secondary" href="#">Subscribe</a>
+          <a class="link-secondary" target="_blank" href="https://github.com/schallenbega">Subscribe</a>
         </div>
         <div class="col text-center logo">
          <a id="nav-link-home"
@@ -58,6 +58,7 @@
       href="/settings"
       hx-get="/htmx/settings"
       hx-target="#app-body"
+      style="padding:10px"
       hx-push-url="/settings"
       class="btn btn-sm btn-outline-secondary nav-link"
     >
@@ -65,15 +66,24 @@
     </a>
 
     <a id="nav-link-profile"
+      style="width: 90px;padding:10px;margin:10px"
       href="/users/{{ auth()->user()->username }}"
       hx-get="/htmx/users/{{ auth()->user()->username }}"
       hx-target="#app-body"
       hx-push-url="/users/{{ auth()->user()->username }}"
       class="btn btn-sm btn-outline-secondary nav-link"
     >
-      <img class="user-pic" src="{{ auth()->user()->image }}">
+      <img width="25px" height="25px" style="border-radius: 50%;" class="user-pic" src="{{ auth()->user()->image }}">
       {{ auth()->user()->name ?? auth()->user()->username }}
     </a>
+    <form
+    method="get"
+        action="/logout">
+        @csrf
+        <button class="btn btn-sm action-btn btn-outline-danger" style="margin:10px" >
+        out
+        </button>
+</form> 
   @endauth
         </div>
       </div>

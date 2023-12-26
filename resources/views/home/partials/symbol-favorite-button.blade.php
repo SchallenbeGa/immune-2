@@ -1,6 +1,12 @@
-<button class="btn btn-outline-primary btn-sm pull-xs-right {{ $is_favorited ? 'active' : '' }}"
-  hx-post="/htmx/home/symbol/{{ $symbol->name }}/favorite"
-  hx-swap="outerHTML"
+<form 
+  style="margin:10px"
+  hx-post="/htmx/home/symbol/{{ $symbol->name }}/favorite" 
 >
-  <i class="ion-heart"></i> {{ $favorite_count }}
+@csrf
+<button class="btn like btn-outline-secondary btn-sm pull-xs-right {{ $is_favorited ? 'active' : '' }}"
+  hx-swap="outerHTML"
+  style="color: grey;border-color:darkgrey;:hover { color: red; }"
+>
+{{ $favorite_count }} ♡
 </button>
+</form>

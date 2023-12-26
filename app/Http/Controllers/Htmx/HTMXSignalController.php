@@ -13,10 +13,6 @@ class HTMXSignalController extends Controller
     {
         return view('symbol.partials.show', [
             'symbol' => $signal,
-        ])
-        .view('components.navbar', ['navbar_active' => ''])
-        .view('components.htmx.head', [
-            'page_title' => Str::words($signal->name, 40, '') . ' —'
         ]);
     }
 }

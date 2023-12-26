@@ -15,11 +15,12 @@
   @endforelse
   </table>
 </div>
+<hr style="border: 10px solid;border-radius: 5px;">
   <div class="col-md-12" >
   <table class="table">
   <tr>
     <th>Date</th>
-    <th>Contact</th>
+    <th>Status</th>
   </tr>
   @forelse ($data[1] as $entry)
     @include('symbol.partials.signal-card', ['entry' => $entry])

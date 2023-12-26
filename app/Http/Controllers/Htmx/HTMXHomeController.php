@@ -40,10 +40,12 @@ class HTMXHomeController extends Controller
         ]);
     }
     public function favorite_symbol(Symbol $symbol)
-    {
+    {   
+       
         if (auth()->guest()) {
             return Helpers::redirectToSignIn();
         }
+
         $isSymbolFavoritedByUser = $symbol->toggleUserFavorite(auth()->user());
 
         return view('home.partials.symbol-favorite-button', [

@@ -30,9 +30,7 @@ class HTMXSymbolController extends Controller
             'symbol' => $symbol,
             'oh'=> $td
 
-        ])       
-        .view('components.htmx.head', [
-            'page_title' => Str::words($symbol->name, 40, '') . ' —']);
+        ]);
     
     }
     public function favorite(Symbol $symbol)

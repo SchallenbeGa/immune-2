@@ -1,33 +1,26 @@
-<div id="user-post-preview" hx-swap-oob="true">
+<div id="feed-post-preview" hx-swap-oob="true">
+<p>{{$total_invested}}$ invested from {{$invested_on}}  made {{ $total }} / fee rate 0.1000%</p>
   @forelse ($symbols as $entry)
-    <div class="post-preview">
-      <div class="post-meta">
-        <div class="info">
-        <h1>{{ $entry->name }}</h1>
-        
-          <span class="date">{{ $entry->created_at }}</span>
-        </div>
-    
-        @include('users.partials.favorite-button', [
-          'favorite_count' => $entry->favoritedUsers->count(),
-          'is_favorited' => auth()->user() ? $entry->favoritedByUser(auth()->user()) : false
-        ])
-    
-      </div>
-      <h1>{{ $entry->name }}</h1>
+  
+    <article class="blog-post">
+        <h2 class="display-5 link-body-emphasis mb-1" style="  display: flex;flex-flow: row wrap;align-items: center;"> <a href="/symbol/{{ $entry->name }}" style="text-decoration: none;color:grey" hx-push-url="/symbol/{{ $entry->name }}" hx-get="/htmx/symbol/{{ $entry->name }}" hx-target="#app-body" class="preview-link">{{ $entry->name }}</a> @include('home.partials.symbol-favorite-button', [
+        'symbol' => $entry,
+        'favorite_count' => $entry->favoritedUsers->count(),
+        'is_favorited' => auth()->user() ? $entry->favoritedByUser(auth()->user()) : false
+        ])</h2>
 
-        <div>
-          <span>Read more...</span>
-
-         
-        </div>
+        <p class="blog-post-meta">{{ $entry->updated_at }}</p>
+        <p>1k $ invested {{ $entry->created_at->format('F jS') }} (without orderbook !) : {{$entry->profit}} ( {{$entry->nb_trade ?? 0}} trades)</p>
+        <hr>
       </a>
-    </div>
-  @empty
-  <div class="post-preview">
-    <div class="alert alert-warning" role="alert">
-      No articles are here... yet.
-    </div>
+     
+    </article>
+ 
+@empty
+<div class="post-preview">
+  <div class="alert alert-warning" role="alert">
+    Nothing to see here...
   </div>
-  @endforelse
+</div>
+@endforelse
 </div>

@@ -17,7 +17,6 @@ class HTMXSettingsController extends Controller
         $user = auth()->user();
 
         return view('settings.partials.index', ['user' => $user])
-            .view('components.navbar', ['navbar_active' => 'settings'])
             .view('components.htmx.head', [
                 'page_title' => 'Settings —'
             ]);
