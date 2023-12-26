@@ -11,7 +11,7 @@
         ])</h2>
 
         <p class="blog-post-meta">{{ $entry->updated_at }}</p>
-        <p>1k $ invested {{ $entry->created_at->format('F jS') }} <br> (without orderbook !) : {{$entry->profit}} ( {{$entry->nb_trade ?? 0}} trades)</p>
+        <p>1k $ invested {{ $entry->created_at->format('F jS') }} <br> : {{$entry->profit}} ( {{$entry->nb_trade ?? 0}} trades)</p>
         <hr>
       </a>
      
