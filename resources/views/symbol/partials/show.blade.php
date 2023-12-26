@@ -2,7 +2,7 @@
   <div class="banner">
     <div class="container">
       <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="margin-top:10px">
-        <div class="col-lg-6 px-0">
+        <div class="col px-0">
           <h1 class="display-4 fst-italic">{{ $symbol->name }}</h1>
           <span class="date">started at : {{ $symbol->created_at }}</span>
           <br>
