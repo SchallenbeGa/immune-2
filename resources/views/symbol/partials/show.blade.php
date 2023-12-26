@@ -1,6 +1,9 @@
 <div class="post-page">
   <div class="banner">
     <div class="container">
+<div class="alert alert-danger" style="margin-top:10px;" role="alert">
+  No financial advice, following content are the result from a <a href="https://fr.wikipedia.org/wiki/Backtesting" target="_blank">backtesting</a> session !
+</div>
       <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="margin-top:10px">
         <div class="col px-0">
           <h1 class="display-4 fst-italic">{{ $symbol->name }}</h1>

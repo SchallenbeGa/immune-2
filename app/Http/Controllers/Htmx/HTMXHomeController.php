@@ -174,7 +174,7 @@ class HTMXHomeController extends Controller
     public function tradeFeed()
     {
         //todo
-        $symb = Trade::orderBy('updated_at','DESC')->limit(25);
+        $symb = Trade::orderBy('updated_at','DESC')->limit(5);
         $sa = $symb;
         $sa = $sa->paginate(20);
         $symb = $symb->get();

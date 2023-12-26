@@ -12,15 +12,8 @@ class HTMXEditorController extends Controller
 {
     public function create()
     {
-        if (auth()->guest()) {
-            return Helpers::redirectToSignIn();
-        }
-        
-        return view('editor.partials.form')
-            .view('components.navbar', ['navbar_active' => 'editor'])
-            .view('components.htmx.head', [
-                'page_title' => 'Editor —'
-            ]);
+       
+        return view('editor.partials.form');
     }
 
     public function store(EditorStoreArticleRequest $request)
