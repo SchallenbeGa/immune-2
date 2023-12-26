@@ -207,7 +207,7 @@
     <div id="htmx-redirect"></div>
    
 
-  <footer class="py-5 text-center text-body-secondary bg-body-tertiary">
+  <footer class="py-5 text-center text-body-secondary bg-body-tertiary" style="margin-top:20px">
     <p>immune-web</p>
     <p class="mb-0">
       <a href="#">Back to top</a>
