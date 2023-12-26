@@ -32,6 +32,14 @@ class SignUpController extends Controller
 
         auth()->login($user);
 
-        return redirect('/');
+        return response()->view('components.redirect', [
+            'hx_get' => '/htmx/home',
+            'hx_target' => '#app-body',
+            'hx_trigger' => 'load',
+        ])
+        ->withHeaders([
+            'HX-Replace-Url' => '/',
+            'HX-Reswap' => 'none'
+        ]);
     }
 }

@@ -20,7 +20,7 @@
               </a>
             </p>
             <div id="sign-up-form-messages"></div>
-            <form method="POST" target="/htmx/sign-up" hx-target="#app-body">
+            <form method="POST" hx-post="/htmx/sign-up" hx-target="#app-body">
               @include('sign-up.partials.form-fields')
             </form>
           </div>
