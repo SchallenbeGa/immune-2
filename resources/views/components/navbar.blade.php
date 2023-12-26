@@ -10,7 +10,7 @@
       hx-get="/htmx/home"
       hx-target="#app-body"
       hx-push-url="/"
-      class="blog-header-logo text-body-emphasis text-decoration-none @if (!isset($navbar_active) || $navbar_active == 'home') active @endif" 
+      class="blog-header-logo text-body-emphasis text-decoration-none" 
     >
       Home
     </a>
@@ -25,7 +25,7 @@
       hx-target="#app-body"
       hx-push-url="/sign-in"
       style="margin-right:1rem"
-      class="btn btn-sm btn-outline-secondary @if (isset($navbar_active) && $navbar_active == 'sign-in') active @endif" 
+      class="btn btn-sm btn-outline-secondary" 
     >
       Sign in
     </a>
@@ -35,7 +35,7 @@
       hx-get="/htmx/sign-up"
       hx-target="#app-body"
       hx-push-url="/sign-up"
-      class="btn btn-sm btn-outline-secondary @if (isset($navbar_active) && $navbar_active == 'sign-up') active @endif" 
+      class="btn btn-sm btn-outline-secondary" 
     >
       Sign up
     </a>
@@ -59,7 +59,7 @@
       hx-get="/htmx/settings"
       hx-target="#app-body"
       hx-push-url="/settings"
-      class="btn btn-sm btn-outline-secondary nav-link @if (isset($navbar_active) && $navbar_active == 'settings') active @endif"
+      class="btn btn-sm btn-outline-secondary nav-link"
     >
       Settings
     </a>
@@ -69,7 +69,7 @@
       hx-get="/htmx/users/{{ auth()->user()->username }}"
       hx-target="#app-body"
       hx-push-url="/users/{{ auth()->user()->username }}"
-      class="btn btn-sm btn-outline-secondarynav-link @if (isset($navbar_active) && $navbar_active == 'profile') active @endif"
+      class="btn btn-sm btn-outline-secondary nav-link"
     >
       <img class="user-pic" src="{{ auth()->user()->image }}">
       {{ auth()->user()->name ?? auth()->user()->username }}

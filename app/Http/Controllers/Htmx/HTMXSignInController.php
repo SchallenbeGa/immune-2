@@ -13,7 +13,10 @@ class HTMXSignInController extends Controller
 {
     public function index()
     {
-        return view('sign-in.partials.index');
+        return view('sign-in.partials.index')
+            .view('components.htmx.head', [
+                'page_title' => 'Sign In —'
+            ]);
     }
 
     public function signIn(SignInRequest $request)

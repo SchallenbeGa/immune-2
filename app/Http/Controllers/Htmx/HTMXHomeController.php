@@ -158,7 +158,7 @@ class HTMXHomeController extends Controller
 
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['global']['is_active'] = true;
-        return view('home.partials.symbol-preview', ['symbol' => $data,'total'=>$total_profit,'total_invested'=>($sa->count()*1000)])
+        return view('home.partials.symbol-preview', ['symbol' => $data,'total'=>$total_profit,'invested_on'=>$data[0]->created_at,'total_invested'=>($sa->count()*1000)])
             .view('home.partials.pagination', [
                 'paginator' => $so,
                 'page_number' => request()->page ?? 1
