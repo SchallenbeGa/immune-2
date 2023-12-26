@@ -1,5 +1,5 @@
 <form 
-  style="margin:10px"
+  style="margin:10px;justify-content: flex-end;display: flex;"
   hx-post="/htmx/home/symbol/{{ $symbol->name }}/favorite" 
 >
 @csrf
