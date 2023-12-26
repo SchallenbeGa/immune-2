@@ -176,7 +176,7 @@ class HTMXHomeController extends Controller
         //todo
         $symb = Trade::orderBy('updated_at','DESC')->limit(5);
         $sa = $symb;
-        $sa = $sa->paginate(20);
+        $sa = $sa->paginate(5);
         $symb = $symb->get();
 
         foreach($symb as $sy){
