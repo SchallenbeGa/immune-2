@@ -10,7 +10,7 @@
         ])</h2>
 
         <p class="blog-post-meta">{{ $entry->updated_at }}</p>
-        <p>1k $ invested {{ $entry->created_at->format('F jS') }} <br> : {{$entry->profit}} ( {{$entry->nb_trade ?? 0}} trades)</p>
+        <p>1k $ invested {{ $entry->created_at->format('F jS') }} <br> Generated : <span style="color:green">{{$entry->profit}}</span> ( {{$entry->nb_trade ?? 0}} trades)</p>
         <hr>
       </a>
      
