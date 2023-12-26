@@ -32,7 +32,7 @@
         Settings
       </a>
 
-      <a id="nav-link-profile" style="width: 90px;padding:10px;margin:10px" href="/users/{{ auth()->user()->username }}" hx-get="/htmx/users/{{ auth()->user()->username }}" hx-target="#app-body" hx-push-url="/users/{{ auth()->user()->username }}" class="btn btn-sm btn-outline-secondary nav-link">
+      <a id="nav-link-profile" style="width: 100%;padding:10px;margin:10px" href="/users/{{ auth()->user()->username }}" hx-get="/htmx/users/{{ auth()->user()->username }}" hx-target="#app-body" hx-push-url="/users/{{ auth()->user()->username }}" class="btn btn-sm btn-outline-secondary nav-link">
         <img width="25px" height="25px" style="border-radius: 50%;" class="user-pic" src="{{ auth()->user()->image }}">
         {{ auth()->user()->name ?? auth()->user()->username }}
       </a>
