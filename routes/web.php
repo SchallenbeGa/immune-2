@@ -31,11 +31,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::fallback(function () {
-    if(Auth()){
-        return redirect()->back();
-    }else{
-        return redirect()->route('index');
-    }
+    return redirect()->route('welcome');  
 });
 
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
