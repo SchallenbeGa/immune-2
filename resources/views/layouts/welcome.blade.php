@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="description" content="Second life of an old buy/sell automat in python.">
+  <meta name="author" content="gabriel0">
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   <script src="{{ asset('js/color-modes.js') }}"></script>
   @stack('meta')
