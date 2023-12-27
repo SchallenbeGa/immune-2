@@ -1,4 +1,3 @@
-<script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
 <div class="post-page">
   <div class="banner">
     <div class="container">
