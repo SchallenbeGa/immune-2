@@ -170,6 +170,16 @@ class HTMXHomeController extends Controller
                 'page_title' => ''
             ]);
     }
+    public function articleFeed()
+    {
+        //todo
+        $symb = Article::orderBy('updated_at','DESC')->limit(2);
+        $sa = $symb;
+        $sa = $sa->paginate(2);
+        $symb = $symb->get();
+
+        return view('home.partials.article-preview', ['articles' => $symb]);
+    }
 
     public function tradeFeed()
     {

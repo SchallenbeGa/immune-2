@@ -21,39 +21,50 @@
         <script>
           var data_p = <?php echo json_encode($oh) ?>;
           var trace1 = {
-
             x: data_p["x"],
-
             close: data_p["close"],
-
             decreasing: {
               line: {
                 color: '#FF0000'
               }
             },
-
             high: data_p["high"],
-
             increasing: {
               line: {
                 color: '#008000'
               }
             },
-
             line: {
               color: 'rgba(31,119,180,1)'
             },
-
             low: data_p["low"],
-
             open: data_p["open"],
-
             type: 'candlestick',
             xaxis: 'x',
-            yaxis: 'y'
+            yaxis: 'y',
+          };
+          var trace2 = {
+            x: data_p["date_buy"],
+            y: data_p["buy"],
+            mode: 'markers',
+            marker: {
+              symbol: "triangle-up",
+              size: 15,
+              color: 'green'
+            }
+          };
+          var trace3 = {
+            x: data_p["date_sell"],
+            y: data_p["sell"],
+            mode: 'markers',
+            marker: {
+              symbol: "triangle-down",
+              size: 15,
+              color: 'red'
+            }
           };
 
-          var data = [trace1];
+          var data = [trace1,trace2,trace3];
 
           var layout = {
             dragmode: 'zoom',

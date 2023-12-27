@@ -19,16 +19,14 @@ class HTMXArticleController extends Controller
         if (auth()->check()) {
             $isArticleFavoritedByUser = $article->favoritedByUser(auth()->user());
         }
+       
 
         return view('articles.partials.show', [
             'article' => $article,
             'favorite_count' => $article->favoritedUsers->count(),
             'is_favorited' => $isArticleFavoritedByUser
-        ])
-        .view('components.navbar', ['navbar_active' => ''])
-        .view('components.htmx.head', [
-            'page_title' => Str::words($article->title, 40, '') . ' —'
         ]);
+        
     }
 
     public function favorite(Article $article)

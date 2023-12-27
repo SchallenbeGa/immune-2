@@ -41,7 +41,7 @@ Route::fallback(function () {
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/home', [HomeController::class, 'index'])->name('index')->middleware('auth');
 Route::get('/global-feed', [HomeController::class, 'index'])->middleware('auth');
-
+Route::get('/article-feed', [HomeController::class, 'articleFeed'])->middleware('auth');
 Route::get('/your-feed', [HomeController::class, 'yourFeed'])->middleware('auth');
 Route::get('/tag-feed/{tag}', [HomeController::class, 'tags']);
 
@@ -56,8 +56,8 @@ Route::get('/articles/{article}', [ArticleController::class, 'show']);
 
 Route::get('/symbol/{symbol}', [SymbolController::class, 'show']);
 
-// Route::get('/editor', [EditorController::class, 'create'])->middleware('auth');
-// Route::get('/editor/{article}', [EditorController::class, 'edit'])->middleware('auth');
+Route::get('/editor', [EditorController::class, 'create'])->middleware('auth');
+Route::get('/editor/{article}', [EditorController::class, 'edit'])->middleware('auth');
 
 Route::get('/users/{user}', [UserController::class, 'show']);
 Route::get('/users/{user}/favorites', [UserController::class, 'favorites']);
@@ -82,16 +82,17 @@ Route::prefix('htmx')->group(function() {
     Route::post('/home/search', [HTMXHomeController::class, 'search']);
     Route::get('/home/feed-navigation', [HTMXHomeController::class, 'feedNavigation']);
     Route::get('/home/global-feed', [HTMXHomeController::class, 'globalFeed']);
+    Route::get('/home/article-feed', [HTMXHomeController::class, 'articleFeed']);
     Route::get('/home/trade-feed', [HTMXHomeController::class, 'tradeFeed']);
     Route::get('/home/your-feed', [HTMXHomeController::class, 'yourFeed']);
     Route::get('/home/tag-list', [HTMXHomeController::class, 'tagList']);
     Route::get('/home/symbol-list', [HTMXHomeController::class, 'symbolList']);
     Route::get('/home/tag-feed/{tag}', [HTMXHomeController::class, 'tagFeed']);
 
-    // Route::get('/editor', [HTMXEditorController::class, 'create']);
-    // Route::post('/editor', [HTMXEditorController::class, 'store']);
-    // Route::get('/editor/{article}', [HTMXEditorController::class, 'edit']);
-    // Route::post('/editor/{article}', [HTMXEditorController::class, 'update']);
+    Route::get('/editor', [HTMXEditorController::class, 'create']);
+    Route::post('/editor', [HTMXEditorController::class, 'store']);
+    Route::get('/editor/{article}', [HTMXEditorController::class, 'edit']);
+    Route::post('/editor/{article}', [HTMXEditorController::class, 'update']);
     
     Route::get('/popular-tags', [HTMXHomeController::class, 'popularTags']);
 

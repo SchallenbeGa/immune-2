@@ -12,6 +12,7 @@
     <img class="img_o" width="100%" height="100%" src="/img/robo.png">
     </div> -->
   </div>
+  <div id="article-post-preview" hx-trigger="load" hx-get="/htmx/home/article-feed"></div>
   <!-- <div class="row mb-2">
     <div class="col-md-6">
       <div class="card flex-md-row mb-4 box-shadow h-md-250">

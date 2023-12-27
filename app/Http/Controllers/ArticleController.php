@@ -16,7 +16,7 @@ class ArticleController extends Controller
         if (auth()->check()) {
             $isArticleFavoritedByUser = $article->favoritedByUser(auth()->user());
         }
-
+       
         return view('articles.detail', [
             'article' => $article,
             'comments' => $article->comments()->latest()->get(),
