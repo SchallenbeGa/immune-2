@@ -10,7 +10,6 @@
   <script src="{{ asset('js/color-modes.js') }}"></script>
   @stack('meta')
   <title>{{ $page_title ?? '' }} immune-web</title>
-  <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
   <style>
     .tagify--outside {
       border: 0;
