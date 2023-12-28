@@ -15,7 +15,7 @@ class HTMXSymbolController extends Controller
     public function show(Symbol $symbol)
     {   
         $trades = Trade::where('symbol_id',$symbol->id)->get();
-        $signals = Signal::where('symbol_id',$symbol->id)->orderBy('updated_at','DESC')->get();
+        $signals = Signal::where('symbol_id',$symbol->id)->orderBy('updated_at','DESC')->limit(50)->get();
  
         $oh=Ohlvc::where('symbol_id',$symbol->id)->get();
         $td =[];
@@ -58,7 +58,7 @@ class HTMXSymbolController extends Controller
     public function data(Symbol $symbol)
     {
         $trades = Trade::where('symbol_id',$symbol->id)->orderBy('updated_at','DESC')->get();
-        $signals = Signal::where('symbol_id',$symbol->id)->orderBy('updated_at','DESC')->get();
+        $signals = Signal::where('symbol_id',$symbol->id)->orderBy('updated_at','DESC')->limit(50)->get();
         $data=[$trades,$signals];
         return view('symbol.partials.signal-wrapper', [
             'data' => $data
