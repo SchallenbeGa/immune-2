@@ -199,6 +199,18 @@ def on_message(ws, message):
             #print(cur.rowcount, " oorecord inserted.")
         else:
             print("waiting to buy")
+            cur.execute("SELECT * FROM signals WHERE symbol_id=%s",(pairs['id'],))
+            number_of_rows = cur.fetchall()
+            print(number_of_rows,pairs['id'])
+            if(number_of_rows != None):
+                print("ouch")
+                sql_Delete_query = "DELETE FROM signals WHERE symbol_id=%s LIMIT 1"
+                cur.execute(sql_Delete_query,(pairs['id'],))
+                immune_db.commit()
+            else:
+                print("none")
+                immune_db.commit()
+            cur = immune_db.cursor(dictionary=True)
             sql_o = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             l = "Automatic buy if current price ("+str(close)+") is lower than long avg("+str(sma_long)+") and higher than short avg : "+str(sma)
@@ -221,6 +233,18 @@ def on_message(ws, message):
             #print(cur.rowcount, " oorecord inserted.")
         else:
             print("waiting to sell")
+            cur.execute("SELECT * FROM signals WHERE symbol_id=%s",(pairs['id'],))
+            number_of_rows = cur.fetchall()
+            print(number_of_rows,pairs['id'])
+            if(number_of_rows != None):
+                print("ouch")
+                sql_Delete_query = "DELETE FROM signals WHERE symbol_id=%s LIMIT 1"
+                cur.execute(sql_Delete_query,(pairs['id'],))
+                immune_db.commit()
+            else:
+                print("none")
+                immune_db.commit()
+            cur = immune_db.cursor(dictionary=True)
             sql_o = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             l = "Automatic sell if current price ("+str(close)+") is bigger than long avg("+str(sma_long)+") and lower than short avg : "+str(sma)
