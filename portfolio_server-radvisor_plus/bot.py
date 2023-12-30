@@ -13,10 +13,10 @@ immune_db = mysql.connector.connect(
   database=config('DB_DATABASE')
 )
 #websocket.enableTrace(True)
-cur = immune_db.cursor(dictionary=True)
+
 pairs = ""
 limit_sql = "3"
-
+cur = immune_db.cursor(dictionary=True)
 # get average price for x last trade
 sma_d = 2
 sma_l = 10
@@ -82,34 +82,23 @@ async def save_trade(b_s,price,pair):
 
 # save last candle/close in tst.csv
 async def save_close(pair,data):
-    print("store data")
+    rm_last("ohlvcs",pairs['id'])
+    #print("store data")
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    cur = immune_db.cursor(dictionary=True)
-
-    cur.execute("SELECT * FROM ohlvcs WHERE symbol_id=%s",(pair,))
-    number_of_rows = cur.fetchall()
-    print(number_of_rows,pair)
-    if(number_of_rows != None):
-        print("ouch")
-        sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s LIMIT 1"
-        cur.execute(sql_Delete_query,(pair,))
-        immune_db.commit()
-    else:
-        print("none")
-        immune_db.commit()
+    
     cur = immune_db.cursor(dictionary=True)
     sql = "INSERT INTO ohlvcs (slug, symbol_id,open,high,low,volume,close,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     val = str(current_time),pair,str(data['o']),str(data['h']),str(data['l']),str(data['v']),str(data['c']),current_time,current_time
-    print("store data : ",val)
+    #print("store data : ",val)
     cur.execute(sql, val)
     immune_db.commit()
-    print(cur.rowcount, "record inserted.")
+    #print(cur.rowcount, "record inserted.")
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
     ad = (current_time,pair)
     cur.execute(sql,ad)
-    print("store data")
+    #print("store data")
     immune_db.commit()
-    print(cur.rowcount, "record inserted.")
+    #print(cur.rowcount, "record inserted.")
 
 # place order on binance
 def order(limit,side, quantity=config('TRADE_QUANTITY'), symbol=config('TRADE_SYMBOL'),order_type=ORDER_TYPE_MARKET):
@@ -131,6 +120,29 @@ def order(limit,side, quantity=config('TRADE_QUANTITY'), symbol=config('TRADE_SY
         return False
     return True
 
+def rm_last(table,id):
+    #print(table,id)
+    if table == "ohlvcs":
+        cur = immune_db.cursor(dictionary=True)
+        cur.execute("SELECT * FROM ohlvcs WHERE symbol_id=%s",(id,))
+        number_of_rows = cur.fetchall()
+        #print(number_of_rows,id)
+    elif table == "signals":
+        cur = immune_db.cursor(dictionary=True)
+        cur.execute("SELECT * FROM signals WHERE symbol_id=%s",(id,))
+        number_of_rows = cur.fetchall()
+        #print(number_of_rows,id)
+    if(number_of_rows != None):
+        #print("ouch")
+        sql_Delete_query = "DELETE FROM "+table+" WHERE symbol_id=%s LIMIT 1"
+        cur.execute(sql_Delete_query,(id,))
+        immune_db.commit()
+    else:
+       # print("none")
+        immune_db.commit()
+
+    return True
+
 def on_open(ws):
     print('opened connection')
 
@@ -142,20 +154,19 @@ def on_message(ws, message):
     # retrieve last trade
 
     json_message = json.loads(message)  
-    print("----------------------------START----------------------------------")
-
+    cur = immune_db.cursor(dictionary=True)
     candle = json_message['data']['k']
-    print(json_message)
+    #print(json_message)
     get_symbol = "SELECT * FROM symbols WHERE name=%s LIMIT 1"
     cur.execute(get_symbol,(json_message['data']['s'].lower(),))
+    #print(cur)
     pairs = cur.fetchall()[0]
-    print(pairs)
     #print("about to get every mov for symbol ",json_message['data']['s'])
     sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
     adr = (pairs['id'],)
     cur.execute(sq, adr)
-    print("every mov for symbol loaded")
-    print("symbol ",pairs['id'])
+    #print("every mov for symbol loaded")
+    #print("symbol ",pairs['id'])
     df = pd.DataFrame(cur.fetchall())
     df.columns = cur.column_names
     df['close']=df['close'].astype(float)
@@ -165,19 +176,14 @@ def on_message(ws, message):
     #print("----------candle-end------------")
     # calculate moving average
     sma = data['close'][-sma_d:].mean()
-    print(sma)
     sma_long = data['close'][-sma_l:].mean()
-    print(sma_long)
-    print("sma solved")
     # retrieve last close price
     close = float(candle['c'])
 
-    print(json_message['data']['s']+" - start to evaluate")
     sql_b = "SELECT * FROM trades WHERE symbol_id = %s ORDER BY id DESC LIMIT 1"
     valb = (pairs['id'],)
     cur.execute(sql_b,valb)
     trades = cur.fetchall()
-    print("trades : ",trades)
     if(cur.rowcount != 0):
         if(trades[0]['side'] == "sell"):
             buy = True
@@ -198,18 +204,7 @@ def on_message(ws, message):
             immune_db.commit()
             #print(cur.rowcount, " oorecord inserted.")
         else:
-            print("waiting to buy")
-            cur.execute("SELECT * FROM signals WHERE symbol_id=%s",(pairs['id'],))
-            number_of_rows = cur.fetchall()
-            print(number_of_rows,pairs['id'])
-            if(number_of_rows != None):
-                print("ouch")
-                sql_Delete_query = "DELETE FROM signals WHERE symbol_id=%s LIMIT 1"
-                cur.execute(sql_Delete_query,(pairs['id'],))
-                immune_db.commit()
-            else:
-                print("none")
-                immune_db.commit()
+            rm_last("signals",pairs['id'])
             cur = immune_db.cursor(dictionary=True)
             sql_o = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -222,7 +217,6 @@ def on_message(ws, message):
     else:
         #print("selll1",close,trades[0]['price'])
         if close < sma and close > sma_long and float(close) > float(trades[0]['price']):
-            print("sell4")
             sql_o = "INSERT INTO trades (price,side,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             vale = (close,"sell",pairs['id'],"20",last,last)
@@ -232,18 +226,7 @@ def on_message(ws, message):
             #print("WONT SELl------------------------------")
             #print(cur.rowcount, " oorecord inserted.")
         else:
-            print("waiting to sell")
-            cur.execute("SELECT * FROM signals WHERE symbol_id=%s",(pairs['id'],))
-            number_of_rows = cur.fetchall()
-            print(number_of_rows,pairs['id'])
-            if(number_of_rows != None):
-                print("ouch")
-                sql_Delete_query = "DELETE FROM signals WHERE symbol_id=%s LIMIT 1"
-                cur.execute(sql_Delete_query,(pairs['id'],))
-                immune_db.commit()
-            else:
-                print("none")
-                immune_db.commit()
+            rm_last("signals",pairs['id'])
             cur = immune_db.cursor(dictionary=True)
             sql_o = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -254,13 +237,7 @@ def on_message(ws, message):
             #print(cur.rowcount, " oorecord inserted.")
     is_candle_closed = candle['x']
     if is_candle_closed:
-        print("check candle")
-        print(candle)
-        print(candle)
-        print(pairs['id'],candle)
         asyncio.run(save_close(pairs['id'],candle))
-        print("candle closed, everything saved")
-    print("-----------------------------END-----------------------------------")
 
 if config('DEBUG_BINANCE') == False:
     SOCKET = "wss://testnet.binance.vision/ws/bnbusdt@kline_1m"
@@ -292,7 +269,6 @@ else:
         pairs = cur.fetchall()
     socket_with_pairs+=pairs[0]['name'].lower()
     for x in pairs:
-        print(x)
         if(symb_fetched):
             save_data(x['id'],x['name'])
             sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
