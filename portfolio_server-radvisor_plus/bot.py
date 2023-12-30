@@ -197,6 +197,7 @@ def on_message(ws, message):
     if buy:
         if close > sma and close < sma_long:
             print("buy")
+            cur = immune_db.cursor(dictionary=True)
             sql_o = "INSERT INTO trades (price,side,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             vale = (close,"buy",pairs['id'],"20",last,last)
@@ -217,6 +218,7 @@ def on_message(ws, message):
     else:
         #print("selll1",close,trades[0]['price'])
         if close < sma and close > sma_long and float(close) > float(trades[0]['price']):
+            cur = immune_db.cursor(dictionary=True)
             sql_o = "INSERT INTO trades (price,side,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s)"
             last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             vale = (close,"sell",pairs['id'],"20",last,last)
