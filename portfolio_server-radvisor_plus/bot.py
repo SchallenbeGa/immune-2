@@ -74,6 +74,7 @@ async def save_trade(b_s,price,pair):
     cur = immune_db.cursor(dictionary=True)
     #print(cur.rowcount, "record inserted.")
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
+    print("updated")
     ad = (current_time,pair)
     cur.execute(sql,ad)
     #print("store data")
@@ -94,6 +95,7 @@ async def save_close(pair,data):
     cur.execute(sql, val)
     immune_db.commit()
     #print(cur.rowcount, "record inserted.")
+    cur = immune_db.cursor(dictionary=True)
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
     ad = (current_time,pair)
     cur.execute(sql,ad)
