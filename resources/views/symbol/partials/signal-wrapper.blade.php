@@ -5,6 +5,7 @@
     <th>Date</th>
     <th>Type</th>
     <th>Price</th>
+    <th>Profit/Loss</th>
   </tr>
   @forelse ($data[0] as $entry)
     @include('symbol.partials.trade-card', ['entry' => $entry])

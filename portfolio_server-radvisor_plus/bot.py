@@ -238,6 +238,7 @@ def on_message(ws, message):
     is_candle_closed = candle['x']
     if is_candle_closed:
         asyncio.run(save_close(pairs['id'],candle))
+    print("end")
 
 if config('DEBUG_BINANCE') == False:
     SOCKET = "wss://testnet.binance.vision/ws/bnbusdt@kline_1m"
@@ -252,6 +253,7 @@ else:
         #print("fetch all pairs and insert them in db")
         #fetch all pairs and insert them in db
         exchange_info = client.get_exchange_info()
+        cur = immune_db.cursor(dictionary=True)
         sql = "INSERT INTO symbols (name,graph,created_at,updated_at) VALUES (%s,%s,%s,%s)"
         limit = int(limit_sql)
         fetched = 0
@@ -259,17 +261,19 @@ else:
         for s in exchange_info['symbols']:
             if fetched<limit:
                 if("USDT" in s['quoteAsset']) and (s['status']=='TRADING'):
-                    #print(s)
+                    print(s)
                     fetched+=1
                     last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     val = (s['symbol'],"/img/"+s['symbol']+".webp",last,last)
                     cur.execute(sql, val)
                     immune_db.commit()
+        cur = immune_db.cursor(dictionary=True)
         cur.execute("SELECT id,name FROM symbols LIMIT "+limit_sql)
         pairs = cur.fetchall()
     socket_with_pairs+=pairs[0]['name'].lower()
     for x in pairs:
         if(symb_fetched):
+            cur = immune_db.cursor(dictionary=True)
             save_data(x['id'],x['name'])
             sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
             adr = (x['id'],)
@@ -281,6 +285,6 @@ else:
         socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
     SOCKET = "wss://stream.binance.com/stream?streams="+socket_with_pairs
 
-
+print("dame")
 ws = websocket.WebSocketApp(SOCKET, on_open=on_open, on_close=on_close, on_message=on_message)
 ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})

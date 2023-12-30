@@ -39,7 +39,7 @@
             },
             low: data_p["low"],
             open: data_p["open"],
-            type: 'candlestick',
+            type: 'ohlc',
             xaxis: 'x',
             yaxis: 'y',
           };
@@ -50,6 +50,7 @@
             marker: {
               symbol: "triangle-up",
               size: 15,
+              standoff:10,
               color: 'green'
             }
           };
@@ -76,8 +77,7 @@
             },
             showlegend: false,
             xaxis: {
-              autorange: true,
-              domain: [0, 1],
+    
               range: [data_p["x"].at(0), data_p["x"].pop()],
               rangeslider: {
                 range: [data_p["x"].at(0), data_p["x"].pop()]
@@ -86,9 +86,8 @@
               type: 'date'
             },
             yaxis: {
-              autorange: true,
-              domain: [0, 1],
-              range: [114.609999778, 137.410004222],
+              autorange:"min",
+              title:'Price',
               type: 'linear'
             },
           };
