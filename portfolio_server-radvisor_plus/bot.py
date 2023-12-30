@@ -84,7 +84,7 @@ async def save_trade(b_s,price,pair):
 
 # save last candle/close in tst.csv
 async def save_close(pair,data):
-    rm_last("ohlvcs",pairs['id'])
+    rm_last("ohlvcs",pair)
     #print("store data")
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
