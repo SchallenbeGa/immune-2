@@ -63,7 +63,7 @@ class HTMXSymbolController extends Controller
         if(count($trades)>0){
             $prev =null;
             foreach($trades as $p){
-                if ($p->side == "sell"){      
+                if ($p->side == "SELL"){      
                     $p->profit = ($p->price - $prev)*(1000/$oh[0]->close);
                 }else{
                     $p->profit = "";

@@ -20,6 +20,7 @@
 
         <script>
           var data_p = <?php echo json_encode($oh) ?>;
+          console.log(data_p);
           var trace1 = {
             x: data_p["x"],
             close: data_p["close"],
@@ -44,8 +45,8 @@
             yaxis: 'y',
           };
           var trace2 = {
-            x: data_p["date_buy"],
-            y: data_p["buy"],
+            x: data_p["date_BUY"],
+            y: data_p["BUY"],
             mode: 'markers',
             marker: {
               symbol: "triangle-up",
@@ -55,8 +56,8 @@
             }
           };
           var trace3 = {
-            x: data_p["date_sell"],
-            y: data_p["sell"],
+            x: data_p["date_SELL"],
+            y: data_p["SELL"],
             mode: 'markers',
             marker: {
               symbol: "triangle-down",

@@ -32,11 +32,11 @@ class HTMXUserController extends Controller
             if($all_trade!=null && count($all_trade)>1){
                 foreach($all_trade as $trade){
                     switch($trade->side){
-                        case "buy":
+                        case "BUY":
                             $trade_quantity[] = 1000/$trade->price;
                             $nb_p[] = floatval($trade->price);
                             break;
-                        case "sell":
+                        case "SELL":
                             if(count($nb_p)==0){
                                 $nb_s[] = $trade->price-$nb_p[0]*$trade_quantity[0];
                             }else{
@@ -66,7 +66,7 @@ class HTMXUserController extends Controller
             }
             $last_trade = Trade::where('symbol_id',$sy->id)->orderBy('updated_at','DESC')->first();
             if($last_trade!=null){
-                if($last_trade->side=="buy"){
+                if($last_trade->side=="BUY"){
                     $ol = ($sy->last_price)-$last_trade->price;
                     $percent = round((float)$ol/100,4) . '%';
                 }else{
@@ -129,11 +129,11 @@ class HTMXUserController extends Controller
             if($all_trade!=null && count($all_trade)>1){
                 foreach($all_trade as $trade){
                     switch($trade->side){
-                        case "buy":
+                        case "BUY":
                             $trade_quantity[] = 1000/$trade->price;
                             $nb_p[] = floatval($trade->price);
                             break;
-                        case "sell":
+                        case "SELL":
                             if(count($nb_p)==0){
                                 $nb_s[] = $trade->price-$nb_p[0]*$trade_quantity[0];
                             }else{

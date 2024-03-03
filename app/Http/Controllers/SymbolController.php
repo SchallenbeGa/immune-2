@@ -28,7 +28,7 @@ class SymbolController extends Controller
         if(count($trades)>0){
             $prev="";
             foreach($trades as $p){
-                if ($p->side == "sell"){
+                if ($p->side == "SELL"){
                     $p->profit = $p->price - $prev;
                 }else{
                     $p->profit = $p->price - end($td["close"]);
