@@ -45,9 +45,6 @@ def save_data_n(id,pair,Client):
 
 # place order on binance
 def order(pair_id,pair,limit,side):
-    print(side.upper())
-    print(pair)
-    print(config('FUTURE'))
     try:
         # place limit order
         if config('FUTURE'):
@@ -296,7 +293,6 @@ def on_message(ws, message):
             #print(tickSize_limit)
             if buy:
                 if (smart_order()<=5):
-                    print("sending order")
                     order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
                 else:
                     print("maximum unfilled order reached")
