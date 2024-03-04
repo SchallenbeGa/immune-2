@@ -48,6 +48,7 @@ def save_data_n(id,pair,Client,FUTURE):
 def order(pair_id,pair,limit,side):
     print(side.upper())
     print(pair)
+    print(config('FUTURE'))
     try:
         # place limit order
         if config('FUTURE'):
