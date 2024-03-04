@@ -304,7 +304,7 @@ def on_message(ws, message):
            print("not good")
     else:
        print("wait for order to get filled")
-
+    print("order done")
     is_candle_closed = candle['x']
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M")
     current_time_obj = datetime.strptime(current_time+":00","%Y-%m-%d %H:%M:%S")
