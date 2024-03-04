@@ -53,6 +53,7 @@ def order(pair_id,pair,limit,side):
         if config('FUTURE'):
             client.futures_change_leverage(symbol=pair, leverage=config('FUTURE_LEVERAGE'))
             if config('FUTURE_COIN'): # COIN-M wip
+                print("what")
                 order = client.futures_coin_create_order(
                     symbol=pair,
                     side=side,
