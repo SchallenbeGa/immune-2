@@ -51,6 +51,7 @@ def order(pair_id,pair,limit,side):
     try:
         # place limit order
         if config('FUTURE'):
+            print("okay")
             client.futures_change_leverage(symbol=pair, leverage=config('FUTURE_LEVERAGE'))
             if config('FUTURE_COIN'): # COIN-M wip
                 print("what")
