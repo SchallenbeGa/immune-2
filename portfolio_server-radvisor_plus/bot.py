@@ -27,7 +27,7 @@ def save_data_n(id,pair,Client,FUTURE):
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
    #print(pair)
    #print("hiole")
-    if FUTURE: 
+    if config('FUTURE'): 
         klines = client.futures_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "2 hour ago UTC")
     else:
         klines = client.get_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "1 hour ago UTC")
@@ -225,12 +225,6 @@ def is_order_filled(symbol_id,symbol_k):
                 #print("store data about to finish")
                 immune_db.commit()
             return True
-        
-        # elif (sorder['status'] == 'CANCELED'):
-        #     if not side_buy:
-        #         side_buy = True
-        #     last_order = 0
-        #     return True
     return False
 
 # run save older data 
@@ -268,8 +262,8 @@ def on_message(ws, message):
     # retrieve last close price
     close = float(candle['c'])
 
-   #print("strategy : " + str(STRATEGY_NAME))
-   #print("current price :" + str(close))
+    #print("strategy : " + str(config('STRATEGY_NAME')))
+    #print("current price :" + str(close))
 
     
    
@@ -281,7 +275,7 @@ def on_message(ws, message):
         valb = (pairs['id'],)
         cur.execute(sql_b,valb)
         trades = cur.fetchall()
-       #print(trades)
+        #print(trades)
         if(cur.rowcount != 0):
             if(trades[0]['side'] == "SELL"):
                 buy = True
@@ -296,15 +290,14 @@ def on_message(ws, message):
            #print("looking to buy")
             side="buy"
             buy = True
-
+        
        #print(trades)
         if buy:
-            r_price = close-(config('MARGIN')*0.2) # to lower buy limit
+            r_price = close-(float(config('MARGIN'))*0.2) # to lower buy limit
         else:
             buy_price = float(trades[0]['price'])
-            r_price = buy_price+config('MARGIN')
+            r_price = buy_price+float(config('MARGIN'))
 
-       #print("before signal")
         if (signal(data,close,client,buy,pairs['name'])) : # todo : demix 
            #print(r_price 
             tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
@@ -333,9 +326,9 @@ def on_message(ws, message):
     close_obj_o=data["created_at"].iloc[-1]
     if (is_candle_closed) & (close_obj_o<current_time_obj):
         asyncio.run(save_close(pairs['id'],candle))
-   #print("#################")
+    #print("#################")
 
-limit_sql = 50
+limit_sql = 3
 autosymbol = True
 cur = immune_db.cursor(dictionary=True)
 cur.execute("SELECT id,name FROM symbols")
@@ -382,8 +375,10 @@ else:
             cur.execute("SELECT id,name FROM symbols")
             pairs = cur.fetchall()
            #print(pairs)
-    socket_with_pairs+= pairs[0]['name'].lower()
+    c=0
+    print(pairs)
     for x in pairs:
+        
         sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
         adr = (x['id'],)
         cur.execute(sq, adr)
@@ -394,7 +389,12 @@ else:
         else:
            print("daata already exist!!")
            #print("ok")
-        socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
+        if c == 0:
+            socket_with_pairs= x['name'].lower()+"@kline_1m"
+        else:
+            socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
+        c+=1
+        
         
 if config('FUTURE'):
     SOCKET = "wss://fstream.binance.com/stream?streams="+socket_with_pairs
