@@ -62,6 +62,7 @@ def order(pair_id,pair,limit,side):
                     price=limit,
                     timeInForce=TIME_IN_FORCE_GTC)
             else: # USD-M
+                print("here")
                 order = client.futures_create_order(
                     symbol=pair,
                     side=side.upper(),
