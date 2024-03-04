@@ -1,10 +1,11 @@
-import websocket, json, pandas as pd,asyncio, numpy as np, mplfinance as mpf
+import websocket, json, pandas as pd, asyncio,mysql.connector
+from datetime import datetime, timedelta
+from binance.helpers import round_step_size
 from binance.client import Client
 from binance.enums import *
-from datetime import datetime
+from helper.bot_tweet import *
+from strategy.signal import *
 from decouple import config
-import ssl
-import mysql.connector
 
 immune_db = mysql.connector.connect(
   host=config('DB_HOST'),
@@ -12,28 +13,24 @@ immune_db = mysql.connector.connect(
   passwd=config('DB_PASSWORD'),
   database=config('DB_DATABASE')
 )
-#websocket.enableTrace(True)
 
-pairs = ""
-limit_sql = "3"
-cur = immune_db.cursor(dictionary=True)
-# get average price for x last trade
-sma_d = 2
-sma_l = 10
-# define the difference between buy/sell price
-added_val = 0.001
-# contain id of sell limit order
-order_id = 0
-in_position = False
+# WIP : time to cancel order
+# EXPIRE = False
+# EXPIRE_DATE = 1660
 
 # init client for binance api
 client = Client(config('BINANCE_K'),config('BINANCE_S'), tld='com')
-##print(config('DEBUG_BINANCE'))
 
-def save_data(id,pair):
+def save_data_n(id,pair,Client,FUTURE):
     #print("store data start")
+    cur = immune_db.cursor(dictionary=True)
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    klines = client.get_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "24 hour ago UTC")
+   #print(pair)
+   #print("hiole")
+    if FUTURE: 
+        klines = client.futures_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "2 hour ago UTC")
+    else:
+        klines = client.get_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "1 hour ago UTC")
     sql = "INSERT INTO ohlvcs (slug, symbol_id,open,high,low,close,volume,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     for line in klines:
             val = datetime.fromtimestamp(line[0]/1000),id, line[1], line[2], line[3], line[4],line[5],datetime.fromtimestamp(line[0]/1000),datetime.fromtimestamp(line[0]/1000)
@@ -47,42 +44,89 @@ def save_data(id,pair):
     immune_db.commit()
     #print(cur.rowcount, "data row executed, result 0 expected")
 
-
-##print(cur.rowcount, " oorecord inserted.")
-# cur = immune_db.cursor(dictionary=True)
-# cur.execute("SELECT symbols.name FROM symbols RIGHT JOIN symbol_favorite ON symbol_favorite.symbol_id = symbols.id")
-# pairs = cur.fetchall()
-# #print(pairs)
-# #print("---------------------------------------------ole")
-# sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s LIMIT 1"
-# pair="1"
-# cur.execute(sql_Delete_query,(pair,))
-# immune_db.commit()
-# #print(cur.rowcount, " oorecord inserted.")
-# #print("---------------------------------------------ola")
-
-# save trade form the bot in trade.csv
-async def save_trade(b_s,price,pair):
-    #print("store data")
+# place order on binance
+def order(pair_id,pair,limit,side):
+   #print(side.upper())
+    try:
+        # place limit order
+        if config('FUTURE'):
+            client.futures_change_leverage(symbol=pair, leverage=config('FUTURE_LEVERAGE'))
+            if config('FUTURE_COIN'): # COIN-M wip
+                order = client.futures_coin_create_order(
+                    symbol=pair,
+                    side=side,
+                    type=FUTURE_ORDER_TYPE_LIMIT,
+                    quantity=config('QUANTITY'),
+                    price=limit,
+                    timeInForce=TIME_IN_FORCE_GTC)
+            else: # USD-M
+                order = client.futures_create_order(
+                    symbol=pair,
+                    side=side.upper(),
+                    type=FUTURE_ORDER_TYPE_LIMIT,
+                    quantity=config('QUANTITY'),
+                    price=limit,
+                    timeInForce=TIME_IN_FORCE_GTC)
+               #print("lol")
+        else: # SPOT BUY/SELL LIMIT
+            order = client.create_order(
+                symbol=pair,
+                side=side,
+                type=ORDER_TYPE_LIMIT,
+                quantity=config('QUANTITY'),
+                price=limit,
+                timeInForce=TIME_IN_FORCE_GTC)
+    except Exception as e:
+       #print("an exception occured - {}".format(e))
+        return False
+   #print("sending order")
+   #print(order)
+    order_id = order['orderId']
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     cur = immune_db.cursor(dictionary=True)
-    sql = "INSERT INTO trades (price,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    val = str(current_time),pair,str(data['o']),str(data['h']),str(data['l']),str(data['v']),str(data['c']),current_time,current_time
+    sql = "INSERT INTO orders (order_id,filled,price,symbol_id,side,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+    val = order_id,"false",order['price'],pair_id,side,config('QUANTITY'),current_time,current_time
     #print("store data : ",val)
     cur.execute(sql, val)
     immune_db.commit()
-    cur = immune_db.cursor(dictionary=True)
-    #print(cur.rowcount, "record inserted.")
-    sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
-    print("updated")
-    ad = (current_time,pair)
-    cur.execute(sql,ad)
-    #print("store data")
-    immune_db.commit()
-    #print(cur.rowcount, "record inserted.")
+    return True
 
+def smart_order():
+    #check if no order and change coin
+   #print("smart order")
+    sql_b = "SELECT symbols.id,orders.filled FROM orders LEFT JOIN symbols ON orders.symbol_id = symbols.id   WHERE orders.filled = 'false'"
+    cur.execute(sql_b)
+   #print("sdwadawd")
+    number_of_rows = cur.fetchall()
+   #print("herreeee")
+        #print(number_of_rows,id)
+    
+   #print("herreeee")
+    return cur.rowcount
 
-# save last candle/close in tst.csv
+def rm_last(table,id):
+    #print(table,id)
+    if table == "ohlvcs":
+        cur = immune_db.cursor(dictionary=True)
+        cur.execute("SELECT * FROM ohlvcs WHERE symbol_id=%s",(id,))
+        number_of_rows = cur.fetchall()
+        #print(number_of_rows,id)
+    elif table == "signals":
+        cur = immune_db.cursor(dictionary=True)
+        cur.execute("SELECT * FROM signals WHERE symbol_id=%s",(id,))
+        number_of_rows = cur.fetchall()
+        #print(number_of_rows,id)
+    if(number_of_rows != None):
+        #print("ouch")
+        sql_Delete_query = "DELETE FROM "+table+" WHERE symbol_id=%s LIMIT 1"
+        cur.execute(sql_Delete_query,(id,))
+        immune_db.commit()
+    else:
+       ##print("none")
+        immune_db.commit()
+
+    return True
+
 async def save_close(pair,data):
     rm_last("ohlvcs",pair)
     #print("store data")
@@ -103,193 +147,260 @@ async def save_close(pair,data):
     immune_db.commit()
     #print(cur.rowcount, "record inserted.")
 
-# place order on binance
-def order(limit,side, quantity=config('TRADE_QUANTITY'), symbol=config('TRADE_SYMBOL'),order_type=ORDER_TYPE_MARKET):
-    global order_id
-    try:
-        # check if order has a price limit
-        if limit > 0:
-            # place limit order
-            order = client.create_order(symbol=symbol,side=side,type=ORDER_TYPE_LIMIT,quantity=config('TRADE_QUANTITY'),price=limit,timeInForce=TIME_IN_FORCE_GTC)
-        else:
-            # place market order
-            order = client.create_order(symbol=symbol,side=side,type=order_type, quantity=quantity)
-
-        #print("sending order")
-        #print(order)
-        order_id = order['orderId']
-    except Exception as e:
-        #print("an exception occured - {}".format(e))
-        return False
-    return True
-
-def rm_last(table,id):
-    #print(table,id)
-    if table == "ohlvcs":
-        cur = immune_db.cursor(dictionary=True)
-        cur.execute("SELECT * FROM ohlvcs WHERE symbol_id=%s",(id,))
-        number_of_rows = cur.fetchall()
-        #print(number_of_rows,id)
-    elif table == "signals":
-        cur = immune_db.cursor(dictionary=True)
-        cur.execute("SELECT * FROM signals WHERE symbol_id=%s",(id,))
-        number_of_rows = cur.fetchall()
-        #print(number_of_rows,id)
-    if(number_of_rows != None):
-        #print("ouch")
-        sql_Delete_query = "DELETE FROM "+table+" WHERE symbol_id=%s LIMIT 1"
-        cur.execute(sql_Delete_query,(id,))
-        immune_db.commit()
+def is_order_filled(symbol_id,symbol_k):
+    cur = immune_db.cursor(dictionary=True)
+    sql_b = "SELECT * FROM orders WHERE symbol_id = %s and filled = 'false' ORDER BY id DESC LIMIT 1"
+    valb = (symbol_id,)
+    cur.execute(sql_b,valb)
+    trades = cur.fetchall()
+   #print(trades)
+    order_id_x=0
+    if(cur.rowcount == 0):
+        return True
     else:
-       # print("none")
-        immune_db.commit()
+       #print(trades[0]['order_id'])
+        order_id_x = trades[0]['order_id']
+        if(trades[0]['side']=="buy"):
+            Date1 = trades[0]['created_at']
+            Date2 = datetime.now()
+            if (Date2 - Date1)>= timedelta(minutes=5) :
+               #print("buy order opened more than five minute ago")
+                result = client.futures_cancel_order(
+                symbol=symbol_k,
+                orderId=order_id_x)
+            
+       #print("order here")
+        
+   #print(order_id_x)
+    if not order_id_x == 0:
+        if config('FUTURE'):
+            if config('FUTURE_COIN'):
+                sorder = client.futures_coin_get_order(symbol=symbol_k,orderId=order_id_x)
+            else:
+               #print("search to found")
+                sorder = client.futures_get_order(symbol=symbol_k,orderId=order_id_x)
+        else:
+            sorder = client.get_order(symbol=symbol_k,orderId=order_id_x)
+        # check if order is filled
+       #print(sorder)
+        if (sorder['status'] == 'FILLED') | (sorder['status'] == 'CANCELED') :
+            if (sorder['status'] == 'FILLED'):
+               #print("hwwwww")
+                cur = immune_db.cursor(dictionary=True)
+                sql_o = "INSERT INTO trades (price,side,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s)"
+               #print(sql_o)
+                last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                valew = sorder['price'],sorder['side'],symbol_id,config('QUANTITY'),last,last
+               #print(valew)
+                cur.execute(sql_o, valew)
+                immune_db.commit()
+               #print("wdwdwwd")
+                cur = immune_db.cursor(dictionary=True)
+                sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
+                ad = ("true",order_id_x)
+                cur.execute(sql,ad)
+                #print("store data about to finish")
+                immune_db.commit()
+               #print("hooooooo") 
+                #if (sorder['side'] == "BUY") & (STOP_LOSS):
+                    #place stop loss order
+                
+                if config('TWEET') : 
+                    if sorder['side'] == "SELL":
+                        cur = immune_db.cursor(dictionary=True)
+                        sql_b = "SELECT * FROM orders WHERE symbol_id = %s AND filled = 'true' ORDER BY id DESC"
+                        valb = (symbol_id,)
+                        cur.execute(sql_b,valb)
+                        trades = cur.fetchall()
+                       #print(trades)
+                        profit = float(trades[0]['price']) - float(trades[1]['price'])
+                        t = symbol_k+"\nstarted : " + trades[1]['created_at'].strftime("%Y-%m-%d %H:%M:%S")+"\nstoped : " + trades[0]['created_at'].strftime("%Y-%m-%d %H:%M:%S")+"\ncoins generated : "+str(profit)
+                        print(t)
+                        asyncio.run(post_twet(t))
+                   
+            else:
+                sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
+                ad = ("canceled",order_id_x)
+                cur.execute(sql,ad)
+                #print("store data about to finish")
+                immune_db.commit()
+            return True
+        
+        # elif (sorder['status'] == 'CANCELED'):
+        #     if not side_buy:
+        #         side_buy = True
+        #     last_order = 0
+        #     return True
+    return False
 
-    return True
+# run save older data 
 
 def on_open(ws):
-    print('opened connection')
+   print('opened connection')
 
 def on_close(ws):
-    print('closed connection')
+   print('closed connection')
 
 def on_message(ws, message):
-    global in_position,order_id,added_val,sma_d,sma_l,buy
-    # retrieve last trade
 
-    json_message = json.loads(message)  
+    # retrieve last trade
+    json_message = json.loads(message)
     cur = immune_db.cursor(dictionary=True)
     candle = json_message['data']['k']
-    #print(json_message)
     get_symbol = "SELECT * FROM symbols WHERE name=%s LIMIT 1"
     cur.execute(get_symbol,(json_message['data']['s'].lower(),))
     #print(cur)
     pairs = cur.fetchall()[0]
-    #print("about to get every mov for symbol ",json_message['data']['s'])
+
+   #print("about to get every mov for symbol ",json_message['data']['s'])
     sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
     adr = (pairs['id'],)
     cur.execute(sq, adr)
-    #print("every mov for symbol loaded")
-    #print("symbol ",pairs['id'])
     df = pd.DataFrame(cur.fetchall())
     df.columns = cur.column_names
     df['close']=df['close'].astype(float)
     data = df
-    #print("------------candle---------------")
-    #print(candle)
-    #print("----------candle-end------------")
-    # calculate moving average
-    sma = data['close'][-sma_d:].mean()
-    sma_long = data['close'][-sma_l:].mean()
+
+    
+
+    # asyncio.run(save_close(json_message['E'],candle))
+   
     # retrieve last close price
     close = float(candle['c'])
 
-    sql_b = "SELECT * FROM trades WHERE symbol_id = %s ORDER BY id DESC LIMIT 1"
-    valb = (pairs['id'],)
-    cur.execute(sql_b,valb)
-    trades = cur.fetchall()
-    if(cur.rowcount != 0):
-        if(trades[0]['side'] == "sell"):
+   #print("strategy : " + str(STRATEGY_NAME))
+   #print("current price :" + str(close))
+
+    
+   
+
+    # si il n'y a pas d'ordre en cours 
+    if (is_order_filled(pairs['id'],pairs['name'])): # todo : demix
+        cur = immune_db.cursor(dictionary=True)
+        sql_b = "SELECT * FROM trades WHERE symbol_id = %s ORDER BY id DESC LIMIT 1"
+        valb = (pairs['id'],)
+        cur.execute(sql_b,valb)
+        trades = cur.fetchall()
+       #print(trades)
+        if(cur.rowcount != 0):
+            if(trades[0]['side'] == "SELL"):
+                buy = True
+                side="buy"
+               #print("looking to buy")
+            else:
+                buy = False
+                side="sell"
+               #print("looking to sell")
+            
+        else:
+           #print("looking to buy")
+            side="buy"
             buy = True
-            #print("looking to buy")
+
+       #print(trades)
+        if buy:
+            r_price = close-(config('MARGIN')*0.2) # to lower buy limit
         else:
-            buy = False
-            #print("looking to sell")
+            buy_price = float(trades[0]['price'])
+            r_price = buy_price+config('MARGIN')
+
+       #print("before signal")
+        if (signal(data,close,client,buy,pairs['name'])) : # todo : demix 
+           #print(r_price 
+            tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
+            #print(tickf)
+            tickSize_limit = round_step_size(
+                r_price,
+                tickf)
+            #print(tickSize_limit)
+            if buy:
+                if (smart_order()<=5):
+                    order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
+                else:
+                    print("maximum unfilled order reached")
+            else:
+                order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
+           
+
+        else:
+           print("not good")
     else:
-        #print("looking to buy")
-        buy = True
-    if buy:
-        if close > sma and close < sma_long:
-            print("buy")
-            cur = immune_db.cursor(dictionary=True)
-            sql_o = "INSERT INTO trades (price,side,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s)"
-            last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            vale = (close,"buy",pairs['id'],"20",last,last)
-            cur.execute(sql_o, vale)
-            immune_db.commit()
-            #print(cur.rowcount, " oorecord inserted.")
-        else:
-            rm_last("signals",pairs['id'])
-            cur = immune_db.cursor(dictionary=True)
-            sql_o = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
-            last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            l = "Automatic buy if current price ("+str(close)+") is lower than long avg("+str(sma_long)+") and higher than short avg : "+str(sma)
-            vale = (l,pairs['id'],last,last)
-            cur.execute(sql_o, vale)
-            immune_db.commit()
-            #print(cur.rowcount, " oorecord inserted.")
-        
-    else:
-        #print("selll1",close,trades[0]['price'])
-        if close < sma and close > sma_long and float(close) > float(trades[0]['price']):
-            cur = immune_db.cursor(dictionary=True)
-            sql_o = "INSERT INTO trades (price,side,symbol_id,quantity,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s)"
-            last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            vale = (close,"sell",pairs['id'],"20",last,last)
-            #print(vale)
-            cur.execute(sql_o, vale)
-            immune_db.commit()
-            #print("WONT SELl------------------------------")
-            #print(cur.rowcount, " oorecord inserted.")
-        else:
-            rm_last("signals",pairs['id'])
-            cur = immune_db.cursor(dictionary=True)
-            sql_o = "INSERT INTO signals (msg,symbol_id,created_at,updated_at) VALUES (%s,%s,%s,%s)"
-            last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            l = "Automatic sell if current price ("+str(close)+") is bigger than long avg("+str(sma_long)+") and lower than short avg : "+str(sma)
-            vale = (l,pairs['id'],last,last)
-            cur.execute(sql_o, vale)
-            immune_db.commit()
-            #print(cur.rowcount, " oorecord inserted.")
+       print("wait for order to get filled")
+
     is_candle_closed = candle['x']
-    if is_candle_closed:
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M")
+    current_time_obj = datetime.strptime(current_time+":00","%Y-%m-%d %H:%M:%S")
+    close_obj_o=data["created_at"].iloc[-1]
+    if (is_candle_closed) & (close_obj_o<current_time_obj):
         asyncio.run(save_close(pairs['id'],candle))
-    print("end")
+   #print("#################")
 
-if config('DEBUG_BINANCE') == False:
-    SOCKET = "wss://testnet.binance.vision/ws/bnbusdt@kline_1m"
-    client.API_URL = 'https://testnet.binance.vision/api'
+limit_sql = 50
+autosymbol = True
+cur = immune_db.cursor(dictionary=True)
+cur.execute("SELECT id,name FROM symbols")
+socket_with_pairs = ""
+pairs = cur.fetchall()
+print(pairs)
+
+if(cur.rowcount == 1):
+    socket_with_pairs+= pairs[0]['name'].lower()+"@kline_1m"
+    sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
+    adr = (pairs[0]['id'],)
+    cur.execute(sq, adr)
+    if cur.rowcount<=0:
+        res = cur.fetchall()
+        save_data_n(pairs[0]['id'],pairs[0]['name'],client,config('FUTURE'))
+       #print("saved")
+    else:
+        res = cur.fetchall()
+       #print("daata already exist!!")
+    
 else:
-    cur = immune_db.cursor(dictionary=True)
-    cur.execute("SELECT id,name FROM symbols LIMIT "+limit_sql)
-    socket_with_pairs = ""
-    pairs = cur.fetchall()
-    symb_fetched = False
     if cur.rowcount == 0:
-        #print("fetch all pairs and insert them in db")
-        #fetch all pairs and insert them in db
-        exchange_info = client.get_exchange_info()
-        cur = immune_db.cursor(dictionary=True)
-        sql = "INSERT INTO symbols (name,graph,created_at,updated_at) VALUES (%s,%s,%s,%s)"
-        limit = int(limit_sql)
-        fetched = 0
-        symb_fetched=True
-        for s in exchange_info['symbols']:
-            if fetched<limit:
-                if("USDT" in s['quoteAsset']) and (s['status']=='TRADING'):
-                    print(s)
-                    fetched+=1
-                    last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    val = (s['symbol'],"/img/"+s['symbol']+".webp",last,last)
-                    cur.execute(sql, val)
-                    immune_db.commit()
-        cur = immune_db.cursor(dictionary=True)
-        cur.execute("SELECT id,name FROM symbols LIMIT "+limit_sql)
-        pairs = cur.fetchall()
-    socket_with_pairs+=pairs[0]['name'].lower()
-    for x in pairs:
-        if(symb_fetched):
+       #print("no crypto added")
+        if autosymbol:
+            exchange_info = client.get_all_tickers()
             cur = immune_db.cursor(dictionary=True)
-            save_data(x['id'],x['name'])
-            sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
-            adr = (x['id'],)
-            cur.execute(sq, adr)
-            #print("ok")
-            df = pd.DataFrame(cur.fetchall())
-            df.columns = cur.column_names
-            data = df
+            sql = "INSERT INTO symbols (name,created_at,updated_at) VALUES (%s,%s,%s)"
+            fetched = 0
+            symb_fetched=True
+            for s in exchange_info:
+                if fetched<limit_sql:
+                    if(float(s['price'])>0.50) and (float(s['price'])<0.95) :
+                        symbol_info = client.get_symbol_info(s['symbol'])
+                        if('TRD_GRP_006' in symbol_info["permissions"]) and (symbol_info['quoteAsset'] == "USDT"):
+                           #print(symbol_info)
+                            if(fetched==0):
+                                socket_with_pairs+= s['symbol'].lower()
+                            fetched+=1
+                            last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            val = (s['symbol'],last,last)
+                            cur.execute(sql, val)
+                            immune_db.commit()
+            cur = immune_db.cursor(dictionary=True)
+            cur.execute("SELECT id,name FROM symbols")
+            pairs = cur.fetchall()
+           #print(pairs)
+    socket_with_pairs+= pairs[0]['name'].lower()
+    for x in pairs:
+        sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
+        adr = (x['id'],)
+        cur.execute(sq, adr)
+        res = cur.fetchall()
+        if cur.rowcount<=0:
+            save_data_n(x['id'],x['name'],client,config('FUTURE'))
+            print("saved")
+        else:
+           print("daata already exist!!")
+           #print("ok")
         socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
+        
+if config('FUTURE'):
+    SOCKET = "wss://fstream.binance.com/stream?streams="+socket_with_pairs
+else:
     SOCKET = "wss://stream.binance.com/stream?streams="+socket_with_pairs
-
-print("dame")
+print("go")
+print(SOCKET)
 ws = websocket.WebSocketApp(SOCKET, on_open=on_open, on_close=on_close, on_message=on_message)
-ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
+ws.run_forever()
