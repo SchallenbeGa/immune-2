@@ -1,5 +1,5 @@
 <div id="feed-post-preview" hx-swap-oob="true">
-  <p>{{$total_invested}}$ invested from 2024-02-04 08:00:00 <br> Generated : ~<span style="color:green">{{ $total }}$</span> / fee rate 0.1000%</p>
+  <p>{{$total_invested}}$ invested from 2024-03-04 08:00:00 <br> Generated : ~<span style="color:green">{{ $total }}$</span> / fee rate 0.1000%</p>
   <hr style="border: 10px solid;border-radius: 5px;">
   @forelse ($symbol as $entry)
   
