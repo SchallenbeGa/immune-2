@@ -54,7 +54,7 @@ def order(pair_id,pair,limit,side):
             if config('FUTURE_COIN'): # COIN-M wip
                 order = client.futures_coin_create_order(
                     symbol=pair,
-                    side=side,
+                    side=side.upper(),
                     type=FUTURE_ORDER_TYPE_LIMIT,
                     quantity=config('QUANTITY'),
                     price=limit,
@@ -71,7 +71,7 @@ def order(pair_id,pair,limit,side):
         else: # SPOT BUY/SELL LIMIT
             order = client.create_order(
                 symbol=pair,
-                side=side,
+                side=side.upper(),
                 type=ORDER_TYPE_LIMIT,
                 quantity=config('QUANTITY'),
                 price=limit,
