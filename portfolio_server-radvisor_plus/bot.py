@@ -46,7 +46,7 @@ def save_data_n(id,pair,Client,FUTURE):
 
 # place order on binance
 def order(pair_id,pair,limit,side):
-   #print(side.upper())
+    print(side.upper())
     try:
         # place limit order
         if config('FUTURE'):
