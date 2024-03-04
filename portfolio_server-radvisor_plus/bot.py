@@ -311,7 +311,7 @@ def on_message(ws, message):
     close_obj_o=data["created_at"].iloc[-1]
     if (is_candle_closed) & (close_obj_o<current_time_obj):
         asyncio.run(save_close(pairs['id'],candle))
-    #print("#################")
+    print("#################")
 
 limit_sql = 50
 autosymbol = True
