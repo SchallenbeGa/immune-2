@@ -71,6 +71,7 @@ def order(pair_id,pair,limit,side):
                     timeInForce=TIME_IN_FORCE_GTC)
                #print("lol")
         else: # SPOT BUY/SELL LIMIT
+            print("spot")
             order = client.create_order(
                 symbol=pair,
                 side=side,
