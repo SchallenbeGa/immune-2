@@ -51,32 +51,20 @@ def order(pair_id,pair,limit,side):
     try:
         # place limit order
         if config('FUTURE'):
-            print("okay")
             client.futures_change_leverage(symbol=pair, leverage=config('FUTURE_LEVERAGE'))
-            if config('FUTURE_COIN'): # COIN-M wip
-                print("what")
-                order = client.futures_coin_create_order(
-                    symbol=pair,
-                    side=side,
-                    type=FUTURE_ORDER_TYPE_LIMIT,
-                    quantity=config('QUANTITY'),
-                    price=limit,
-                    timeInForce=TIME_IN_FORCE_GTC)
-            else: # USD-M
-                print("here")
-                order = client.futures_create_order(
-                    symbol=pair,
-                    side=side.upper(),
-                    type=FUTURE_ORDER_TYPE_LIMIT,
-                    quantity=config('QUANTITY'),
-                    price=limit,
-                    timeInForce=TIME_IN_FORCE_GTC)
-               #print("lol")
+            order = client.futures_create_order(
+                symbol=pair,
+                side=side.upper(),
+                type=FUTURE_ORDER_TYPE_LIMIT,
+                quantity=config('QUANTITY'),
+                price=limit,
+                timeInForce=TIME_IN_FORCE_GTC)
+            #print("lol")
         else: # SPOT BUY/SELL LIMIT
             print("spot")
             order = client.create_order(
                 symbol=pair,
-                side=side,
+                side=side.upper(),
                 type=ORDER_TYPE_LIMIT,
                 quantity=config('QUANTITY'),
                 price=limit,
@@ -179,11 +167,8 @@ def is_order_filled(symbol_id,symbol_k):
    #print(order_id_x)
     if not order_id_x == 0:
         if config('FUTURE'):
-            if config('FUTURE_COIN'):
-                sorder = client.futures_coin_get_order(symbol=symbol_k,orderId=order_id_x)
-            else:
-               #print("search to found")
-                sorder = client.futures_get_order(symbol=symbol_k,orderId=order_id_x)
+            #print("search to found")
+            sorder = client.futures_get_order(symbol=symbol_k,orderId=order_id_x)
         else:
             sorder = client.get_order(symbol=symbol_k,orderId=order_id_x)
         # check if order is filled
