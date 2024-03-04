@@ -13,7 +13,7 @@ immune_db = mysql.connector.connect(
   passwd=config('DB_PASSWORD'),
   database=config('DB_DATABASE')
 )
-
+if(config('FUTURE'))
 # WIP : time to cancel order
 # EXPIRE = False
 # EXPIRE_DATE = 1660
@@ -21,7 +21,7 @@ immune_db = mysql.connector.connect(
 # init client for binance api
 client = Client(config('BINANCE_K'),config('BINANCE_S'), tld='com')
 
-def save_data_n(id,pair,Client,FUTURE):
+def save_data_n(id,pair,Client):
     #print("store data start")
     cur = immune_db.cursor(dictionary=True)
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -345,7 +345,7 @@ if(cur.rowcount == 1):
     cur.execute(sq, adr)
     if cur.rowcount<=0:
         res = cur.fetchall()
-        save_data_n(pairs[0]['id'],pairs[0]['name'],client,config('FUTURE'))
+        save_data_n(pairs[0]['id'],pairs[0]['name'],client)
        #print("saved")
     else:
         res = cur.fetchall()
@@ -386,7 +386,7 @@ else:
         cur.execute(sq, adr)
         res = cur.fetchall()
         if cur.rowcount<=0:
-            save_data_n(x['id'],x['name'],client,config('FUTURE'))
+            save_data_n(x['id'],x['name'],client)
             print("saved")
         else:
            print("daata already exist!!")
