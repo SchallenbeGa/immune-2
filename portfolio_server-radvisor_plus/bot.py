@@ -328,7 +328,7 @@ def on_message(ws, message):
         asyncio.run(save_close(pairs['id'],candle))
     #print("#################")
 
-limit_sql = 3
+limit_sql = 50
 autosymbol = True
 cur = immune_db.cursor(dictionary=True)
 cur.execute("SELECT id,name FROM symbols")
