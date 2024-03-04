@@ -77,7 +77,7 @@ def order(pair_id,pair,limit,side):
                 price=limit,
                 timeInForce=TIME_IN_FORCE_GTC)
     except Exception as e:
-       #print("an exception occured - {}".format(e))
+        print("an exception occured - {}".format(e))
         return False
    #print("sending order")
    #print(order)
@@ -299,15 +299,14 @@ def on_message(ws, message):
             r_price = buy_price+float(config('MARGIN'))
 
         if (signal(data,close,client,buy,pairs['name'])) : # todo : demix 
-           #print(r_price 
             tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
-            #print(tickf)
             tickSize_limit = round_step_size(
                 r_price,
                 tickf)
             #print(tickSize_limit)
             if buy:
                 if (smart_order()<=5):
+                    print("sending order")
                     order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
                 else:
                     print("maximum unfilled order reached")
