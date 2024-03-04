@@ -305,12 +305,15 @@ def on_message(ws, message):
     else:
        print("wait for order to get filled")
     print("order done")
-    is_candle_closed = candle['x']
+    
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M")
     current_time_obj = datetime.strptime(current_time+":00","%Y-%m-%d %H:%M:%S")
     close_obj_o=data["created_at"].iloc[-1]
-    if (is_candle_closed) & (close_obj_o<current_time_obj):
+    if (close_obj_o<current_time_obj):
+        print("saved candle")
         asyncio.run(save_close(pairs['id'],candle))
+    else:
+        print("no need to save")
     print("#################")
 
 limit_sql = 50
