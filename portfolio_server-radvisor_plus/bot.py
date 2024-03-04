@@ -47,6 +47,7 @@ def save_data_n(id,pair,Client,FUTURE):
 # place order on binance
 def order(pair_id,pair,limit,side):
     print(side.upper())
+    print(pair)
     try:
         # place limit order
         if config('FUTURE'):
@@ -54,7 +55,7 @@ def order(pair_id,pair,limit,side):
             if config('FUTURE_COIN'): # COIN-M wip
                 order = client.futures_coin_create_order(
                     symbol=pair,
-                    side=side.upper(),
+                    side=side,
                     type=FUTURE_ORDER_TYPE_LIMIT,
                     quantity=config('QUANTITY'),
                     price=limit,
@@ -71,7 +72,7 @@ def order(pair_id,pair,limit,side):
         else: # SPOT BUY/SELL LIMIT
             order = client.create_order(
                 symbol=pair,
-                side=side.upper(),
+                side=side,
                 type=ORDER_TYPE_LIMIT,
                 quantity=config('QUANTITY'),
                 price=limit,
