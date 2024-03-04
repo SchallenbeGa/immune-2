@@ -13,7 +13,6 @@ immune_db = mysql.connector.connect(
   passwd=config('DB_PASSWORD'),
   database=config('DB_DATABASE')
 )
-if(config('FUTURE'))
 # WIP : time to cancel order
 # EXPIRE = False
 # EXPIRE_DATE = 1660
