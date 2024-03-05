@@ -296,23 +296,23 @@ def on_message(ws, message):
             margin = buy_price/1000 
             print(margin)
             
-        # if (signal(data,close,client,buy,pairs['name'])) : # todo : demix 
-        #     tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
-        #     tickSize_limit = round_step_size(
-        #         r_price,
-        #         tickf)
-        #     #print(tickSize_limit)
-        #     if buy:
-        #         if (smart_order()<=5):
-        #             order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
-        #         else:
-        #             print("maximum unfilled order reached")
-        #     else:
-        #         order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
+        if (signal(data,close,client,buy,pairs['name'])) : # todo : demix 
+            tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
+            tickSize_limit = round_step_size(
+                r_price,
+                tickf)
+            #print(tickSize_limit)
+            if buy:
+                if (smart_order()<=5):
+                    order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
+                else:
+                    print("maximum unfilled order reached")
+            else:
+                order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
            
 
-        # else:
-        #    print("not good")
+        else:
+           print("not good")
     else:
        print("wait for order to get filled")
     print("order done")
