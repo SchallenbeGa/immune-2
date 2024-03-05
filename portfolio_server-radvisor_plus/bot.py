@@ -159,11 +159,8 @@ def is_order_filled(symbol_id,symbol_k):
                 symbol=symbol_k,
                 orderId=order_id_x)
                 print(result)
-                sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
-                ad = ("canceled",order_id_x)
-                cur.execute(sql,ad)
-                #print("store data about to finish")
-                immune_db.commit()
+                print("store data about to finish")
+
             
         print("order here")
         
