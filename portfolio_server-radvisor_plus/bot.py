@@ -155,16 +155,18 @@ def is_order_filled(symbol_id,symbol_k):
             Date2 = datetime.now()
             if (Date2 - Date1)>= timedelta(minutes=5) :
                 print("buy order opened more than five minute ago")
-                try:
+                if(Date2 - Date1)>= timedelta(minutes=20):
+                    sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
+                    ad = ("canceled",order_id_x)
+                    cur.execute(sql,ad)
+                    #print("store data about to finish")
+                    immune_db.commit()
+                    return True
+                else:
                     result = client.futures_cancel_order(
                     symbol=symbol_k,
                     orderId=order_id_x)
-                    print(result)
-                except Exception as e:
-                    print("an exception occured - {}".format(e))
-                    return False
-                print("store data about to finish")
-
+               
             
         print("order here")
         
