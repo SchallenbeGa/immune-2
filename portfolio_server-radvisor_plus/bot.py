@@ -158,6 +158,7 @@ def is_order_filled(symbol_id,symbol_k):
                 result = client.futures_cancel_order(
                 symbol=symbol_k,
                 orderId=order_id_x)
+                print(result)
                 sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
                 ad = ("canceled",order_id_x)
                 cur.execute(sql,ad)
