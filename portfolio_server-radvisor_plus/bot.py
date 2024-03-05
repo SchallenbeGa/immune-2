@@ -119,23 +119,23 @@ def rm_last(table,id):
 
 async def save_close(pair,data):
     rm_last("ohlvcs",pair)
-    #print("store data")
+    print("store data")
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     cur = immune_db.cursor(dictionary=True)
     sql = "INSERT INTO ohlvcs (slug, symbol_id,open,high,low,volume,close,created_at,updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     val = str(current_time),pair,str(data['o']),str(data['h']),str(data['l']),str(data['v']),str(data['c']),current_time,current_time
-    #print("store data : ",val)
+    print("store data : ",val)
     cur.execute(sql, val)
     immune_db.commit()
-    #print(cur.rowcount, "record inserted.")
+    print(cur.rowcount, "record inserted.")
     cur = immune_db.cursor(dictionary=True)
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
     ad = (current_time,pair)
     cur.execute(sql,ad)
-    #print("store data")
+    print("store data")
     immune_db.commit()
-    #print(cur.rowcount, "record inserted.")
+    print(cur.rowcount, "record inserted.")
 
 def is_order_filled(symbol_id,symbol_k):
     cur = immune_db.cursor(dictionary=True)
