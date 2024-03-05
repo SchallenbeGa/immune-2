@@ -148,28 +148,28 @@ def is_order_filled(symbol_id,symbol_k):
     if(cur.rowcount == 0):
         return True
     else:
-       #print(trades[0]['order_id'])
+        print(trades[0]['order_id'])
         order_id_x = trades[0]['order_id']
         if(trades[0]['side']=="buy"):
             Date1 = trades[0]['created_at']
             Date2 = datetime.now()
             if (Date2 - Date1)>= timedelta(minutes=5) :
-               #print("buy order opened more than five minute ago")
+                print("buy order opened more than five minute ago")
                 result = client.futures_cancel_order(
                 symbol=symbol_k,
                 orderId=order_id_x)
             
-       #print("order here")
+        print("order here")
         
-   #print(order_id_x)
+    print(order_id_x)
     if not order_id_x == 0:
         if config('FUTURE'):
-            #print("search to found")
+            print("search to found")
             sorder = client.futures_get_order(symbol=symbol_k,orderId=order_id_x)
         else:
             sorder = client.get_order(symbol=symbol_k,orderId=order_id_x)
         # check if order is filled
-       #print(sorder)
+        print(sorder)
         if (sorder['status'] == 'FILLED') | (sorder['status'] == 'CANCELED') :
             if (sorder['status'] == 'FILLED'):
                #print("hwwwww")
@@ -233,7 +233,7 @@ def on_message(ws, message):
     #print(cur)
     pairs = cur.fetchall()[0]
 
-   #print("about to get every mov for symbol ",json_message['data']['s'])
+    print("about to get every mov for symbol ",json_message['data']['s'])
     sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
     adr = (pairs['id'],)
     cur.execute(sq, adr)
@@ -249,8 +249,8 @@ def on_message(ws, message):
     # retrieve last close price
     close = float(candle['c'])
 
-    #print("strategy : " + str(config('STRATEGY_NAME')))
-    #print("current price :" + str(close))
+    print("strategy : " + str(config('STRATEGY_NAME')))
+    print("current price :" + str(close))
 
     
    
@@ -284,24 +284,26 @@ def on_message(ws, message):
         else:
             buy_price = float(trades[0]['price'])
             r_price = buy_price+float(config('MARGIN'))
-
-        if (signal(data,close,client,buy,pairs['name'])) : # todo : demix 
-            tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
-            tickSize_limit = round_step_size(
-                r_price,
-                tickf)
-            #print(tickSize_limit)
-            if buy:
-                if (smart_order()<=5):
-                    order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
-                else:
-                    print("maximum unfilled order reached")
-            else:
-                order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
+            margin = buy_price/1000 
+            print(margin)
+            
+        # if (signal(data,close,client,buy,pairs['name'])) : # todo : demix 
+        #     tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
+        #     tickSize_limit = round_step_size(
+        #         r_price,
+        #         tickf)
+        #     #print(tickSize_limit)
+        #     if buy:
+        #         if (smart_order()<=5):
+        #             order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
+        #         else:
+        #             print("maximum unfilled order reached")
+        #     else:
+        #         order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
            
 
-        else:
-           print("not good")
+        # else:
+        #    print("not good")
     else:
        print("wait for order to get filled")
     print("order done")
