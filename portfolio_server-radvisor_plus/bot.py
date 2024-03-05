@@ -155,10 +155,14 @@ def is_order_filled(symbol_id,symbol_k):
             Date2 = datetime.now()
             if (Date2 - Date1)>= timedelta(minutes=5) :
                 print("buy order opened more than five minute ago")
-                result = client.futures_cancel_order(
-                symbol=symbol_k,
-                orderId=order_id_x)
-                print(result)
+                try:
+                    result = client.futures_cancel_order(
+                    symbol=symbol_k,
+                    orderId=order_id_x)
+                    print(result)
+                except Exception as e:
+                    print("an exception occured - {}".format(e))
+                    return False
                 print("store data about to finish")
 
             
