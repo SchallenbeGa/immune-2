@@ -1,4 +1,4 @@
-import websocket, json, pandas as pd, asyncio,mysql.connector
+import websocket, json, pandas as pd, asyncio,mysql.connector,requests
 from datetime import datetime, timedelta
 from binance.helpers import round_step_size
 from binance.client import Client
@@ -213,6 +213,9 @@ def is_order_filled(symbol_id,symbol_k):
                         t = symbol_k+"\nstarted : " + trades[1]['created_at'].strftime("%Y-%m-%d %H:%M:%S")+"\nstoped : " + trades[0]['created_at'].strftime("%Y-%m-%d %H:%M:%S")+"\ncoins generated : "+str(profit)
                         print(t)
                         asyncio.run(post_twet(t))
+                        requests.post("https://ntfy.sh/gabriel0alertservive24",
+                            data=t,
+                            headers={ "Tags": "warning,mailsrv13,daily-backup" })
                    
             else:
                 sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
@@ -260,9 +263,6 @@ def on_message(ws, message):
 
     print("strategy : " + str(config('STRATEGY_NAME')))
     print("current price :" + str(close))
-
-    
-   
 
     # si il n'y a pas d'ordre en cours 
     if (is_order_filled(pairs['id'],pairs['name'])): # todo : demix
