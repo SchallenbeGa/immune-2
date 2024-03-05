@@ -158,6 +158,11 @@ def is_order_filled(symbol_id,symbol_k):
                 result = client.futures_cancel_order(
                 symbol=symbol_k,
                 orderId=order_id_x)
+                sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
+                ad = ("canceled",order_id_x)
+                cur.execute(sql,ad)
+                #print("store data about to finish")
+                immune_db.commit()
             
         print("order here")
         
