@@ -321,6 +321,16 @@ def on_message(ws, message):
     current_time_obj = datetime.strptime(current_time+":00","%Y-%m-%d %H:%M:%S")
     close_obj_o=data["created_at"].iloc[-1]
     if (is_candle_closed)&(close_obj_o<current_time_obj):
+        sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s"
+        cur.execute(sql_Delete_query,(pairs['id'],))
+        immune_db.commit()
+        save_data_n(pairs['id'],pairs['name'],client)
+        print("saved")
+        if c == 0:
+            socket_with_pairs= x['name'].lower()+"@kline_1m"
+        else:
+            socket_with_pairs+= "/"+x['name'].lower()+"@kline_1m"
+        c+=1
         print("saved candle")
         asyncio.run(save_close(pairs['id'],candle))
     else:
@@ -359,7 +369,7 @@ else:
             symb_fetched=True
             for s in exchange_info:
                 if fetched<limit_sql:
-                    if(float(s['price'])>0.50) and (float(s['price'])<0.95) :
+                    if(float(s['price'])>0.30) and (float(s['price'])<0.95) :
                         symbol_info = client.get_symbol_info(s['symbol'])
                         if('TRD_GRP_006' in symbol_info["permissions"]) and (symbol_info['quoteAsset'] == "USDT"):
                            #print(symbol_info)
@@ -377,17 +387,11 @@ else:
     c=0
     print(pairs)
     for x in pairs:
-        
-        sq = "SELECT * FROM ohlvcs WHERE symbol_id = %s"
-        adr = (x['id'],)
-        cur.execute(sq, adr)
-        res = cur.fetchall()
-        if cur.rowcount<=0:
-            save_data_n(x['id'],x['name'],client)
-            print("saved")
-        else:
-           print("daata already exist!!")
-           #print("ok")
+        sql_Delete_query = "DELETE FROM ohlvcs WHERE symbol_id=%s"
+        cur.execute(sql_Delete_query,(x['id'],))
+        immune_db.commit()
+        save_data_n(x['id'],x['name'],client)
+        print("saved")
         if c == 0:
             socket_with_pairs= x['name'].lower()+"@kline_1m"
         else:
