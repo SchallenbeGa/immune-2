@@ -213,9 +213,9 @@ def is_order_filled(symbol_id,symbol_k):
                         t = symbol_k+"\nstarted : " + trades[1]['created_at'].strftime("%Y-%m-%d %H:%M:%S")+"\nstoped : " + trades[0]['created_at'].strftime("%Y-%m-%d %H:%M:%S")+"\ncoins generated : "+str(profit)
                         print(t)
                         asyncio.run(post_twet(t))
-                        requests.post("https://ntfy.sh/gabriel0alertservive24",
+                        requests.post("https://ntfy.sh/gabriel0alert-00",
                             data=t,
-                            headers={ "Tags": "warning,mailsrv13,daily-backup" })
+                            headers={ "Tags": "moneybag" })
                    
             else:
                 sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
