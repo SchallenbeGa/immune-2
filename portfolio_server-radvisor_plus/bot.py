@@ -197,6 +197,15 @@ def is_order_filled(symbol_id,symbol_k):
                 cur.execute(sql,ad)
                 #print("store data about to finish")
                 immune_db.commit()
+                if(sorder['side']=="SELL"):
+                    buy_price = float(sorder['price'])
+                    r_price = buy_price+float(config('MARGIN'))
+                   
+                    tickf = float(client.get_symbol_info(symbol_k)['filters'][0]["tickSize"])
+                    tickSize_limit = round_step_size(
+                        r_price,
+                        tickf)
+                    order_limit = order(symbol_id,symbol_k,tickSize_limit,"BUY")
                #print("hooooooo") 
                 #if (sorder['side'] == "BUY") & (STOP_LOSS):
                     #place stop loss order
