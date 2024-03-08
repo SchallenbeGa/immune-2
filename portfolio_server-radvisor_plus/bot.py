@@ -205,7 +205,7 @@ def is_order_filled(symbol_id,symbol_k):
                     tickSize_limit = round_step_size(
                         r_price,
                         tickf)
-                    order_limit = order(symbol_id,symbol_k,tickSize_limit,"BUY")
+                    order_limit = order(symbol_id,symbol_k,tickSize_limit,"buy")
                #print("hooooooo") 
                 #if (sorder['side'] == "BUY") & (STOP_LOSS):
                     #place stop loss order
