@@ -312,7 +312,7 @@ def on_message(ws, message):
                 tickf)
             #print(tickSize_limit)
             if buy:
-                if (smart_order()<=5):
+                if (smart_order()<=1):
                     order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
                 else:
                     print("maximum unfilled order reached")
