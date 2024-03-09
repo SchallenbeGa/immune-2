@@ -302,8 +302,8 @@ def on_message(ws, message):
         else:
             buy_price = float(trades[0]['price'])
             r_price = buy_price+float(config('MARGIN'))
-            margin = buy_price/1000 
-            print("this would be the price : "+margin)
+            margin = buy_price + buy_price/1000 
+            print("this would be the price : "+str(margin))
 
         if (signal(data,close,client,buy,pairs['name'])) :
             tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
