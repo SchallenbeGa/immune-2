@@ -298,19 +298,19 @@ def on_message(ws, message):
         
        #print(trades)
         if buy:
-            r_price = close-(float(config('MARGIN'))*0.2) # to lower buy limit
+            r_price = close-(float(config('MARGIN'))*0.2)
         else:
             buy_price = float(trades[0]['price'])
             r_price = buy_price+float(config('MARGIN'))
             margin = buy_price/1000 
-            print(margin)
-            
-        if (signal(data,close,client,buy,pairs['name'])) : # todo : demix 
+            print("this would be the price : "+margin)
+
+        if (signal(data,close,client,buy,pairs['name'])) :
             tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
             tickSize_limit = round_step_size(
                 r_price,
                 tickf)
-            #print(tickSize_limit)
+
             if buy:
                 if (smart_order()<=5):
                     order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
