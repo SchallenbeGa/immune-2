@@ -15,9 +15,5 @@
         </div>
     </div>
 @empty
-<div class="post-preview">
-    <div class="alert alert-warning" role="alert">
-        Nothing to see here...
-    </div>
-</div>
+
 @endforelse

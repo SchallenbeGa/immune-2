@@ -6,12 +6,16 @@
      
  
   @forelse ($orders as $entry)
-  <div class="col-6">
+  <div class="col-6 justify-content-center">
   <div class="p-4 mb-3 bg-body-tertiary rounded" style="
-  border-radius: 15px 50px 30px !important;
-  background: #73AD21;
-  padding: 20px;
-  height: 100px;">
+  background: rgba(var(--bs-tertiary-bg-rgb),var(--bs-bg-opacity))!important;
+  border: 0;
+  box-shadow: 6px 0px 0px {{ $entry->side === 'buy' ? '#77DD77' : '#FF6961' }};
+  outline: transparent;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;">
           
           <p class="mb-0">
             <span class="date">{{ $entry->created_at }}</span>
