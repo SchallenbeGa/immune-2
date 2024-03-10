@@ -149,7 +149,7 @@ def is_order_filled(symbol_id,symbol_k):
         if(trades[0]['side']=="buy"):
             Date1 = trades[0]['created_at']
             Date2 = datetime.now()
-            if (Date2 - Date1)>= timedelta(minutes=3) :
+            if (Date2 - Date1)>= timedelta(minutes=1) :
                 print("buy order opened more than five minute ago")
                 if(Date2 - Date1)>= timedelta(minutes=20):
                     sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
