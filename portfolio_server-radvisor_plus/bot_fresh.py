@@ -278,7 +278,7 @@ async def on_message(symbol):
             buy = True
             side="buy"
                 
-        r_price = close-(float(config('MARGIN')))
+        r_price = close-(float(config('MARGIN'))*0.2)
 
         if (signal(data,close,client,buy,pairs['name'])) :
             tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
