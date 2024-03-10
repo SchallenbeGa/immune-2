@@ -159,9 +159,12 @@ def is_order_filled(symbol_id,symbol_k):
                     immune_db.commit()
                     return True
                 else:
-                    result = client.futures_cancel_order(
-                    symbol=symbol_k,
-                    orderId=order_id_x)
+                    try:
+                        result = client.futures_cancel_order(
+                        symbol=symbol_k,
+                        orderId=order_id_x)
+                    except Exception as e:
+                        print("an exception occured - {}".format(e))
                
             
         print("order here")
@@ -237,7 +240,7 @@ def on_open(ws):
 def on_close(ws):
    print('closed connection')
 
-def on_message(symbol):
+async def on_message(symbol):
     
     cur = immune_db.cursor(dictionary=True)
     get_symbol = "SELECT * FROM symbols WHERE name=%s LIMIT 1"
@@ -275,7 +278,7 @@ def on_message(symbol):
             buy = True
             side="buy"
                 
-        r_price = close-(float(config('MARGIN'))*0.2)
+        r_price = close-(float(config('MARGIN')))
 
         if (signal(data,close,client,buy,pairs['name'])) :
             tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
@@ -362,5 +365,5 @@ else:
             cur.execute(sql_Delete_query,(x['id'],))
             immune_db.commit()
             save_data_n(x['id'],x['name'],client)
-            on_message(x['name'])
+            asyncio.run(on_message(x['name']))
         
