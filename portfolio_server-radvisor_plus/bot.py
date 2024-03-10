@@ -24,8 +24,6 @@ def save_data_n(id,pair,Client):
     #print("store data start")
     cur = immune_db.cursor(dictionary=True)
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-   #print(pair)
-   #print("hiole")
     if config('FUTURE'): 
         klines = client.futures_historical_klines(pair, Client.KLINE_INTERVAL_1MINUTE, "2 hour ago UTC")
     else:
@@ -39,9 +37,7 @@ def save_data_n(id,pair,Client):
     sql = "UPDATE symbols SET updated_at = %s WHERE id = %s"
     ad = (current_time,pair)
     cur.execute(sql,ad)
-    #print("store data about to finish")
     immune_db.commit()
-    #print(cur.rowcount, "data row executed, result 0 expected")
 
 # place order on binance
 def order(pair_id,pair,limit,side):
@@ -153,7 +149,7 @@ def is_order_filled(symbol_id,symbol_k):
         if(trades[0]['side']=="buy"):
             Date1 = trades[0]['created_at']
             Date2 = datetime.now()
-            if (Date2 - Date1)>= timedelta(minutes=5) :
+            if (Date2 - Date1)>= timedelta(minutes=3) :
                 print("buy order opened more than five minute ago")
                 if(Date2 - Date1)>= timedelta(minutes=20):
                     sql = "UPDATE orders SET filled = %s WHERE order_id = %s"
@@ -197,19 +193,17 @@ def is_order_filled(symbol_id,symbol_k):
                 cur.execute(sql,ad)
                 #print("store data about to finish")
                 immune_db.commit()
-                if(sorder['side']=="SELL"):
+                if(sorder['side']== "BUY"):
                     buy_price = float(sorder['price'])
-                    r_price = buy_price+float(config('MARGIN'))
-                   
+                    margin = buy_price + buy_price/1000 
+                    print("this would be the price : "+str(margin))
                     tickf = float(client.get_symbol_info(symbol_k)['filters'][0]["tickSize"])
                     tickSize_limit = round_step_size(
-                        r_price,
+                        margin,
                         tickf)
-                    order_limit = order(symbol_id,symbol_k,tickSize_limit,"buy")
-               #print("hooooooo") 
-                #if (sorder['side'] == "BUY") & (STOP_LOSS):
-                    #place stop loss order
-                
+                    order_limit = order(symbol_id,symbol_k,tickSize_limit,"sell")
+               
+
                 # if config('TWEET') : 
                 if sorder['side'] == "SELL":
                     cur = immune_db.cursor(dictionary=True)
@@ -285,25 +279,15 @@ def on_message(ws, message):
             if(trades[0]['side'] == "SELL"):
                 buy = True
                 side="buy"
-               #print("looking to buy")
             else:
                 buy = False
                 side="sell"
-               #print("looking to sell")
-            
         else:
-           #print("looking to buy")
-            side="buy"
             buy = True
-        
-       #print(trades)
+            side="buy"
+            
         if buy:
             r_price = close-(float(config('MARGIN'))*0.2)
-        else:
-            buy_price = float(trades[0]['price'])
-            r_price = buy_price+float(config('MARGIN'))
-            margin = buy_price + buy_price/1000 
-            print("this would be the price : "+str(margin))
 
         if (signal(data,close,client,buy,pairs['name'])) :
             tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
@@ -316,8 +300,6 @@ def on_message(ws, message):
                     order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
                 else:
                     print("maximum unfilled order reached")
-            else:
-                order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side)
            
 
         else:
@@ -346,7 +328,7 @@ def on_message(ws, message):
         print("no need to save")
     print("#################")
 
-limit_sql = 50
+limit_sql = 5
 autosymbol = True
 cur = immune_db.cursor(dictionary=True)
 cur.execute("SELECT id,name FROM symbols")
