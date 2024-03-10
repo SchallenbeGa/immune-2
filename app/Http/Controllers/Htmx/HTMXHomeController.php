@@ -9,6 +9,7 @@ use App\Support\Helpers;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\Ohlvc;
+use App\Models\Order;
 use App\Models\Symbol;
 use App\Models\Signal;
 use Illuminate\Http\Request;
@@ -79,6 +80,8 @@ class HTMXHomeController extends Controller
 
     public function globalFeed()
     {
+        $all_open_order = Order::where('filled','false')->get();
+       
         $symb = Symbol::with(['favoritedUsers']);
         $sa = $symb;
         $so = $symb->paginate(20);
@@ -160,7 +163,7 @@ class HTMXHomeController extends Controller
 
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['global']['is_active'] = true;
-        return view('home.partials.symbol-preview', ['symbol' => $data,'total'=>$total_profit,'invested_on'=>$data[0]->created_at,'total_invested'=>($sa->count()*1000)])
+        return view('home.partials.symbol-preview', ['symbol' => $data,'orders'=> $all_open_order,'total'=>$total_profit,'invested_on'=>$data[0]->created_at,'total_invested'=>($sa->count()*1000)])
             .view('home.partials.pagination', [
                 'paginator' => $so,
                 'page_number' => request()->page ?? 1

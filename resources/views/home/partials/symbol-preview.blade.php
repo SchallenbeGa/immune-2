@@ -1,6 +1,30 @@
 <div id="feed-post-preview" hx-swap-oob="true">
   <p>{{$total_invested}}$ invested from 2024-03-04 08:00:00 <br> Generated : ~<span style="color:green">{{ $total }}$</span> / fee rate 0.1000%</p>
   <hr style="border: 10px solid;border-radius: 5px;">
+  <h4 class="fst-italic">Order pending</h4>
+  <div class="row">
+     
+ 
+  @forelse ($orders as $entry)
+  <div class="col-6">
+  <div class="p-4 mb-3 bg-body-tertiary rounded" style=" border-radius: 15px 50px 30px !important;
+  background: #73AD21;
+  padding: 20px;
+  height: 100px;">
+          
+          <p class="mb-0">
+            <span class="date">{{ $entry->created_at }}</span>
+            <br>
+            <span class="order_content">{{ $entry->side }} at price : {{ $entry->price }}</span></p>
+        </div>
+  </div>
+  @empty
+  <div class="post-preview">
+    <div class="alert alert-warning" role="alert">
+      No articles are here... yet.
+    </div>
+  </div>
+  @endforelse
   @forelse ($symbol as $entry)
   
     <article class="blog-post">
