@@ -89,6 +89,14 @@ class HTMXHomeController extends Controller
         $fees = 0;
         $total_profit = 0;
         foreach($sa->get() as $sy){
+            if(count($all_open_order)>0){
+                foreach($all_open_order as $order){
+                    if($sy->id == $order->symbol_id){
+                        $order->symbol = $sy->name;
+                    }
+
+                }
+            }
             $pnl = "0.00 %";
             $sy->pnl = $pnl;
             $sy->profit = "0";
@@ -102,7 +110,7 @@ class HTMXHomeController extends Controller
                 foreach($all_trade as $trade){
                     switch($trade->side){
                         case "BUY":
-                            $trade_quantity[] = 1000/$trade->price;
+                            $trade_quantity[] = 20/$trade->price;
                             $nb_p[] = floatval($trade->price);
                             break;
                         case "SELL":

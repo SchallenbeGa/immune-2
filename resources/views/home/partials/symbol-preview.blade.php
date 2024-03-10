@@ -1,5 +1,5 @@
 <div id="feed-post-preview" hx-swap-oob="true">
-  <p>{{$total_invested}}$ invested from 2024-03-04 08:00:00 <br> Generated : ~<span style="color:green">{{ $total }}$</span> / fee rate 0.1000%</p>
+  <p><br> Generated : ~<span style="color:green">{{ $total }}$</span> / fee rate 0.1000%</p>
   <hr style="border: 10px solid;border-radius: 5px;">
   <h4 class="fst-italic">Order pending</h4>
   <div class="row">
@@ -19,6 +19,8 @@
           
           <p class="mb-0">
             <span class="date">{{ $entry->created_at }}</span>
+            <br>
+            <span class="order_symbol">{{ $entry->symbol}}</span>
             <br>
             <span class="order_content">{{ $entry->side }} at price : {{ $entry->price }}</span></p>
         </div>
