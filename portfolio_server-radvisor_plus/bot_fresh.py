@@ -215,7 +215,7 @@ def is_order_filled(symbol_id,symbol_k):
                     cur.execute(sql_b,valb)
                     trades = cur.fetchall()
                     #print(trades)
-                    profit = float(trades[0]['price']) - float(trades[1]['price'])
+                    profit = (float(trades[0]['price']) - float(trades[1]['price']))*100
                     t = symbol_k+"\nstarted : " + trades[1]['created_at'].strftime("%Y-%m-%d %H:%M:%S")+"\nstoped : " + trades[0]['created_at'].strftime("%Y-%m-%d %H:%M:%S")+"\ncoins generated : "+str(profit)
                     print(t)
                     #asyncio.run(post_twet(t))
