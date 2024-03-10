@@ -7,7 +7,8 @@
  
   @forelse ($orders as $entry)
   <div class="col-6">
-  <div class="p-4 mb-3 bg-body-tertiary rounded" style=" border-radius: 15px 50px 30px !important;
+  <div class="p-4 mb-3 bg-body-tertiary rounded" style="
+  border-radius: 15px 50px 30px !important;
   background: #73AD21;
   padding: 20px;
   height: 100px;">
