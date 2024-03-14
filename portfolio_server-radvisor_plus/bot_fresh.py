@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 from binance.helpers import round_step_size
 from binance.client import Client
 from binance.enums import *
-from helper.bot_tweet import *
 from strategy.signal import *
 from decouple import config
 
