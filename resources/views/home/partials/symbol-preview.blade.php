@@ -34,7 +34,7 @@
   @endforelse
   @forelse ($symbol as $entry)
   
-    <article class="blog-post">
+    <article class="blog-post more">
     <div class="row">
       <div class="col">
       <h2 class="display-5 link-body-emphasis mb-1" style="  display: flex;flex-flow: row wrap;align-items: center;">
