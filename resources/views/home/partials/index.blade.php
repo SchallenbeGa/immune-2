@@ -12,6 +12,14 @@
     <img class="img_o" width="100%" height="100%" src="/img/robo.png">
     </div> -->
   </div>
+  <!-- <div id="form-message"></div>
+
+<form id="action_form" hx-post="/htmx/actions/run">
+  @csrf
+  <input class="form-control" name="trades">
+  <button class="btn btn-sm btn-primary" style="margin-top:10px">
+  </button>
+</form> -->
   <div id="article-post-preview" hx-trigger="load" hx-get="/htmx/home/article-feed"></div>
   <!-- <div class="row mb-2">
     <div class="col-md-6">
@@ -50,7 +58,7 @@
 
       <div id="feed-post-preview" hx-trigger="load, every 2s" @if (isset($tag)) hx-get="/htmx/home/tag-feed/{{ $tag->name }}{{ isset(request()->page) ? '?page=' . request()->page : '' }}" @elseif (isset($personal)) hx-get="/htmx/home/your-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}" @else hx-get="/htmx/home/global-feed" @endif></div>
     </div>
-    <div class="col-md-4 more">
+    <div class="col-md-4">
       <div class="position-sticky" style="top: 2rem;">
         <div class="p-4 mb-3 bg-body-tertiary rounded">
           <h4 class="fst-italic">About</h4>
