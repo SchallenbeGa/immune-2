@@ -27,6 +27,7 @@ def order(pair_id,pair,limit,side,quantity):
             price=limit,
             timeInForce=TIME_IN_FORCE_GTC)
     except Exception as e:
+        print(quantity,limit)
         print("an exception occured - {}".format(e))
         return False
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
