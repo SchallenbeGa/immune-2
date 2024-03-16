@@ -41,6 +41,7 @@ def order(pair_id,pair,limit,side,quantity):
 def smart_order():
     sql_b = "SELECT symbols.id,orders.filled FROM orders LEFT JOIN symbols ON orders.symbol_id = symbols.id   WHERE orders.filled = 'false'"
     cur.execute(sql_b)
+    cur.fetchall()
     return cur.rowcount
 
 def rm_last(table,id):
@@ -123,7 +124,12 @@ def is_order_filled(symbol_id,symbol_k):
                     margin,
                     tickf)
                 quantity = config('QUANTITY')/tickSize_limit
-                order_limit = order(symbol_id,symbol_k,tickSize_limit,"sell",quantity)
+                 
+                qt_l = round_step_size(
+                        quantity,
+                        tickf)
+                print(qt_l)
+                order_limit = order(symbol_id,symbol_k,tickSize_limit,"sell",qt_l)
             else:
                 cur = immune_db.cursor(dictionary=True)
                 sql_b = "SELECT * FROM orders WHERE symbol_id = %s AND filled = 'true' ORDER BY id DESC"
@@ -142,13 +148,8 @@ def is_order_filled(symbol_id,symbol_k):
             immune_db.commit()
         return True
 
-def on_message(symbol,data):
+def on_message(pairs,data):
     
-    cur = immune_db.cursor(dictionary=True)
-    get_symbol = "SELECT * FROM symbols WHERE name=%s LIMIT 1"
-    cur.execute(get_symbol,(symbol,))
-    #print(cur)
-    pairs = cur.fetchall()[0]
     print(pairs)
     close = data["close"].iloc[-1]
     # si il n'y a pas d'ordre en cours 
@@ -172,22 +173,26 @@ def on_message(symbol,data):
                 
         r_price = close-(float(config('MARGIN'))*0.2)
 
-        # if (signal(data,close,client,buy,pairs['name'])) :
-        #     tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
-        #     tickSize_limit = round_step_size(
-        #         r_price,
-        #         tickf)
+        if (signal(data,close,client,buy,pairs['name'])) :
+            tickf = float(client.get_symbol_info(pairs['name'])['filters'][0]["tickSize"])
+            tickSize_limit = round_step_size(
+                r_price,
+                tickf)
 
-        #     if buy:
-        #         if (smart_order()<=5):
-        #           quantity = config('QUANTITY')/tickSize_limit
-        #             order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side,quantity)
-        #         else:
-        #             print("maximum unfilled order reached")
+            if buy:
+                if (smart_order()<=5):
+                    quantity = float(config('QUANTITY'))/tickSize_limit
+                    quantity= float(round(quantity,8))
+                    print("actual price : ",close)
+                    print("desired price : ",tickSize_limit)
+                    print("quantity : ",quantity)
+                    order_limit = order(pairs['id'],pairs['name'],tickSize_limit,side,quantity)
+                else:
+                    print("maximum unfilled order reached")
            
 
-        # else:
-        #    print("not good")
+        else:
+           print("not good")
     else:
        print("wait for order to get filled")
     print("order done")
@@ -201,27 +206,34 @@ if(cur.rowcount<=0):
     exchange_info = client.get_all_tickers()
     cur = immune_db.cursor(dictionary=True)
     sql = "INSERT INTO symbols (name,created_at,updated_at) VALUES (%s,%s,%s)"
+    val = []
+    c=0
     for s in exchange_info:
-        print(s)
-        symbol_info = client.get_symbol_info(s['symbol'])
-        if('TRD_GRP_006' in symbol_info["permissions"]) and (symbol_info['quoteAsset'] == "USDT"):
-            last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            val = (s['symbol'],last,last)
-            print(symbol_info)
-            cur.execute(sql, val)
-            immune_db.commit()
+        
+        if s['symbol'].endswith("USDT") and c<5:
+            print(s)
+            symbol_info = client.get_symbol_info(s['symbol'])
+            if(symbol_info!=None):
+                print(symbol_info)
+                if('TRD_GRP_006' in symbol_info["permissions"]) and (symbol_info['quoteAsset'] == "USDT"):
+                    c+=1
+                    last = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    val.append((s['symbol'],last,last))
+    print(val)
+    cur.executemany(sql, val)
+    immune_db.commit()
+    print("symbols imported")
 cur = immune_db.cursor(dictionary=True)
 get_all_symbol = "SELECT * FROM symbols"
 cur.execute(get_all_symbol)
 pairs = cur.fetchall()
-for x in pairs:
-    klines = client.futures_historical_klines(x['name'], Client.KLINE_INTERVAL_1MINUTE, "5 minutes ago UTC")
-    ohlc_data = [[float(kline[1]), float(kline[2]), float(kline[3]), float(kline[4])] for kline in klines]
-    df = pd.DataFrame(ohlc_data, columns=['open', 'high', 'low', 'close'])
-    timestamps = [datetime.fromtimestamp(int(kline[0]) / 1000) for kline in klines]
-    df['Timestamp'] = timestamps
-    df.set_index('Timestamp', inplace=True)
-    data = df
-    print(data)
-    on_message(x['name'],data)
-    print(pairs)
+while True:
+    for x in pairs:
+        klines = client.futures_historical_klines(x['name'], Client.KLINE_INTERVAL_1MINUTE, "5 minutes ago UTC")
+        ohlc_data = [[float(kline[1]), float(kline[2]), float(kline[3]), float(kline[4])] for kline in klines]
+        df = pd.DataFrame(ohlc_data, columns=['open', 'high', 'low', 'close'])
+        timestamps = [datetime.fromtimestamp(int(kline[0]) / 1000) for kline in klines]
+        df['Timestamp'] = timestamps
+        df.set_index('Timestamp', inplace=True)
+        data = df
+        on_message(x,data)
