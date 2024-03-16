@@ -183,7 +183,7 @@ def on_message(pairs,data):
             if buy:
                 if (smart_order()<=5):
                     quantity = float(config('QUANTITY'))/tickSize_limit
-                    quantity= float(round(quantity,8))
+                    quantity= float(round(quantity,6))
                     print("actual price : ",close)
                     print("desired price : ",tickSize_limit)
                     print("quantity : ",quantity)
