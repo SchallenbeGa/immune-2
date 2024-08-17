@@ -59,7 +59,7 @@
 @empty
 <div class="post-preview">
   <div class="alert alert-warning" role="alert">
-    Nothing to see here...
+    No symbols
   </div>
 </div>
 @endforelse

@@ -23,26 +23,46 @@ class HTMXEditorController extends Controller
         }
 
         $validated = $request->safe()->all();
+        if(env('COMPLETION')){
+            $client = new \GuzzleHttp\Client();
+            $message="write an article in english about ".$validated['content'].",use html tag to format";
+            $url = 'https://api.openai.com/v1/chat/completions';
+            $headers = [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . env('OPENAI_API_KEY'),
+            ];
+            $body = [
+                'model' => 'gpt-3.5-turbo',
+                'messages' => [['role' => 'user', 'content' => $message]],
+            ];
+            $response = $client->post($url, [
+                'headers' => $headers, 
+                'json' => $body,
+            ]);
+            $result = json_decode($response->getBody()->getContents(), true);
+            $a_build = response()->json($result['choices'][0]['message']['content']);
+            $content = $a_build;
+        }else{$content=$validated['content'];}
 
         $article = Article::create([
             'user_id' => auth()->user()->id,
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']),
             'description' => $validated['description'],
-            'body' => $validated['content']
+            'body' => $content
         ]);
 
-        if ($validated['tags']) {
+        // if ($validated['tags']) {
 
-            $tags = json_decode($validated['tags']);
-            $tagsArray = [];
+        //     $tags = json_decode($validated['tags']);
+        //     $tagsArray = [];
 
-            foreach ($tags as $key => $tag) {
-                $tagsArray[] = $tag->value;
-            }
+        //     foreach ($tags as $key => $tag) {
+        //         $tagsArray[] = $tag->value;
+        //     }
 
-            $article->attachTags($tagsArray);
-        }
+        //     $article->attachTags($tagsArray);
+        //}
 
         return response()->view('components.redirect', [
                 'hx_get' => '/htmx/articles/' . $article->slug,

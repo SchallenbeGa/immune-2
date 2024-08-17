@@ -3,7 +3,7 @@
     <div class="col-md-6">
         <div class="card flex-md-row mb-4 box-shadow h-md-250">
             <div class="card-body d-flex flex-column align-items-start">
-                <strong class="d-inline-block mb-2 text-primary">AI Generated</strong>
+                <!-- <strong class="d-inline-block mb-2 text-primary"></strong> -->
                 <h3 class="mb-0">
                 <a href="/articles/{{ $entry->slug }}" style="text-decoration: none;color: var(--bs-heading-color);" hx-push-url="/articles/{{ $entry->slug }}" hx-get="/htmx/articles/{{ $entry->slug }}" hx-target="#app-body" class="preview-link">{{ $entry->title }}</a>
                 </h3>
