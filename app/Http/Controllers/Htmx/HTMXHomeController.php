@@ -171,7 +171,8 @@ class HTMXHomeController extends Controller
 
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['global']['is_active'] = true;
-        return view('home.partials.symbol-preview', ['symbol' => $data,'orders'=> $all_open_order,'total'=>$total_profit,'invested_on'=>$data[0]->created_at,'total_invested'=>($sa->count()*1000)])
+        if(isset($data[0])){
+            return view('home.partials.symbol-preview', ['symbol' => $data,'orders'=> $all_open_order,'total'=>$total_profit,'invested_on'=>$data[0]->created_at,'total_invested'=>($sa->count()*1000)])
             .view('home.partials.pagination', [
                 'paginator' => $so,
                 'page_number' => request()->page ?? 1
@@ -180,6 +181,17 @@ class HTMXHomeController extends Controller
             .view('components.htmx.head', [
                 'page_title' => ''
             ]);
+        }else{
+            return view('home.partials.symbol-preview', ['symbol' => $data,'orders'=> $all_open_order,'total'=>$total_profit,'invested_on'=>"",'total_invested'=>($sa->count()*1000)])
+            .view('home.partials.pagination', [
+                'paginator' => $so,
+                'page_number' => request()->page ?? 1
+            ])
+            .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
+            .view('components.htmx.head', [
+                'page_title' => ''
+            ]);
+        }
     }
     public function articleFeed()
     {
