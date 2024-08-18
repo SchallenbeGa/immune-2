@@ -10,7 +10,6 @@
   <script src="{{ asset('js/color-modes.js') }}"></script>
   @stack('meta')
   <title>{{ $page_title ?? '' }} immune-web</title>
-  <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
   <style>
     .bd-placeholder-img {
       font-size: 1.125rem;

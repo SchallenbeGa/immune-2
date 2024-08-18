@@ -8,7 +8,6 @@
     <meta name="description" content="portfolio">
     <meta name="keywords" content="portfolio">
     <meta name="author" content="immune">
-    <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <style>
