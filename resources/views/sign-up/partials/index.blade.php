@@ -31,9 +31,10 @@
                 <p class="mb-0">Du latin immunis (« libre de charge »).</p>
               </div>
               <div>
-                <h4 class="fst-italic">Recent trades</h4>
+                <h4 class="fst-italic">Recent article</h4>
                 <ul class="list-unstyled">
-                  <div id="trade-post-preview" hx-trigger="load" hx-get="/htmx/home/trade-feed"></div>
+                <div id="article-post-preview" hx-trigger="load" hx-get="/htmx/home/article-feed"></div>
+                  <!-- <div id="trade-post-preview" hx-trigger="load" hx-get="/htmx/home/trade-feed"></div> -->
                 </ul>
               </div>
             </div>
