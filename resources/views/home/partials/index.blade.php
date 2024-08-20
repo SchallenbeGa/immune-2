@@ -22,7 +22,7 @@
   <button class="btn btn-sm btn-primary" style="margin-top:10px">
   </button>
 </form> -->
-  <div id="article-post-preview" hx-trigger="load" hx-get="/htmx/home/article-feed"></div>
+  
   <!-- <div class="row mb-2">
     <div class="col-md-6">
       <div class="card flex-md-row mb-4 box-shadow h-md-250">
@@ -57,8 +57,8 @@
   </div> -->
   <div class="row">
     <div class="col-md-8">
-
-      <div id="feed-post-preview" hx-trigger="load, every 2s" @if (isset($tag)) hx-get="/htmx/home/tag-feed/{{ $tag->name }}{{ isset(request()->page) ? '?page=' . request()->page : '' }}" @elseif (isset($personal)) hx-get="/htmx/home/your-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}" @else hx-get="/htmx/home/global-feed" @endif></div>
+<div id="article-post-preview" hx-trigger="load" hx-get="/htmx/home/article-feed"></div>
+      <!-- <div id="feed-post-preview" hx-trigger="load, every 2s" @if (isset($tag)) hx-get="/htmx/home/tag-feed/{{ $tag->name }}{{ isset(request()->page) ? '?page=' . request()->page : '' }}" @elseif (isset($personal)) hx-get="/htmx/home/your-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}" @else hx-get="/htmx/home/global-feed" @endif></div> -->
     </div>
     <div class="col-md-4">
       <div class="position-sticky" style="top: 2rem;">
@@ -67,12 +67,12 @@
           <p class="mb-0">Du latin immunis (« libre de charge »).</p>
         </div>
 
-        <div>
+        <!-- <div>
           <h4 class="fst-italic">Recent trades</h4>
           <ul class="list-unstyled">
             <div id="trade-post-preview" hx-trigger="load" hx-get="/htmx/home/trade-feed"></div>
           </ul>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
