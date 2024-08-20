@@ -11,7 +11,7 @@
                 <p class="card-text mb-auto">{{$entry->description}}</p>
                 <a href="/articles/{{ $entry->slug }}" hx-push-url="/articles/{{ $entry->slug }}" hx-get="/htmx/articles/{{ $entry->slug }}" hx-target="#app-body" class="preview-link">Continue reading</a>
             </div>
-            <img class="card-img-right flex-auto d-none d-md-block"  alt="Thumbnail [200x250]" style="width: 200px;" src="{{ $entry->img_path }}">
+            <!-- <img class="card-img-right flex-auto d-none d-md-block"  alt="Thumbnail [200x250]" style="width: 200px;" src="{{ $entry->img_path }}"> -->
         </div>
     </div>
 @empty
