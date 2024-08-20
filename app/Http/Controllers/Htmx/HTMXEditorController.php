@@ -26,10 +26,10 @@ class HTMXEditorController extends Controller
         if(env('COMPLETION')){
             $client = new \GuzzleHttp\Client();
             $message="write an article in english about ".$validated['content'].",use html tag to format";
-            $url = 'https://api.openai.com/v1/chat/completions';
+            $url = 'http://localhost:8080/v1/chat/completions';
             $headers = [
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . env('OPENAI_API_KEY'),
+                'Authorization' => 'Bearer no-key',
             ];
             $body = [
                 'model' => 'gpt-3.5-turbo',
