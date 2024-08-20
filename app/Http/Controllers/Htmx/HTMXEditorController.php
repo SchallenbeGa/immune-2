@@ -25,10 +25,8 @@ class HTMXEditorController extends Controller
         $validated = $request->safe()->all();
         if(env('COMPLETION')){
              // The message you want to send to OpenAI
-    $message = $_POST['message'];
-
     $curl = curl_init();
-
+    $message="write an article in english about ".$validated['content'].",use html tag to format";
     curl_setopt_array($curl, array(
       CURLOPT_URL => 'http://localhost:8080/v1/chat/completions',
       CURLOPT_RETURNTRANSFER => true,
@@ -57,32 +55,10 @@ class HTMXEditorController extends Controller
 
     curl_close($curl);
 
-    curl_close($curl);
-
     // Process the response from the OpenAI API
     $json = json_decode($response);
-    $completion = $json->choices[0]->message->content;
-    echo $response;
-   echo $completion;
-
-            $client = new \GuzzleHttp\Client();
-            $message="write an article in english about ".$validated['content'].",use html tag to format";
-            $url = 'http://localhost:8080/v1/chat/completions';
-            $headers = [
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer no-key',
-            ];
-            $body = [
-                'model' => 'gpt-3.5-turbo',
-                'messages' => [['role' => 'user', 'content' => $message]],
-            ];
-            $response = $client->post($url, [
-                'headers' => $headers, 
-                'json' => $body,
-            ]);
-            $result = json_decode($response->getBody()->getContents(), true);
-            $a_build = response()->json($result['choices'][0]['message']['content']);
-            $content = $a_build;
+    $content = $json->choices[0]->message->content;
+   
         }else{$content=$validated['content'];}
 
         $article = Article::create([
