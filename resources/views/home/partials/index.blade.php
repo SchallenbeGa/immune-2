@@ -1,5 +1,7 @@
 <main class="container">
-  <div class="alert alert-danger" style="margin-top:10px;" role="alert">
+  <div class="alert alert-success" style="margin-top:10px;" role="alert">
+   Working example from an old session <a href="https://lrz.gabriel0.com" target="_blank">right here</a>
+  </div><div class="alert alert-danger" style="margin-top:10px;" role="alert">
     No financial advice, following content are the result from a <a href="https://fr.wikipedia.org/wiki/Backtesting" target="_blank">backtesting</a> session !
   </div>
   <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="margin-top:10px">
