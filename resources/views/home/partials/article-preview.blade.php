@@ -1,6 +1,6 @@
 <div class="row mb-2" id="article-post-preview" hx-swap-oob="true">
     @forelse ($articles as $entry)
-    <div class="col-md-6">
+    <div class="col">
         <div class="card flex-md-row mb-4 box-shadow h-md-150">
             <div class="card-body d-flex flex-column align-items-start">
                 <!-- <strong class="d-inline-block mb-2 text-primary"></strong> -->
