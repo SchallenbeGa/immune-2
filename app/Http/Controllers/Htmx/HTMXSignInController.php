@@ -49,7 +49,7 @@ class HTMXSignInController extends Controller
             'hx_trigger' => 'load',
         ])
         ->withHeaders([
-            'HX-Replace-Url' => '/',
+            'HX-Redirect' => '/',
             'HX-Reswap' => 'none'
         ]);
     }

@@ -43,14 +43,14 @@ class HTMXSettingsController extends Controller
 
         $user = tap(auth()->user())->update($data);
    
-        return view('settings.partials.form', [
-            'user' => $user,
-            'oob_swap' => true
+        return response()->view('components.redirect', [
+            'hx_get' => '/htmx/home',
+            'hx_target' => '#app-body',
+            'hx_trigger' => 'load',
         ])
-        .view('settings.partials.form-message', [
-            'message' => 'Successfully updated.',
-            'oob_swap' => true
-        ])
-        .view('components.navbar', ['navbar_active' => 'settings']);
+        ->withHeaders([
+            'HX-Redirect' => '/',
+            'HX-Reswap' => 'none'
+        ]);
     }
 }
