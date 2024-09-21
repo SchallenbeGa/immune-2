@@ -48,15 +48,17 @@
   <div class="container page">
 
     <div class="row post-content">
-      <div class="col-md-12">
+      <div class="col-md-9">
       {!! $article->body !!}
       </div>
-      <div class="col-md-12 m-t-2">
-        <ul class="tag-list">
-          @foreach ($article->tags as $tag)
-            <li class="tag-default tag-pill tag-outline">{{ $tag->name }}</li>
-          @endforeach
-        </ul>
+      <div class="col-md-3 m-t-2">
+      <div id="feed-post-preview"
+          hx-trigger="load"
+
+        
+            hx-get="/htmx/home/global-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
+
+        ></div>
       </div>
     </div>
 
