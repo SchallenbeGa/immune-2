@@ -15,9 +15,6 @@ use App\Http\Controllers\Htmx\HTMXSignInController;
 use App\Http\Controllers\Htmx\HTMXSignUpController;
 use App\Http\Controllers\Htmx\HTMXArticleController;
 use App\Http\Controllers\Htmx\HTMXSettingsController;
-use App\Http\Controllers\Htmx\HTMXSymbolController;
-use App\Http\Controllers\SymbolController;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,14 +27,9 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::fallback(function () {
-    return redirect()->route('welcome');  
-});
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/global-feed', [HomeController::class, 'index']);
 
-Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
-Route::get('/home', [HomeController::class, 'index'])->name('index')->middleware('auth');
-Route::get('/global-feed', [HomeController::class, 'index'])->middleware('auth');
-Route::get('/article-feed', [HomeController::class, 'articleFeed'])->middleware('auth');
 Route::get('/your-feed', [HomeController::class, 'yourFeed'])->middleware('auth');
 Route::get('/tag-feed/{tag}', [HomeController::class, 'tags']);
 
@@ -46,11 +38,8 @@ Route::post('/sign-in', [SignInController::class, 'signIn'])->middleware('guest'
 Route::get('/logout', [SignInController::class, 'logout'])->middleware('auth');
 
 Route::get('/sign-up', [SignUpController::class, 'index'])->middleware('guest');
-Route::post('/sign-up', [SignUpController::class, 'signUp'])->middleware('guest');
 
 Route::get('/articles/{article}', [ArticleController::class, 'show']);
-
-Route::get('/symbol/{symbol}', [SymbolController::class, 'show']);
 
 Route::get('/editor', [EditorController::class, 'create'])->middleware('auth');
 Route::get('/editor/{article}', [EditorController::class, 'edit'])->middleware('auth');
@@ -64,25 +53,18 @@ Route::prefix('htmx')->group(function() {
 
     Route::get('/home', [HTMXHomeController::class, 'index']);
     Route::post('/home/articles/{article}/favorite', [HTMXHomeController::class, 'favorite']);
-    Route::post('/home/symbol/{symbol}/favorite', [HTMXHomeController::class, 'favorite_symbol']);
-    Route::get('/symbol/{symbol}', [HTMXSymbolController::class, 'show']);
-    Route::get('/symbol/{symbol}/data', [HTMXSymbolController::class, 'data']);
+    
     Route::get('/articles/{article}', [HTMXArticleController::class, 'show']);
-    Route::get('/symbol/{symbol}', [HTMXSymbolController::class, 'show']);
     Route::post('/articles/{article}/favorite', [HTMXArticleController::class, 'favorite']);
-    Route::post('/symbol/{symbol}/favorite', [HTMXSymbolController::class, 'favorite_symbol']);
     Route::post('/articles/follow-user/{user}', [HTMXArticleController::class, 'follow']);
     Route::get('/articles/{article}/comments', [HTMXArticleController::class, 'comments']);
     Route::post('/articles/{article}/comments', [HTMXArticleController::class, 'postComment']);
     Route::delete('/articles/{article}', [HTMXArticleController::class, 'delete']);
-    Route::post('/home/search', [HTMXHomeController::class, 'search']);
+
     Route::get('/home/feed-navigation', [HTMXHomeController::class, 'feedNavigation']);
     Route::get('/home/global-feed', [HTMXHomeController::class, 'globalFeed']);
-    Route::get('/home/article-feed', [HTMXHomeController::class, 'articleFeed']);
-    Route::get('/home/trade-feed', [HTMXHomeController::class, 'tradeFeed']);
     Route::get('/home/your-feed', [HTMXHomeController::class, 'yourFeed']);
     Route::get('/home/tag-list', [HTMXHomeController::class, 'tagList']);
-    Route::get('/home/symbol-list', [HTMXHomeController::class, 'symbolList']);
     Route::get('/home/tag-feed/{tag}', [HTMXHomeController::class, 'tagFeed']);
 
     Route::get('/editor', [HTMXEditorController::class, 'create']);
@@ -104,8 +86,7 @@ Route::prefix('htmx')->group(function() {
 
     Route::get('/users/{user}', [HTMXUserController::class, 'show']);
     Route::get('/users/{user}/articles', [HTMXUserController::class, 'articles']);
-    Route::get('/users/{user}/favorites', [HTMXUserController::class, 'favoriteSymbols']);
+    Route::get('/users/{user}/favorites', [HTMXUserController::class, 'favoriteArticles']);
     Route::post('/users/{user}/follow', [HTMXUserController::class, 'follow']);
     Route::post('/users/articles/{article}/favorite', [HTMXUserController::class, 'favorite']);
-    Route::post('/users/symbol/{symbol}/favorite', [HTMXUserController::class, 'favorite']);
 });

@@ -10,7 +10,13 @@ class HTMXSignUpController extends Controller
 {
     public function index()
     {
-        return view('sign-up.partials.index');
+        return view('sign-up.partials.index')
+            .view('components.navbar', [
+                'navbar_active' => 'sign-up'
+            ])
+            .view('components.htmx.head', [
+                'page_title' => 'Sign Up —'
+            ]);
     }
 
     public function signUp(SignUpRequest $request)
@@ -18,6 +24,7 @@ class HTMXSignUpController extends Controller
         $validated = $request->safe()->only(['username', 'email', 'password']);
 
         $user = User::create([
+            'role'=>1,
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password'])

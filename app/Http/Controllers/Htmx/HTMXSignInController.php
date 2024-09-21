@@ -14,6 +14,9 @@ class HTMXSignInController extends Controller
     public function index()
     {
         return view('sign-in.partials.index')
+            .view('components.navbar', [
+                'navbar_active' => 'sign-in'
+            ])
             .view('components.htmx.head', [
                 'page_title' => 'Sign In —'
             ]);
@@ -49,7 +52,7 @@ class HTMXSignInController extends Controller
             'hx_trigger' => 'load',
         ])
         ->withHeaders([
-            'HX-Redirect' => '/',
+            'HX-Replace-Url' => '/',
             'HX-Reswap' => 'none'
         ]);
     }

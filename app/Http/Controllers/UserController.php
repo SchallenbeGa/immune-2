@@ -10,26 +10,52 @@ class UserController extends Controller
 {
     public function show(User $user)
     {
-        $user->load(['favorites']);
+        $isUserFollowed = false;
+        $navbarActive = 'none';
+        $user->load(['articles', 'followers']);
+
+        $userFeedNavbarItems = Helpers::userFeedNavbarItems($user);
+
+        if (auth()->check() && auth()->user()->following($user)) {
+            $isUserFollowed = true;
+        }
+
+        if ($user->isSelf) {
+            $navbarActive = 'profile';
+        }
+
         return view('users.show', [
             'user' => $user,
-            'navbar_active' => 'profile',
-            'symbols' => $user->favorites,
-            'total'=>0,'invested_on'=>0,'total_invested'=>($user->favorites->count()*1000),
-            'personal' => true,
-            'page_title' => 'Your profil —'
+            'navbar_active' => $navbarActive,
+            'user_feed_navbar_items' => $userFeedNavbarItems,
+            'follower_count' => $user->followers->count(),
+            'is_followed' => $isUserFollowed,
+            'page_title' => $user->username . ' —'
         ]);
     }
 
     public function favorites(User $user)
     {
 
+        $isUserFollowed = false;
+        $user->load(['articles', 'followers']);
+        
+        $userFeedNavbarItems = Helpers::userFeedNavbarItems($user);
+        $userFeedNavbarItems['personal']['is_active'] = false;
+        $userFeedNavbarItems['favorite']['is_active'] = true;
+
+        if (auth()->check() && auth()->user()->following($user)) {
+            $isUserFollowed = true;
+        }
+
         return view('users.show', [
+            'load_favorites' => true,
             'user' => $user,
-            'total'=>0,'invested_on'=>0,'total_invested'=>($user->favorites->count()*1000),
-            'personal' => true,
-            'page_title' => 'Your feed —'
+            'navbar_active' => 'profile',
+            'user_feed_navbar_items' => $userFeedNavbarItems,
+            'follower_count' => $user->followers->count(),
+            'is_followed' => $isUserFollowed,
+            'page_title' => 'Articles favorited by ' .  $user->username . ' —'
         ]);
     }
-
 }

@@ -17,6 +17,7 @@ class HTMXSettingsController extends Controller
         $user = auth()->user();
 
         return view('settings.partials.index', ['user' => $user])
+            .view('components.navbar', ['navbar_active' => 'settings'])
             .view('components.htmx.head', [
                 'page_title' => 'Settings —'
             ]);
@@ -31,7 +32,7 @@ class HTMXSettingsController extends Controller
         $validated = $request->safe()->all();
 
         $data = [
-            'image' => $validated['image_url'],
+            'image' => $validated['image'],
             'name' => $validated['name'],
             'email' => $validated['email'],
             'bio' => $validated['bio']
@@ -42,15 +43,15 @@ class HTMXSettingsController extends Controller
         }
 
         $user = tap(auth()->user())->update($data);
-   
-        return response()->view('components.redirect', [
-            'hx_get' => '/htmx/home',
-            'hx_target' => '#app-body',
-            'hx_trigger' => 'load',
+
+        return view('settings.partials.form', [
+            'user' => $user,
+            'oob_swap' => true
         ])
-        ->withHeaders([
-            'HX-Redirect' => '/',
-            'HX-Reswap' => 'none'
-        ]);
+        .view('settings.partials.form-message', [
+            'message' => 'Successfully updated.',
+            'oob_swap' => true
+        ])
+        .view('components.navbar', ['navbar_active' => 'settings']);
     }
 }

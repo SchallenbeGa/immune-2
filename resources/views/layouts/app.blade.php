@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @stack('meta')
-    <title>{{ $page_title ?? '' }} immune-web</title>
-    <meta name="description" content="portfolio">
-    <meta name="keywords" content="portfolio">
-    <meta name="author" content="immune">
+    <title>{{ $page_title ?? '' }} gabriel0</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('css/tagify.css') }}">
+    
     <style>
       .tagify--outside{
         border: 0;
@@ -32,6 +28,9 @@
       .tagify__input { border-radius: 4px; margin: 0; padding: 10px 12px; }
     </style>
 
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css">
+    <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
   </head>
   <body hx-ext="head-support">
     <nav class="navbar navbar-light">
@@ -40,7 +39,7 @@
           href="/"
           hx-push-url="/"
           hx-get="/htmx/home" 
-          hx-target="#app-body">immune-web</a>
+          hx-target="#app-body">gabriel0</a>
           
         @include('components.navbar')
       </div>
@@ -52,10 +51,7 @@
     
     <footer>
       <div class="container">
-        <a href="/" class="logo-font">immune-web</a>
-        <span class="attribution">
-         
-        </span>
+       immune-web
       </div>
     </footer>
 
@@ -63,9 +59,7 @@
 
     <script src="{{ asset('js/htmx.js') }}"></script>
     <script src="{{ asset('js/htmx-head-support.js') }}"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/tagify.js') }}"></script>
 
     <script>
       var isTagify = null;

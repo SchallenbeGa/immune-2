@@ -1,28 +1,50 @@
-<main class="container">
-<div class="alert alert-danger" style="margin-top:10px;" role="alert">
-  No financial advice, following content are the result from a <a href="https://fr.wikipedia.org/wiki/Backtesting" target="_blank">backtesting</a> session !
-</div>
-  <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="margin-top:10px">
-    <div class="col">
-      <h1 class="display-4 fst-italic">
-        <p>Hello {{ $user->name }}</p>
-        <p>{{ $user->bio }}</p>
-      </h1>
-      <p class="lead my-3">This is your homepage</p>
+<div class="profile-page">
+  <div class="user-info">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-10 col-md-offset-1">
+          <img src="{{ $user->image }}" class="user-img" />
+          <h4>{{ $user->name }}</h4>
+          <p>{{ $user->bio }}</p>
+
+          @if ($user->is_self)
+            <a class="btn btn-sm btn-outline-secondary action-btn"
+              href="/settings"
+              hx-push-url="/settings"
+              hx-get="/htmx/settings"
+              hx-target="#app-body"
+            >
+              <i class="ion-ios-gear"></i>
+              &nbsp;
+              Edit Profile Settings</span>
+            </a>
+          @else
+            @include('users.partials.follow-button')
+          @endif
+        </div>
+
+      </div>
     </div>
-    @if ($user->is_self)
-    <a class="btn btn-sm btn-outline-secondary action-btn" href="/settings" style="margin:10px" hx-push-url="/settings" hx-get="/htmx/settings" hx-target="#app-body">
-      Edit Profile Settings</span>
-    </a>
-    @else
-    @include('users.partials.follow-button')
-    @endif
   </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <div id="feed-post-preview" hx-get="/htmx/users/{{ $user->username }}/favorites" hx-trigger="every 1s"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="posts-toggle">
+          <ul id="user-feed-navigation" class="nav nav-pills outline-active"></ul>
+        </div>
+        
+        <div id="user-post-preview"
+          @if (isset($load_favorites))
+            hx-get="/htmx/users/{{ $user->username }}/favorites"
+          @else
+            hx-get="/htmx/users/{{ $user->username }}/articles"
+          @endif
+          
+          hx-trigger="load"
+        ></div>
+      </div>
     </div>
   </div>
-  </div>
-</main>
+</div>

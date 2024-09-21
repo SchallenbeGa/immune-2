@@ -1,48 +1,79 @@
-<header class="border-bottom lh-1 py-3">
-  <div class="row flex-nowrap justify-content-between align-items-center">
-    <div class="col pt-1 sub">
+<ul id="navbar" class="nav navbar-nav pull-xs-right" hx-swap-oob="true">
+  <li class="nav-item">
+    <a id="nav-link-home"
+      href="/"
+      hx-get="/htmx/home"
+      hx-target="#app-body"
+      hx-push-url="/"
+      class="nav-link @if (!isset($navbar_active) || $navbar_active == 'home') active @endif" 
+    >
+      Home
+    </a>
+  </li>
 
-      <a class="link-secondary" target="_blank" href="https://github.com/schallenbega">Subscribe</a>
-    </div>
-    <div class="col text-center logo">
-      <a id="nav-link-home" href="/" hx-get="/htmx/home" hx-target="#app-body" hx-push-url="/" class="blog-header-logo text-body-emphasis text-decoration-none">
-        Home
-      </a>
-    </div>
-    <div class="col d-flex justify-content-end align-items-center" hx-swap-oob="true">
+  @guest
+  <li class="nav-item">
+    <a id="nav-link-sign-in"
+      href="/sign-in"
+      hx-get="/htmx/sign-in"
+      hx-target="#app-body"
+      hx-push-url="/sign-in"
+      class="nav-link @if (isset($navbar_active) && $navbar_active == 'sign-in') active @endif" 
+    >
+      Sign in
+    </a>
+  </li>
+  <li class="nav-item">
+    <a id="nav-link-sign-up"
+      href="/sign-up"
+      hx-get="/htmx/sign-up"
+      hx-target="#app-body"
+      hx-push-url="/sign-up"
+      class="nav-link @if (isset($navbar_active) && $navbar_active == 'sign-up') active @endif" 
+    >
+      Sign up
+    </a>
+  </li>
+  @endguest
+  
+  @auth
+  @if (auth()->user()->role>2)
+    <li class="nav-item">
+    <a id="nav-link-editor"
+      href="/editor"
+      hx-get="/htmx/editor"
+      hx-target="#app-body"
+      hx-push-url="/editor"
+      class="nav-link @if (isset($navbar_active) && $navbar_active == 'editor') active @endif"
+    >
+      <i class="ion-compose"></i>
+      New Article
+    </a>
+  </li>
+  @endif
 
-
-      @guest
-      <a id="nav-link-sign-in" href="/sign-in" hx-get="/htmx/sign-in" hx-target="#app-body" hx-push-url="/sign-in" style="margin-right:1rem" class="btn btn-sm btn-outline-secondary">
-        Sign in
-      </a>
-
-      <a id="nav-link-sign-up" href="/sign-up" hx-get="/htmx/sign-up" hx-target="#app-body" hx-push-url="/sign-up" class="btn btn-sm btn-outline-secondary">
-        Sign up
-      </a>
-      @endguest
-
-      @auth
-
-      <!-- <a id="nav-link-editor" href="/editor" hx-get="/htmx/editor" hx-target="#app-body" hx-push-url="/editor" class="btn btn-sm btn-outline-secondary nav-link">
-        New Article
-      </a> -->
-
-      <a id="nav-link-settings" href="/settings" hx-get="/htmx/settings" hx-target="#app-body" style="padding:10px" hx-push-url="/settings" class="btn btn-sm btn-outline-secondary nav-link">
-        Settings
-      </a>
-
-      <a id="nav-link-profile" style="width: 100%;padding:10px;margin:10px" href="/users/{{ auth()->user()->username }}" hx-get="/htmx/users/{{ auth()->user()->username }}" hx-target="#app-body" hx-push-url="/users/{{ auth()->user()->username }}" class="btn btn-sm btn-outline-secondary nav-link">
-        <img width="25px" height="25px" style="border-radius: 50%;" class="user-pic" src="{{ auth()->user()->image }}">
-        {{ auth()->user()->name ?? auth()->user()->username }}
-      </a>
-      <form method="get" action="/logout">
-        @csrf
-        <button class="btn btn-sm action-btn btn-outline-danger" style="margin:10px">
-          out
-        </button>
-      </form>
-      @endauth
-    </div>
-  </div>
-</header>
+  <li class="nav-item">
+    <a id="nav-link-settings"
+      href="/settings"
+      hx-get="/htmx/settings"
+      hx-target="#app-body"
+      hx-push-url="/settings"
+      class="nav-link @if (isset($navbar_active) && $navbar_active == 'settings') active @endif"
+    >
+      Settings
+    </a>
+  </li>
+  <li class="nav-item">
+    <a id="nav-link-profile"
+      href="/users/{{ auth()->user()->username }}"
+      hx-get="/htmx/users/{{ auth()->user()->username }}"
+      hx-target="#app-body"
+      hx-push-url="/users/{{ auth()->user()->username }}"
+      class="nav-link @if (isset($navbar_active) && $navbar_active == 'profile') active @endif"
+    >
+      <img class="user-pic" src="{{ auth()->user()->image }}">
+      {{ auth()->user()->name ?? auth()->user()->username }}
+    </a>
+  </li>
+  @endauth
+</ul>

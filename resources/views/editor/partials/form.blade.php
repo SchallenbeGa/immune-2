@@ -16,26 +16,25 @@
 
           hx-target="#app-body"
         >
-        @csrf
           <fieldset class="form-group">
-            <input type="text" name="title" style="margin-top:10px" class="form-control form-control-lg" placeholder="Post Title"
+            <input type="text" name="title" class="form-control form-control-lg" placeholder="Post Title"
               @if (isset($article))
                 value="{{ $article->title }}"
               @endif
             >
           </fieldset>
           <fieldset class="form-group">
-            <input type="text" name="description" style="margin-top:10px" class="form-control form-control-md" placeholder="What's this article about?"
+            <input type="text" name="description" class="form-control form-control-md" placeholder="What's this article about?"
               @if (isset($article))
                 value="{{ $article->description }}"
               @endif
             >
           </fieldset>
           <fieldset class="form-group">
-            <textarea rows="8" name="content" class="form-control" style="margin-top:10px" placeholder="Write your post (in markdown)">@if (isset($article)){{ $article->body }}@endif</textarea>
+            <textarea rows="8" name="content" class="form-control" placeholder="Write your post (in markdown)">@if (isset($article)){{ $article->body }}@endif</textarea>
           </fieldset>
           <fieldset class="form-group">
-            <input type="text" name="tags" class="form-control tagify--outside" style="margin-top:10px" placeholder="Enter tags"
+            <input type="text" name="tags" class="form-control tagify--outside" placeholder="Enter tags"
               @if (isset($article))
                 value="{{ $article->tags->pluck('name') }}"
               @endif

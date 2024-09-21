@@ -1,4 +1,4 @@
-@extends('layouts.welcome')
+@extends('layouts.app')
 
 @section('content')
   @include('settings.partials.index')

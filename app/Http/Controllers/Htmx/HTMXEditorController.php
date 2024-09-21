@@ -12,8 +12,18 @@ class HTMXEditorController extends Controller
 {
     public function create()
     {
-       
-        return view('editor.partials.form');
+        if (auth()->guest()) {
+            return Helpers::redirectToSignIn();
+        }
+        if(auth()->user()->role<2){
+            return Helpers::redirectToHome();
+        }
+        
+        return view('editor.partials.form')
+            .view('components.navbar', ['navbar_active' => 'editor'])
+            .view('components.htmx.head', [
+                'page_title' => 'Editor —'
+            ]);
     }
 
     public function store(EditorStoreArticleRequest $request)
@@ -21,65 +31,30 @@ class HTMXEditorController extends Controller
         if (auth()->guest()) {
             return Helpers::redirectToSignIn();
         }
-
+        if(auth()->user()->role<2){
+            return Helpers::redirectToHome();
+        }
         $validated = $request->safe()->all();
-        if(env('COMPLETION')){
-             // The message you want to send to OpenAI
-            $curl = curl_init();
-            $message="write an article in english about ".$validated['content'].",use html tag to format";
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => 'http://localhost:8080/v1/chat/completions',
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => '',
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 0,
-              CURLOPT_FOLLOWLOCATION => true,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => 'POST',
-              CURLOPT_POSTFIELDS =>'{
-                  "model": "gpt-3.5-turbo",
-                  "messages": [
-                    {
-                      "role": "user",
-                      "content": "'.$message.'"
-                    }
-                  ]
-                }',
-              CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer no-key',
-                'Content-Type: application/json'
-              ),
-            ));
-        
-            $response = curl_exec($curl);
-        
-            curl_close($curl);
-        
-            // Process the response from the OpenAI API
-            $json = json_decode($response);
-            $content = $json->choices[0]->message->content;
-   
-        }else{$content=$validated['content'];}
 
         $article = Article::create([
             'user_id' => auth()->user()->id,
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']),
             'description' => $validated['description'],
-            'body' => $content
+            'body' => $validated['content']
         ]);
 
-        // if ($validated['tags']) {
+        if ($validated['tags']) {
 
-        //     $tags = json_decode($validated['tags']);
-        //     $tagsArray = [];
+            $tags = json_decode($validated['tags']);
+            $tagsArray = [];
 
-        //     foreach ($tags as $key => $tag) {
-        //         $tagsArray[] = $tag->value;
-        //     }
+            foreach ($tags as $key => $tag) {
+                $tagsArray[] = $tag->value;
+            }
 
-        //     $article->attachTags($tagsArray);
-        //}
+            $article->attachTags($tagsArray);
+        }
 
         return response()->view('components.redirect', [
                 'hx_get' => '/htmx/articles/' . $article->slug,
@@ -96,6 +71,9 @@ class HTMXEditorController extends Controller
         if (auth()->guest()) {
             return Helpers::redirectToSignIn();
         }
+        if(auth()->user()->role<2){
+            return Helpers::redirectToHome();
+        }
         
         return view('editor.partials.form', ['article' => $article])
             .view('components.navbar', ['navbar_active' => ''])
@@ -108,6 +86,9 @@ class HTMXEditorController extends Controller
     {
         if (auth()->guest()) {
             return Helpers::redirectToSignIn();
+        }
+        if(auth()->user()->role<2){
+            return Helpers::redirectToHome();
         }
 
         $validated = $request->safe()->all();
