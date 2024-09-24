@@ -72,6 +72,25 @@ class HTMXHomeController extends Controller
                 'page_title' => ''
             ]);
     }
+    public function lightFeed()
+    {
+        $articles = Article::with(['user', 'tags']);
+
+        $feedNavbarItems = Helpers::feedNavbarItems();
+        $feedNavbarItems['global']['is_active'] = true;
+
+        $articles = $articles->paginate(5);
+
+        return view('home.partials.post-preview-light', ['articles' => $articles])
+            .view('home.partials.pagination', [
+                'paginator' => $articles,
+                'page_number' => request()->page ?? 1
+            ])
+            .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
+            .view('components.htmx.head', [
+                'page_title' => ''
+            ]);
+    }
 
     public function tagFeed(Tag $tag)
     {

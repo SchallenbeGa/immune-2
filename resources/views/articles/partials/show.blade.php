@@ -40,7 +40,7 @@
       <div class="col-md-3 m-t-2">
       <div id="feed-post-preview-light"
           hx-trigger="load"
-          hx-get="/htmx/home/global-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
+          hx-get="/htmx/home/light-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
         ></div>
       </div>
     </div>

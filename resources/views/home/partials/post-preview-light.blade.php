@@ -1,26 +1,12 @@
 <div id="feed-post-preview-light" hx-swap-oob="true">
   @forelse ($articles as $article)
-    <div class="post-preview">
-      <div class="post-meta">
-      
-
-      
-          <span class="date">{{ $article->created_at->format('F jS') }}</span>
-        </div>
-
-       
-
-      </div>
       <a href="/articles/{{ $article->slug }}"
         hx-push-url="/articles/{{ $article->slug }}"
         hx-get="/htmx/articles/{{ $article->slug }}"
         hx-target="#app-body"
-        class="preview-link"
       >
-        <h1>{{ $article->title }}</h1>
+        <h3>{{ $article->title }}</h3>
         <p>{{ $article->description }}</p>
-
-        
       </a>
     </div>
   @empty
