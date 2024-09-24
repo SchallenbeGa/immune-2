@@ -7,7 +7,7 @@
       hx-push-url="/"
       class="nav-link @if (!isset($navbar_active) || $navbar_active == 'home') active @endif" 
     >
-      Home
+      home
     </a>
   </li>
 
@@ -20,7 +20,7 @@
       hx-push-url="/sign-in"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'sign-in') active @endif" 
     >
-      Sign in
+      sign in
     </a>
   </li>
   <li class="nav-item">
@@ -31,7 +31,7 @@
       hx-push-url="/sign-up"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'sign-up') active @endif" 
     >
-      Sign up
+      sign up
     </a>
   </li>
   @endguest
@@ -47,7 +47,7 @@
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'editor') active @endif"
     >
       <i class="ion-compose"></i>
-      New Article
+      new article
     </a>
   </li>
   @endif
@@ -60,7 +60,7 @@
       hx-push-url="/settings"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'settings') active @endif"
     >
-      Settings
+      settings
     </a>
   </li>
   <li class="nav-item">

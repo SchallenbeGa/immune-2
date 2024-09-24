@@ -7,17 +7,10 @@
           hx-get="/htmx/users/{{ $article->user->username }}"
           hx-target="#app-body"
         >
-          <img src="{{ $article->user->image }}" />
+        
         </a>
         <div class="info">
-          <a href="/users/{{ $article->user->username }}"
-            hx-push-url="/users/{{ $article->user->username }}"
-            hx-get="/htmx/users/{{ $article->user->username }}"
-            hx-target="#app-body"
-            class="author"
-          >
-            {{ $article->user->name }}
-          </a>
+         
           <span class="date">{{ $article->created_at->format('F jS') }}</span>
         </div>
     

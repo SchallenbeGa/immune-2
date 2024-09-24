@@ -1,7 +1,8 @@
 <div class="home-page">
   <div class="banner">
     <div class="container">
-      <p>second life of an old project</p>
+      <p>hypermedia x php</p>
+      <p>content is some llm</p>
     </div>
   </div>
 

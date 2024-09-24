@@ -12,7 +12,7 @@ class Helpers
 
         if (!auth()->guest()) {
             $navbarItems['personal'] = [
-                'title' => 'Your Feed',
+                'title' => 'personal',
                 'is_active' => false,
                 'hx_get_url' => '/htmx/home/your-feed',
                 'hx_push_url' => '/your-feed'
@@ -20,7 +20,7 @@ class Helpers
         }
 
         $navbarItems['global'] = [
-            'title' => 'Global Feed',
+            'title' => 'articles',
             'is_active' => false,
             'hx_get_url' => '/htmx/home/global-feed',
             'hx_push_url' => '/'
@@ -33,17 +33,12 @@ class Helpers
     {
         return [
             'personal' => [
-                'title' => 'My Articles',
+                'title' => 'articles',
                 'is_active' => true,
                 'url' => '/users/' . $user->username,
                 'hx_get_url' => '/htmx/users/' . $user->username . '/articles'
             ],
-            'favorite' => [
-                'title' => 'Favorited Articles',
-                'is_active' => false,
-                'url' => '/users/' . $user->username . '/favorites',
-                'hx_get_url' => '/htmx/users/' . $user->username . '/favorites'
-            ]
+            
         ];
     }
 

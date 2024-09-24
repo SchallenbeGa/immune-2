@@ -7,9 +7,9 @@
 >
   <i class="ion-heart"></i>
   @if ($is_favorited)
-  Unfavorite Post    
+  unlove
   @else
-  Favorite Post
+  love
   @endif
   ({{ $favorite_count }})
 </button>

@@ -1,28 +1,29 @@
-<div class="editor-page">
-  <div class="container page">
-    <div class="row">
+<div class="post-page">
+<form method="post"
 
-      <div class="col-md-10 col-md-offset-1 col-xs-12">
+@if (isset($article))
+  hx-post="/htmx/editor/{{ $article->slug }}"
+@else
+  hx-post="/htmx/editor"
+@endif
 
-        <div id="form-message"></div>
+hx-target="#app-body"
+>
 
-        <form method="post"
+<div id="form-message"></div>
 
-          @if (isset($article))
-            hx-post="/htmx/editor/{{ $article->slug }}"
-          @else
-            hx-post="/htmx/editor"
-          @endif
+  <div class="banner">
+    <div class="container">
 
-          hx-target="#app-body"
-        >
-          <fieldset class="form-group">
+   <h1> <fieldset class="form-group">
             <input type="text" name="title" class="form-control form-control-lg" placeholder="Post Title"
               @if (isset($article))
                 value="{{ $article->title }}"
               @endif
             >
-          </fieldset>
+          </fieldset></h1>
+          
+          <hr>
           <fieldset class="form-group">
             <input type="text" name="description" class="form-control form-control-md" placeholder="What's this article about?"
               @if (isset($article))
@@ -30,21 +31,41 @@
               @endif
             >
           </fieldset>
-          <fieldset class="form-group">
-            <textarea rows="8" name="content" class="form-control" placeholder="Write your post (in markdown)">@if (isset($article)){{ $article->body }}@endif</textarea>
+
+      <div class="post-meta">
+       
+        <div class="info">
+          <span class="date">{{ $article->created_at->format('F jS') }}</span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container page">
+
+    <div class="row post-content">
+      <div class="col-md-12">
+      <fieldset class="form-group">
+            <textarea rows="16" name="content" class="form-control" placeholder="Write your post (in markdown)">@if (isset($article)){!! $article->body !!}@endif</textarea>
           </fieldset>
-          <fieldset class="form-group">
+          
+      
+      </div>
+      
+    </div>
+    <fieldset class="form-group">
             <input type="text" name="tags" class="form-control tagify--outside" placeholder="Enter tags"
               @if (isset($article))
                 value="{{ $article->tags->pluck('name') }}"
               @endif
             >
           </fieldset>
-          <button class="btn btn-lg btn-primary pull-xs-right">
+          <button  class="btn btn-lg btn-primary pull-xs-right">
             Publish Article
           </button>
-        </form>
-      </div>
-    </div>
+          
   </div>
+  </form>
 </div>

@@ -6,16 +6,8 @@
       <h1>{{ $article->title }}</h1>
 
       <div class="post-meta">
-        <a href="profile.html"><img src="{{ $article->user->image }}" /></a>
+        <a href="profile.html"></a>
         <div class="info">
-          <a href="/users/{{ $article->user->username }}"
-            hx-push-url="/users/{{ $article->user->username }}"
-            hx-get="/htmx/users/{{ $article->user->username }}"
-            hx-target="#app-body"
-            class="author"
-          >
-            {{ $article->user->name }}
-          </a>
           <span class="date">{{ $article->created_at->format('F jS') }}</span>
         </div>
 
@@ -26,12 +18,6 @@
           @include('articles.partials.delete-button', ['article' => $article])
 
         @else
-        
-          @include('articles.partials.follow-button', [
-            'user' => $article->user,
-            'follower_count' => $article->user->followers->count(),
-            'is_followed' => auth()->user() ? $article->user->followedBy(auth()->user()) : false
-          ])
           
           @include('articles.partials.favorite-button', [
             'show_text' => true,
@@ -52,12 +38,9 @@
       {!! $article->body !!}
       </div>
       <div class="col-md-3 m-t-2">
-      <div id="feed-post-preview"
+      <div id="feed-post-preview-light"
           hx-trigger="load"
-
-        
-            hx-get="/htmx/home/global-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
-
+          hx-get="/htmx/home/global-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
         ></div>
       </div>
     </div>
@@ -66,16 +49,9 @@
 
     <div class="post-actions">
       <div class="post-meta">
-        <a href="profile.html"><img src="{{ $article->user->image }}" /></a>
+        <a href="profile.html"></a>
         <div class="info">
-          <a href="/users/{{ $article->user->username }}"
-            hx-push-url="/users/{{ $article->user->username }}"
-            hx-get="/htmx/users/{{ $article->user->username }}"
-            hx-target="#app-body"
-            class="author"
-          >
-            {{ $article->user->name }}
-          </a>
+          
           <span class="date">{{ $article->created_at->format('F jS') }}</span>
         </div>
 
@@ -86,12 +62,6 @@
           @include('articles.partials.delete-button', ['article' => $article])
             
         @else
-
-          @include('articles.partials.follow-button', [
-            'user' => $article->user, 
-            'follower_count' => $article->user->followers->count(),
-            'is_followed' => auth()->user() ? $article->user->followedBy(auth()->user()) : false
-          ])
 
           @include('articles.partials.favorite-button', [
             'show_text' => true,
