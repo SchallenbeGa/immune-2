@@ -63,7 +63,7 @@
       settings
     </a>
   </li>
-  <li class="nav-item">
+  <!-- <li class="nav-item">
     <a id="nav-link-profile"
       href="/users/{{ auth()->user()->username }}"
       hx-get="/htmx/users/{{ auth()->user()->username }}"
@@ -73,7 +73,7 @@
     >
       profile
     </a>
-  </li>
+  </li> -->
   <li class="nav-item">
     <div class="col-md-4 col-md-offset-3">
         <button class="btn btn-outline-danger" hx-post="/htmx/logout">
