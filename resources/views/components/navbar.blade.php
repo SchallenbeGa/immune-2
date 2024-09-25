@@ -75,5 +75,12 @@
       {{ auth()->user()->name ?? auth()->user()->username }}
     </a>
   </li>
+  <li class="nav-item">
+    <div class="col-md-6 col-md-offset-3">
+        <button class="btn btn-outline-danger" hx-post="/htmx/logout">
+          logout
+        </button>
+      </div>
+</li>
   @endauth
 </ul>
