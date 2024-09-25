@@ -12,19 +12,10 @@
         </div>
 
         @if ($article->user->isSelf)
-
+          <br>
           @include('articles.partials.edit-button', ['article' => $article])
 
           @include('articles.partials.delete-button', ['article' => $article])
-
-        @else
-          
-          @include('articles.partials.favorite-button', [
-            'show_text' => true,
-            'favorite_count' => $favorite_count,
-            'is_favorited' => $is_favorited
-          ])
-
         @endif
       </div>
 
