@@ -1,4 +1,4 @@
-<button class="btn btn-outline-secondary btn-sm edit-button"
+<button style="margin:0.2rem;" class="btn btn-outline-secondary btn-sm edit-button"
   hx-get="/htmx/editor/{{ $article->slug }}"
   hx-target="#app-body"
   hx-push-url="/editor/{{ $article->slug }}"
