@@ -7,7 +7,7 @@
       <p>hypermedia x php</p>
       <p>content is some llm</p>
     <p>Why did the math book look sad? Because it had too many problems!</p>
-      <p>(error 404)</p>
+      <p>(error 419)</p>
     </div>
   </div>
 </div>
