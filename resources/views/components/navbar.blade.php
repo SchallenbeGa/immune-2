@@ -75,7 +75,7 @@
     </a>
   </li>
   <li class="nav-item">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-4 col-md-offset-3">
         <button class="btn btn-outline-danger" hx-post="/htmx/logout">
           logout
         </button>
