@@ -1,4 +1,5 @@
 <div id="feed-post-preview-light" hx-swap-oob="true">
+<h3>latest articles</h3>
   @forelse ($articles as $article)
     <div class="post-preview">
       <div class="post-meta">

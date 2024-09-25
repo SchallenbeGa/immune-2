@@ -38,6 +38,7 @@
       {!! $article->body !!}
       </div>
       <div class="col-md-3 m-t-2">
+        <hr>
       <div id="feed-post-preview-light"
           hx-trigger="load"
           hx-get="/htmx/home/light-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
@@ -50,10 +51,6 @@
     <div class="post-actions">
       <div class="post-meta">
         <a href="profile.html"></a>
-        <div class="info">
-          
-          <span class="date">{{ $article->created_at->format('F jS') }}</span>
-        </div>
 
         @if ($article->user->isSelf)
 
