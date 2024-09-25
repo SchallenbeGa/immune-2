@@ -73,8 +73,8 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2" hx-get="/htmx/articles/{{ $article->slug }}/comments" hx-trigger="load"></div>
+    <div>
+      <div class="col-md-9" hx-get="/htmx/articles/{{ $article->slug }}/comments" hx-trigger="load"></div>
     </div>
 
   </div>

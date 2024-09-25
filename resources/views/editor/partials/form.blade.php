@@ -45,7 +45,7 @@ hx-target="#app-body"
 
   <div class="container page">
 
-    <div class="row post-content">
+    <div class="post-content">
       <div class="col-md-12">
       <fieldset class="form-group">
             <textarea rows="16" name="content" class="form-control" placeholder="Write your post (in markdown)">@if (isset($article)){!! $article->body !!}@endif</textarea>

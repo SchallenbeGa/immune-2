@@ -74,22 +74,18 @@ class HTMXHomeController extends Controller
     }
     public function lightFeed()
     {
-        $articles = Article::with(['user', 'tags']);
+        $articles = Article::with(['user', 'tags', 'favoritedUsers']);
 
-        $feedNavbarItems = Helpers::feedNavbarItems();
-        $feedNavbarItems['global']['is_active'] = true;
+   
 
         $articles = $articles->paginate(5);
 
-        return view('home.partials.post-preview-light', ['articles' => $articles])
-            .view('home.partials.pagination', [
-                'paginator' => $articles,
-                'page_number' => request()->page ?? 1
-            ])
-            .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
-            .view('components.htmx.head', [
-                'page_title' => ''
-            ]);
+        return view('home.partials.post-preview-light', ['articles' => $articles]);
+        // $articles = Article::with(['user']);
+
+        // $articles = $articles->paginate(5);
+
+        // return view('home.partials.post-preview', ['articles' => $articles]);
     }
 
     public function tagFeed(Tag $tag)
