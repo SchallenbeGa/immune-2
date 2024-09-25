@@ -71,7 +71,7 @@
       hx-push-url="/users/{{ auth()->user()->username }}"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'profile') active @endif"
     >
-      {{ auth()->user()->name ?? auth()->user()->username }}
+      profile
     </a>
   </li>
   <li class="nav-item">
