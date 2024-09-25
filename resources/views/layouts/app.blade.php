@@ -29,9 +29,8 @@
       .tagify__input { border-radius: 4px; margin: 0; padding: 10px 12px; }
     </style>
 
-    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
-    
-    <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}"> -->
   </head>
   <body hx-ext="head-support">
     <nav class="navbar navbar-light">
