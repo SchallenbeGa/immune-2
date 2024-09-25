@@ -11,31 +11,6 @@
            of salt that you'll keep coming back for.">
     <title>{{ $page_title ?? '' }} gabriel0</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    
-    <style>
-      .tagify--outside{
-        border: 0;
-      }
-
-      .tagify--outside .tagify__input{
-        order: -1;
-        flex: 100%;
-        border: 1px solid var(--tags-border-color);
-        margin-bottom: 1em;
-        transition: .1s;
-      }
-
-      .tagify--outside .tagify__input:hover{ border-color:var(--tags-hover-border-color); }
-      .tagify--outside.tagify--focus .tagify__input{
-        transition:0s;
-        border-color: var(--tags-focus-border-color);
-      }
-
-      .tagify__input { border-radius: 4px; margin: 0; padding: 10px 12px; }
-    </style>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}"> -->
   </head>
   <body hx-ext="head-support">
     <nav class="navbar navbar-light">
