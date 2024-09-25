@@ -3,6 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta
+  name="description"
+  content="gabriel0's simple recipe for maple donuts
+           makes a sticky, sweet treat with just a hint
+           of salt that you'll keep coming back for.">
     <title>{{ $page_title ?? '' }} gabriel0</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/tagify.css') }}">
