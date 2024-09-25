@@ -73,7 +73,7 @@ class HTMXEditorController extends Controller
         }
         if(auth()->user()->role<2){
             return Helpers::redirectToHome();
-        }
+        }  
         
         return view('editor.partials.form', ['article' => $article])
             .view('components.navbar', ['navbar_active' => ''])

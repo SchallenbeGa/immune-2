@@ -33,11 +33,11 @@ hx-target="#app-body"
           </fieldset>
 
       <div class="post-meta">
-       
+      @if (isset($article))
         <div class="info">
           <span class="date">{{ $article->created_at->format('F jS') }}</span>
         </div>
-
+        @endif
       </div>
 
     </div>
