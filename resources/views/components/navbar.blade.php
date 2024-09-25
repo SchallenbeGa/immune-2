@@ -71,7 +71,7 @@
       hx-push-url="/users/{{ auth()->user()->username }}"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'profile') active @endif"
     >
-      <img class="user-pic" src="{{ auth()->user()->image }}">
+      <img alt="picture choosed by user" class="user-pic" src="{{ auth()->user()->image }}">
       {{ auth()->user()->name ?? auth()->user()->username }}
     </a>
   </li>
