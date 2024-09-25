@@ -11,12 +11,7 @@ class Helpers
         $navbarItems = [];
 
         if (!auth()->guest()) {
-            $navbarItems['personal'] = [
-                'title' => 'personal',
-                'is_active' => false,
-                'hx_get_url' => '/htmx/home/your-feed',
-                'hx_push_url' => '/your-feed'
-            ];
+           //
         }
 
         $navbarItems['global'] = [
@@ -29,18 +24,7 @@ class Helpers
         return $navbarItems;
     }
 
-    public static function userFeedNavbarItems(User $user): array
-    {
-        return [
-            'personal' => [
-                'title' => 'articles',
-                'is_active' => true,
-                'url' => '/users/' . $user->username,
-                'hx_get_url' => '/htmx/users/' . $user->username . '/articles'
-            ],
-            
-        ];
-    }
+   
 
     public static function redirectToHome()
     {

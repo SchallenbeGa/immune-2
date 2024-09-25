@@ -33,26 +33,6 @@ class HTMXHomeController extends Controller
         ]);
     }
 
-    public function yourFeed()
-    {
-        $articles = Article::with(['user', 'tags', 'favoritedUsers']);
-
-        $feedNavbarItems = Helpers::feedNavbarItems();
-        $feedNavbarItems['personal']['is_active'] = true;
-
-        $articles = $articles->ofAuthorsFollowedByUser(auth()->user())->paginate(5);
-
-        return view('home.partials.post-preview', ['articles' => $articles])
-            .view('home.partials.pagination', [
-                'paginator' => $articles,
-                'page_number' => request()->page ?? 1
-            ])
-            .view('home.partials.feed-navigation', ['feedNavbarItems' => $feedNavbarItems])
-            .view('components.htmx.head', [
-                'page_title' => 'Your feed —'
-            ]);
-    }
-
     public function globalFeed()
     {
         $articles = Article::with(['user', 'tags'])->latest();
