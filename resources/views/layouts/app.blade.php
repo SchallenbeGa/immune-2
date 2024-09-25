@@ -10,7 +10,6 @@
            of salt that you'll keep coming back for.">
     <title>{{ $page_title ?? '' }} gabriel0</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/tagify.css') }}">
     
     <style>
       .tagify--outside{

@@ -25,7 +25,7 @@ class EditorStoreArticleRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'description' => 'nullable',
+            'description' => 'required',
             'content' => 'required',
             'tags' => 'nullable',
         ];

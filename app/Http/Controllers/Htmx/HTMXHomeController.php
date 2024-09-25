@@ -55,7 +55,7 @@ class HTMXHomeController extends Controller
 
     public function globalFeed()
     {
-        $articles = Article::with(['user', 'tags', 'favoritedUsers']);
+        $articles = Article::with(['user', 'tags'])->latest();
 
         $feedNavbarItems = Helpers::feedNavbarItems();
         $feedNavbarItems['global']['is_active'] = true;
@@ -74,7 +74,7 @@ class HTMXHomeController extends Controller
     }
     public function lightFeed()
     {
-        $articles = Article::with(['user', 'tags', 'favoritedUsers']);
+        $articles = Article::with(['user', 'tags', 'favoritedUsers'])->latest();
 
    
 

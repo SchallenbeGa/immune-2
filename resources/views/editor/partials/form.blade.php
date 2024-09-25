@@ -48,7 +48,7 @@ hx-target="#app-body"
     <div class="post-content">
       <div class="col-md-12">
       <fieldset class="form-group">
-            <textarea rows="16" name="content" class="form-control" placeholder="Write your post (in markdown)">@if (isset($article)){!! $article->body !!}@endif</textarea>
+            <textarea rows="16" name="content" class="form-control" placeholder="Write your post (in html)">@if (isset($article)){!! $article->body !!}@endif</textarea>
           </fieldset>
           
       
@@ -56,7 +56,7 @@ hx-target="#app-body"
       
     </div>
     <fieldset class="form-group">
-            <input type="text" name="tags" class="form-control tagify--outside" placeholder="Enter tags"
+            <input style="display:none" type="text" name="tags" class="form-control tagify--outside" placeholder="Enter tags"
               @if (isset($article))
                 value="{{ $article->tags->pluck('name') }}"
               @endif

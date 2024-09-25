@@ -11,7 +11,6 @@
     <textarea class="form-control" placeholder="Write a comment..." rows="3" name="comment"></textarea>
   </div>
   <div class="card-footer">
-    <img src="{{ $article->user->image }}" class="comment-author-img" />
     <button class="btn btn-sm btn-primary">
       Post Comment
     </button>
