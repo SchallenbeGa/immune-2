@@ -1,6 +1,7 @@
 <ul id="navbar" class="nav navbar-nav pull-xs-right" hx-swap-oob="true">
   <li class="nav-item">
     <a id="nav-link-home"
+    aria-label="homepage"
       href="/"
       hx-get="/htmx/home"
       hx-target="#app-body"
@@ -14,6 +15,7 @@
   @guest
   <li class="nav-item">
     <a id="nav-link-sign-in"
+    aria-label="signin page"
       href="/sign-in"
       hx-get="/htmx/sign-in"
       hx-target="#app-body"
@@ -25,6 +27,7 @@
   </li>
   <li class="nav-item">
     <a id="nav-link-sign-up"
+    aria-label="signup page"
       href="/sign-up"
       hx-get="/htmx/sign-up"
       hx-target="#app-body"
@@ -40,6 +43,7 @@
   @if (auth()->user()->role>2)
     <li class="nav-item">
     <a id="nav-link-editor"
+    aria-label="new article page"
       href="/editor"
       hx-get="/htmx/editor"
       hx-target="#app-body"
@@ -54,6 +58,7 @@
 
   <li class="nav-item">
     <a id="nav-link-settings"
+    aria-label="user's setting page"
       href="/settings"
       hx-get="/htmx/settings"
       hx-target="#app-body"
