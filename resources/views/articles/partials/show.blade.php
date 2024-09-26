@@ -6,7 +6,6 @@
       <h1>{{ $article->title }}</h1>
 
       <div class="post-meta">
-        <a href="profile.html"></a>
         <div class="info">
           <span class="date">{{ $article->created_at->format('F jS') }}</span>
         </div>
@@ -41,7 +40,6 @@
 
     <div class="post-actions">
       <div class="post-meta">
-        <a href="profile.html"></a>
 
         @if ($article->user->isSelf)
 
@@ -49,8 +47,14 @@
 
           @include('articles.partials.delete-button', ['article' => $article])
             
+        @elseif (auth()->guest())
+        <a style="color:black;margin:0.2rem;" class="btn btn-sm edit-button"
+  href="/login"
+>
+  <i class="ion-edit"></i>
+  love
+</a>
         @else
-
           @include('articles.partials.favorite-button', [
             'show_text' => true,
             'favorite_count' => $favorite_count,
