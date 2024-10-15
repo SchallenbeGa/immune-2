@@ -3,12 +3,18 @@
     <a id="nav-link-home"
     aria-label="homepage"
       href="/"
-      hx-get="/htmx/home"
-      hx-target="#app-body"
-      hx-push-url="/"
       class="nav-link @if (!isset($navbar_active) || $navbar_active == 'home') active @endif" 
     >
       home
+    </a>
+  </li>
+  <li class="nav-item">
+    <a id="nav-link-home"
+    aria-label="homepage"
+      href="/scan"
+      class="nav-link @if (!isset($navbar_active) || $navbar_active == 'home') active @endif" 
+    >
+      scan
     </a>
   </li>
 </ul>

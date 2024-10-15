@@ -33,7 +33,7 @@ use App\Http\Controllers\InventoryController;
 */
 
 Route::get('/', [HomeController::class, 'index']);
-
+Route::get('/scan', [HomeController::class, 'scan']);
 Route::post('/import', [ImportController::class, 'import']);
 
 Route::get('/sign-in', [SignInController::class, 'index'])->middleware('guest')->name('login');

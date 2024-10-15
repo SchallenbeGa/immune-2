@@ -13,6 +13,12 @@ class HomeController extends Controller
             'page_title' => 'Home —'
         ]);
     }
+    public function scan()
+    {
+        return view('home.scan', [
+            'page_title' => 'Home —'
+        ]);
+    }
 
     public function yourFeed()
     {

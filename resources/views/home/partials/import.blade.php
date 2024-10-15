@@ -9,7 +9,7 @@
   @endif
 >
     @csrf
-    <label for="json_file">Télécharger le fichier JSON :</label>
+    <label for="json_file">import json :</label>
     <input type="file" name="json_file" id="json_file">
-    <button type="submit" onclick="setTimeout(() =>refreshTableData(), 1000)">Importer</button>
+    <button type="submit" onclick="setTimeout(() =>refreshTableData(), 1000)">letsgooo</button>
 </form>
