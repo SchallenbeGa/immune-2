@@ -21,6 +21,13 @@ class InventoryController extends Controller
         $computer = $computer->append('detailUrl');
         return view('inventory.show', compact('computer'));
     }
+    public function showByReferenceJson($reference)
+    {
+        // Rechercher le PC par sa référence avec l'utilisateur associé
+        $computer = Computer::with('employee')->where('reference', $reference)->firstOrFail();
+        $computer = $computer->append('detailUrl');
+        return response()->json($computer);
+    }
     public function getComputers()
     {
         // Récupérer toutes les machines avec les utilisateurs associés
