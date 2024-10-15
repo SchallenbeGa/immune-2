@@ -15,6 +15,11 @@ use App\Http\Controllers\Htmx\HTMXSignInController;
 use App\Http\Controllers\Htmx\HTMXSignUpController;
 use App\Http\Controllers\Htmx\HTMXArticleController;
 use App\Http\Controllers\Htmx\HTMXSettingsController;
+use App\Http\Controllers\Htmx\HTMXImportController;
+use App\Http\Controllers\Htmx\HTMXInventoryController;
+
+use App\Http\Controllers\ImportController;
+use App\Http\Controllers\InventoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,46 +33,32 @@ use App\Http\Controllers\Htmx\HTMXSettingsController;
 */
 
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/global-feed', [HomeController::class, 'index']);
 
-Route::get('/your-feed', [HomeController::class, 'yourFeed'])->middleware('auth');
-Route::get('/tag-feed/{tag}', [HomeController::class, 'tags']);
+Route::post('/import', [ImportController::class, 'import']);
 
 Route::get('/sign-in', [SignInController::class, 'index'])->middleware('guest')->name('login');
 Route::post('/sign-in', [SignInController::class, 'signIn'])->middleware('guest');
 Route::get('/logout', [SignInController::class, 'logout'])->middleware('auth');
 
+Route::get('/inventory', [InventoryController::class, 'index']);
 Route::get('/sign-up', [SignUpController::class, 'index'])->middleware('guest');
 
-Route::get('/articles/{article}', [ArticleController::class, 'show']);
-
-Route::get('/editor', [EditorController::class, 'create'])->middleware('auth');
-Route::get('/editor/{article}', [EditorController::class, 'edit'])->middleware('auth');
-
-Route::get('/users/{user}', [UserController::class, 'show']);
-Route::get('/users/{user}/favorites', [UserController::class, 'favorites']);
-
 Route::get('/settings', [SettingsController::class, 'index'])->middleware('auth');
-
+Route::get('/computers/json', [InventoryController::class, 'getComputers'])->name('computers.json');
+Route::get('/computers/{reference}', [InventoryController::class, 'showByReference'])->name('inventory.show');
 Route::prefix('htmx')->group(function() {
 
     Route::get('/home', [HTMXHomeController::class, 'index']);
+    Route::get('/inventory/list', [HTMXInventoryController::class, 'showList']);
     Route::post('/home/articles/{article}/favorite', [HTMXHomeController::class, 'favorite']);
-    
+    Route::get('/computers/{reference}', [HTMXInventoryController::class, 'showByReference'])->name('inventory.show');
     Route::get('/articles/{article}', [HTMXArticleController::class, 'show']);
     Route::post('/articles/{article}/favorite', [HTMXArticleController::class, 'favorite']);
     Route::post('/articles/follow-user/{user}', [HTMXArticleController::class, 'follow']);
     Route::get('/articles/{article}/comments', [HTMXArticleController::class, 'comments']);
     Route::post('/articles/{article}/comments', [HTMXArticleController::class, 'postComment']);
     Route::delete('/articles/{article}', [HTMXArticleController::class, 'delete']);
-
-    Route::get('/home/feed-navigation', [HTMXHomeController::class, 'feedNavigation']);
-    Route::get('/home/global-feed', [HTMXHomeController::class, 'globalFeed']);
-    Route::get('/home/light-feed', [HTMXHomeController::class, 'lightFeed']);
-    Route::get('/home/your-feed', [HTMXHomeController::class, 'yourFeed']);
-    Route::get('/home/tag-list', [HTMXHomeController::class, 'tagList']);
-    Route::get('/home/tag-feed/{tag}', [HTMXHomeController::class, 'tagFeed']);
-
+    
     Route::get('/editor', [HTMXEditorController::class, 'create']);
     Route::post('/editor', [HTMXEditorController::class, 'store']);
     Route::get('/editor/{article}', [HTMXEditorController::class, 'edit']);
@@ -84,6 +75,7 @@ Route::prefix('htmx')->group(function() {
 
     Route::get('/settings', [HTMXSettingsController::class, 'index']);
     Route::post('/settings', [HTMXSettingsController::class, 'update']);
+    Route::post('/import', [HTMXImportController::class, 'import']);
 
     Route::get('/users/{user}', [HTMXUserController::class, 'show']);
     Route::get('/users/{user}/articles', [HTMXUserController::class, 'articles']);
