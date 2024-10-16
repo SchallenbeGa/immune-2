@@ -11,7 +11,13 @@ class Computer extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['reference', 'employee_id'];
+    protected $fillable = [
+        'localisation',
+        'garantie',
+        'date_achat',
+        'date_fin_garantie',
+        'reference',
+        'employee_id'];
 
     public function employee()
     {

@@ -15,6 +15,10 @@ class CreateComputersTable extends Migration
     {
         Schema::create('computers', function (Blueprint $table) {
             $table->id();
+            $table->string('garantie'); 
+            $table->string('localisation'); 
+            $table->string('date_achat'); 
+            $table->string('date_fin_garantie'); 
             $table->string('reference');  // Référence de la machine
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade'); // Clé étrangère avec la table 'users'
             $table->timestamps();         // Ajoute created_at et updated_at

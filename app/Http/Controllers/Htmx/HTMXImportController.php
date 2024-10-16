@@ -8,6 +8,7 @@ use App\Models\Computer;
 use App\Models\EmployeeComputerHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HTMXImportController extends Controller
 {
@@ -58,69 +59,90 @@ class HTMXImportController extends Controller
         if (auth()->guest()) {
             return Helpers::redirectToSignIn();
         }
-        $file = $request->file('csv_file');
-        $filePath = $file->getRealPath();
+        // Read the CSV file
+    $file = $request->file('csv_file');
+    $filePath = $file->getRealPath();
+    // Preprocess the CSV file to remove null bytes and unwanted characters
+    $fileContent = file_get_contents($filePath);
+    $fileContent = preg_replace('/\x00/', '', $fileContent);  // Remove null bytes
+
+    // Save the cleaned content back to a temporary file for processing
+    $tempFilePath = sys_get_temp_dir() . '/cleaned_csv.csv';
+    file_put_contents($tempFilePath, $fileContent);
+
+    // Open the cleaned CSV file for reading
+    $csvFile = fopen($tempFilePath, 'r');
+    $header = fgetcsv($csvFile);
+    // Create arrays to track existing and new references
+    $newReferences = [];
+
+    // Begin transaction for safe insert/update
+    DB::beginTransaction();
+
+    try {
+        // Process each row of the CSV
+        while (($row = fgetcsv($csvFile)) !== false) {
+            // Extract 'pc' and 'employee' values from each row
+            $pcReference = $row[2];  // Assuming the 'pc' reference is in the first column
+            $employeeName = $row[4]; // Assuming the 'employee' name is in the second column
+            $garantie = $row[7];
+            $localisation = $row[6];
+            $achat = $row[8];
+            $garantie_end = $row[9];
         
-        // Open the file for reading
-        $csvFile = fopen($filePath, 'r');
-        $header = fgetcsv($csvFile); // Assuming the first row is the header
-        
-        // Start transaction for atomic database operations
-        DB::beginTransaction();
+            // Store the reference for comparison later
+            $newReferences[] = $pcReference;
 
-        try {
-            // Loop through each row of the CSV file
-            while (($row = fgetcsv($csvFile)) !== false) {
-                // Extract data based on column positions (adjust indexes according to your CSV format)
-                $pcName = $row[2]; // e.g., "pc" column
-                $userName = $row[4]; // e.g., "user" column
+            // Check if the employee already exists, otherwise create a new one
+            $employee = Employee::firstOrCreate(
+                ['name' => $employeeName]
+            );
 
-                // Find or create the user in the users table
-                $user = Employee::firstOrCreate(['name' => $userName]);
+            // Check if the computer already exists, otherwise create or update it
+            $computer = Computer::updateOrCreate(
+                ['reference' => $pcReference,
+            'localisation' => $localisation,
+        'garantie' => $garantie,
+    'date_achat' => $achat,
+'date_fin_garantie' => $garantie_end],
+                ['employee_id' => $employee->id]  // Update employee assignment
+            );
 
-                // Check if the computer already exists
-                $computer = Computer::where('reference', $pcName)->first();
-
-                if (!$computer) {
-                    // If the computer doesn't exist, create it and assign the current user
-                    $computer = Computer::create([
-                        'reference' => $pcName,
-                        'employee_id' => $employee->id, // Assuming computers table has user_id to track the current user
-                    ]);
-                } else {
-                    // If the computer already exists, update the current user
-                    $computer->user_id = $employee->id;
-                    $computer->save();
-                }
-
-                // Log the history of user assignment in the user_computer_history table
-                UserComputerHistory::create([
-                    'computer_id' => $computer->id,
-                    'employee_id' => $employee->id,
-                    'assigned_at' => now(), // Use current timestamp
-                ]);
-            }
-
-            // Commit the transaction
-            DB::commit();
-
-            return back()->with('success', 'CSV imported successfully!');
-
-        } catch (\Exception $e) {
-            // Rollback the transaction in case of error
-            DB::rollback();
-            return back()->with('error', 'Failed to import CSV: ' . $e->getMessage());
-        } finally {
-            fclose($csvFile);
+            // Log the history in the employee_computer_history table
+            EmployeeComputerHistory::updateOrCreate([
+                'computer_id' => $computer->id,
+                'employee_id' => $employee->id,
+                'assigned_at' => now(),
+            ]);
         }
-    
+
+        // Fetch all existing references from the database
+        $existingReferences = Computer::pluck('reference')->toArray();
+
+        // Remove PCs that are no longer present in the new list (i.e., delete those not in the CSV)
+        Computer::whereNotIn('reference', $newReferences)->delete();
+
+        // Commit the transaction
+        DB::commit();
+
+        // Return a success message with the updated view
         return view('home.partials.import', [
             'oob_swap' => true
         ])
         .view('home.partials.form-message', [
             'message' => 'Successfully updated.',
             'oob_swap' => true
-        ])
-        .view('components.navbar', ['navbar_active' => 'settings']);
+        ]);
+
+    } catch (\Exception $e) {
+        // Rollback the transaction in case of any failure
+        DB::rollback();
+        dd($e);
+        // Handle the error (you can also add logging here)
+        return back()->with('error', 'Error during CSV import: ' . $e->getMessage());
+    } finally {
+        // Close the file
+        fclose($csvFile);
     }
+}
 }
