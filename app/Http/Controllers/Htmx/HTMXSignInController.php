@@ -61,6 +61,14 @@ class HTMXSignInController extends Controller
     {
         auth()->logout();
 
-        return Helpers::redirectToHome();
+        return response()->view('components.redirect', [
+            'hx_get' => '/htmx/sign-in',
+            'hx_target' => '#app-body',
+            'hx_trigger' => 'load',
+        ])
+        ->withHeaders([
+            'HX-Replace-Url' => '/',
+            'HX-Reswap' => 'none'
+        ]);
     }
 }

@@ -18,6 +18,7 @@ class CreateComputersTable extends Migration
             $table->string('reference');  // Référence de la machine
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade'); // Clé étrangère avec la table 'users'
             $table->timestamps();         // Ajoute created_at et updated_at
+            $table->softDeletes();
         });
     }
 

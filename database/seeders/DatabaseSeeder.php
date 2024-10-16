@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'Colombier$2022',
             'role' => 1
         ]);
-        
-        Computer::factory(800)->create();
+
+        // Computer::factory(800)->create();
     }
 }

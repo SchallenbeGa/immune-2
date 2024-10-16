@@ -17,6 +17,7 @@ class CreateEmployeesTable extends Migration
             $table->id();
             $table->string('name');  // Nom de l'utilisateur
             $table->timestamps();    // Ajoute created_at et updated_at
+            $table->softDeletes();
         });
     }
 

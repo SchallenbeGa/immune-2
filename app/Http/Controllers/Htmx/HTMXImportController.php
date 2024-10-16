@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Htmx;
 use App\Support\Helpers;
 use App\Models\Employee;
 use App\Models\Computer;
+use App\Models\EmployeeComputerHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,9 @@ class HTMXImportController extends Controller
 {
     public function import(Request $request)
     {
-  
+        if (auth()->guest()) {
+            return Helpers::redirectToSignIn();
+        }
         $jsonData = json_decode(file_get_contents($request->file('json_file')), true);
         
         foreach ($jsonData['pc_list'] as $pcData) {
@@ -22,10 +25,16 @@ class HTMXImportController extends Controller
             );
 
             // Vérifier si le PC existe déjà, sinon le créer ou le mettre à jour
-            Computer::updateOrCreate(
+            $comp = Computer::updateOrCreate(
                 ['reference' => $pcData['pc']], // Critère pour identifier la machine
                 ['employee_id' => $employee->id]        // Mise à jour des informations
             );
+
+            EmployeeComputerHistory::updateOrCreate([
+                'computer_id' => $comp->id,
+                'employee_id' => $employee->id,
+                'assigned_at' => now(),
+            ]);
         }
         $existingReferences = Computer::pluck('reference')->toArray();
 

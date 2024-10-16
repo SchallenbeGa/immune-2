@@ -11,8 +11,10 @@ class Employee extends Model
 
     protected $fillable = ['name'];
 
-    public function computers()
+   
+    public function computerHistory()
     {
-        return $this->hasMany(Computer::class);
+        return $this->hasMany(EmployeeComputerHistory::class);
     }
+
 }

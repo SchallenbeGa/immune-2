@@ -17,14 +17,24 @@ class InventoryController extends Controller
     public function showByReference($reference)
     {
         // Rechercher le PC par sa référence avec l'utilisateur associé
-        $computer = Computer::with('employee')->where('reference', $reference)->firstOrFail();
+        $computer = Computer::with(['employee','employeeHistory.employee'])->where('reference', $reference)->firstOrFail();
+        $computer_history = Computer::withTrashed()->where('reference', $reference)->firstOrFail();
         $computer = $computer->append('detailUrl');
-        return view('inventory.show', compact('computer'));
+        $computer->employeeHistory->pop();
+        $employee_history = $computer->employeeHistory->map(function ($history) {
+            return [
+                'employee' => $history->employee->name,
+                'assigned_at' => $history->assigned_at,
+            ];
+        })->sortDesc();
+        
+        return view('inventory.show', compact('computer','employee_history'));
     }
     public function showByReferenceJson($reference)
     {
         // Rechercher le PC par sa référence avec l'utilisateur associé
-        $computer = Computer::with('employee')->where('reference', $reference)->firstOrFail();
+        $computer = Computer::with(['employee','userHistory.user'])->where('reference', $reference)->firstOrFail();
+        dd($computer);
         $computer = $computer->append('detailUrl');
         return response()->json($computer);
     }

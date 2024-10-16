@@ -9,7 +9,7 @@
     <a href="/htmx/sign-in" hx-get="/htmx/sign-in" hx-target="#app-body"
       hx-push-url="/sign-in"
     >
-      Sign in
+      Login
     </a>
     or
     <a href="/htmx/sign-up" hx-get="/htmx/sign-up" hx-target="#app-body"

@@ -4,10 +4,7 @@
      
     </div>
   </div>
-  <link href="https://unpkg.com/tabulator-tables@5.3.4/dist/css/tabulator.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://unpkg.com/luxon@2.3.0/build/global/luxon.min.js"></script>
-  <script src="https://unpkg.com/tabulator-tables@5.3.4/dist/js/tabulator.min.js"></script>
+ 
   <div class="container page">
     <div class="">
 
@@ -28,6 +25,8 @@
        <button id="exportBtn">Export to CSV</button>
        <button id="printBtn">Print All QR Codes</button>
        <div id="qr-codes-container" style="display:none;"></div>
+       <button id="get-data-btn">Générer QR Codes</button>
+       <div id="qr-container"></div>
 
        <div id="computer-table"></div>
        <div id="qr-codes"></div>
@@ -42,7 +41,6 @@
         ajaxURL: "{{ route('computers.json') }}", // URL pour charger les données JSON
         height: "500px", // Hauteur du tableau
         layout: "fitColumns", // Ajuster les colonnes à la largeur du tableau
-        pagination: "local", // Activer la pagination
         paginationSize: 10, // Nombre de lignes par page
         columns: [
             {title: "Référence de la machine", field: "reference", sorter: "string", width: 150},
@@ -69,6 +67,39 @@
                 }
         ]
     });
+    function generateQRCode(url, callback) {
+   
+        }
+
+        // Bouton pour récupérer les données et générer les QR codes
+        document.getElementById("get-data-btn").addEventListener("click", function() {
+            var data = table.getData(); // Récupérer les données du tableau
+
+            // Vider le conteneur de QR codes avant d'ajouter les nouveaux
+            var qrContainer = document.getElementById("qr-container");
+            qrContainer.innerHTML = "";
+
+            // Parcourir chaque ligne de données et générer un QR code pour chaque URL
+            data.forEach(function(row) {
+                var url = row.url; // Récupérer l'URL
+
+                // Générer le QR code pour chaque URL
+                const qrCodeContainer = document.createElement('a');
+                        const qrCode = new QRCode(qrCodeContainer, {
+                            text: cell.getValue(),
+                            width: 100,
+                            height: 100
+                        });
+                generateQRCode(url, function(qrCodeBase64) {
+                    // Créer un élément <img> pour afficher le QR code
+                    var img = document.createElement("img");
+                    img.src = qrCodeBase64;
+
+                    // Ajouter l'image au conteneur
+                    qrContainer.appendChild(img);
+                });
+            });
+        });
     // Fonction pour imprimer tous les QR codes
     document.getElementById('printBtn').addEventListener('click', function() {
             const qrContainer = document.getElementById('qr-codes-container');
