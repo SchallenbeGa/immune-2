@@ -22,12 +22,16 @@
     <p>Details URL: {{ $computer->detailUrl }}</p>
 </div>
 <hr>
+  
+@auth
+  
 @foreach($employee_history as $entry)
 <div>
     <h2>Old user : {{ $entry['employee'] }}</h2>
     <p>Details URL: {{ $entry['assigned_at'] }}</p>
 </div>
 @endforeach
+@endauth
 <!-- Affichage du QR code correspondant à l'URL de l'ordinateur -->
 <div id="qr-code-container"></div>
 

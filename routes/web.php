@@ -7,7 +7,7 @@ use App\Http\Controllers\EditorController;
 use App\Http\Controllers\SignInController;
 use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\SettingsController;
+
 use App\Http\Controllers\Htmx\HTMXHomeController;
 use App\Http\Controllers\Htmx\HTMXUserController;
 use App\Http\Controllers\Htmx\HTMXEditorController;
@@ -44,7 +44,7 @@ Route::get('/logout', [SignInController::class, 'logout'])->middleware('auth');
 Route::get('/inventory', [InventoryController::class, 'index'])->middleware('auth');
 
 Route::get('/computers/json', [InventoryController::class, 'getComputers'])->name('computers.json')->middleware('auth');
-Route::get('/computers/{reference}', [InventoryController::class, 'showByReference'])->name('inventory.show')->middleware('auth');
+Route::get('/computers/{reference}', [InventoryController::class, 'showByReference'])->name('inventory.show');
 Route::get('/computers/{reference}/json', [InventoryController::class, 'showByReferenceJson'])->name('inventory.showJson')->middleware('auth');
 
 Route::prefix('htmx')->group(function() {
