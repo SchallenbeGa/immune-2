@@ -1,5 +1,18 @@
 <ul id="navbar" class="nav navbar-nav pull-xs-right" hx-swap-oob="true">
-  
+@guest
+  <li class="nav-item">
+    <a id="nav-link-sign-in"
+    aria-label="signin page"
+      href="/sign-in"
+      hx-get="/htmx/sign-in"
+      hx-target="#app-body"
+      hx-push-url="/sign-in"
+      class="nav-link @if (isset($navbar_active) && $navbar_active == 'sign-in') active @endif" 
+    >
+      sign in
+    </a>
+  </li>
+  @endguest
   @auth
   
   <li class="nav-item">
