@@ -36,6 +36,7 @@ Route::get('/', [HomeController::class, 'index'])->middleware('auth');
 Route::get('/home', [HomeController::class, 'index'])->middleware('auth');
 Route::get('/scan', [HomeController::class, 'scan'])->middleware('auth');
 Route::post('/import', [ImportController::class, 'import']);
+Route::post('/import/csv', [ImportController::class, 'importCsv']);
 
 Route::get('/sign-in', [SignInController::class, 'index'])->middleware('guest')->name('login');
 Route::post('/sign-in', [SignInController::class, 'signIn'])->middleware('guest');
@@ -77,6 +78,7 @@ Route::prefix('htmx')->group(function() {
     Route::get('/settings', [HTMXSettingsController::class, 'index']);
     Route::post('/settings', [HTMXSettingsController::class, 'update']);
     Route::post('/import', [HTMXImportController::class, 'import']);
+    Route::post('/import/csv', [HTMXImportController::class, 'importCsv']);
 
     Route::get('/users/{user}', [HTMXUserController::class, 'show']);
     Route::get('/users/{user}/articles', [HTMXUserController::class, 'articles']);

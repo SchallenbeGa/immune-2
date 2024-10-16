@@ -36,4 +36,24 @@ class ImportController extends Controller
 
         return response()->json(['message' => 'Données importées et mises à jour avec succès']);
     }
+    public function importCsv(Request $request)
+    {
+        // Assumons que le fichier JSON est uploadé ou présent localement
+        $jsonData = json_decode(file_get_contents($request->file('json_file')), true);
+        
+        foreach ($jsonData['pc_list'] as $pcData) {
+            // Vérifier si l'utilisateur existe déjà, sinon le créer
+            $user = Employee::firstOrCreate(
+                ['name' => $pcData['employee']]
+            );
+
+            // Vérifier si le PC existe déjà, sinon le créer ou le mettre à jour
+            Computer::updateOrCreate(
+                ['reference' => $pcData['pc']], // Critère pour identifier la machine
+                ['employee_id' => $user->id]        // Mise à jour des informations
+            );
+        }
+
+        return response()->json(['message' => 'Données importées et mises à jour avec succès']);
+    }
 }
