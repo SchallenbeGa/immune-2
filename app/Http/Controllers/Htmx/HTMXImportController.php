@@ -85,10 +85,10 @@ class HTMXImportController extends Controller
             // Extract 'pc' and 'employee' values from each row
             $pcReference = $row[2];  // Assuming the 'pc' reference is in the first column
             $employeeName = $row[4]; // Assuming the 'employee' name is in the second column
-            $garantie = $row[7];
-            $localisation = $row[6];
-            $achat = $row[8];
-            $garantie_end = $row[9];
+            $garantie = $row[6];
+            $localisation = $row[5];
+            $achat = $row[7];
+            $garantie_end = $row[98];
         
             // Store the reference for comparison later
             $newReferences[] = $pcReference;
