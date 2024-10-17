@@ -18,9 +18,16 @@
 <div>
     <h2>ID: {{ $computer->id }}</h2>
     <p>Reference: {{ $computer->reference }}</p>
+    @auth
     <p>User: {{ $computer->employee->name}}</p>
+    <p>garantie : {{ $computer->garantie }}</p>
+    <p>fin de garantie : {{ $computer->date_fin_garantie }}</p>
+    <p>date achat : {{ $computer->date_achat }}</p>
+    <p>localisation : {{ $computer->localisation }}</p>
     <p>assigned at : {{ $computer->updated_at }}</p>
     <p>Details URL: {{ $computer->detailUrl }}</p>
+    @endauth
+  
 </div>
 <hr>
   
