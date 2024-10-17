@@ -19,6 +19,7 @@
     <h2>ID: {{ $computer->id }}</h2>
     <p>Reference: {{ $computer->reference }}</p>
     <p>User: {{ $computer->employee->name}}</p>
+    <p>assigned at : {{ $computer->updated_at }}</p>
     <p>Details URL: {{ $computer->detailUrl }}</p>
 </div>
 <hr>
