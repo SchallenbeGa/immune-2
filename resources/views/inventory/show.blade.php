@@ -28,7 +28,7 @@
 @foreach($employee_history as $entry)
 <div>
     <h2>Old user : {{ $entry['employee'] }}</h2>
-    <p>Details URL: {{ $entry['assigned_at'] }}</p>
+    <p>assigned at : {{ $entry['assigned_at'] }}</p>
 </div>
 @endforeach
 @endauth
