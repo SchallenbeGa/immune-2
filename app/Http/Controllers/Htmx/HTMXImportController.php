@@ -88,7 +88,7 @@ class HTMXImportController extends Controller
             $garantie = $row[6];
             $localisation = $row[5];
             $achat = $row[7];
-            $garantie_end = $row[98];
+            $garantie_end = $row[8];
         
             // Store the reference for comparison later
             $newReferences[] = $pcReference;
