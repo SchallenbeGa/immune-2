@@ -49,7 +49,7 @@
             
         @elseif (auth()->guest())
         <a style="color:black;margin:0.2rem;" class="btn btn-sm edit-button"
-  href="/login"
+  href="/sign-in"
 >
   <i class="ion-edit"></i>
   love
