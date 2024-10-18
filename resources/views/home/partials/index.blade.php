@@ -13,7 +13,7 @@
         <div class="feed-toggle">
           <ul id="feed-navigation" class="nav nav-pills outline-active"></ul>
         </div>
-
+        <nav id="feed-pagination"></nav>
         <div id="feed-post-preview"
           hx-trigger="load"
 
