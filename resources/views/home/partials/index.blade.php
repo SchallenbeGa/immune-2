@@ -9,7 +9,7 @@
   <div class="container page">
     <div class="row">
 
-      <div class="col-md-9">¨
+      <div class="col-md-9">
       <nav id="feed-pagination"></nav>
         <div class="feed-toggle">
           <ul id="feed-navigation" class="nav nav-pills outline-active"></ul>

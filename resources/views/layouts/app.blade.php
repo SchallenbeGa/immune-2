@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
     <meta
   name="description"
   content="gabriel0's simple recipe for maple donuts
@@ -39,6 +38,15 @@
 
     <script src="{{ asset('js/htmx.js') }}"></script>
     <script src="{{ asset('js/htmx-head-support.js') }}"></script>
-   
+    <script>
+    // Get the session lifetime (in minutes) from your backend and multiply by 60 to convert to seconds.
+    var sessionLifetimeInMinutes = {{ config('session.lifetime') }}; // Insert backend value here
+    var sessionLifetimeInSeconds = sessionLifetimeInMinutes * 60; // Convert to seconds
+
+    // Refresh the page after the session lifetime expires
+    setTimeout(function() {
+        window.location.reload(); // Refresh the page
+    }, sessionLifetimeInSeconds * 1000); // Convert seconds to milliseconds for setTimeout
+</script>
   </body>
 </html>
