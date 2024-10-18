@@ -15,7 +15,7 @@ footer{background:#f3f3f3;margin-top:3rem;padding:1rem 0;position:absolute;botto
 .post-meta{display:block;font-weight:300;}
 .post-meta .info{display:inline-block;vertical-align:middle;}
 .post-meta .info{margin:0 1.5rem 0 .3rem;line-height:1rem;}
-.post-meta .info .date{color:#bbb;font-size:.8rem;display:block;}
+.post-meta .info .date{color:black;font-size:.8rem;display:block;}
 .post-preview{border-top:1px solid rgba(0,0,0,.1);padding:1.5rem 0;}
 .post-preview .post-meta{margin:0 0 1rem;}
 .post-preview .preview-link h1{font-weight:700!important;font-size:2rem!important;}
@@ -112,9 +112,9 @@ h1{font-size:2.5rem;}
 .navbar-nav .nav-link{display:block;padding-top:.425rem;padding-bottom:.425rem;}
 .navbar-nav .nav-item+.nav-item{margin-left:1rem;}
 .navbar-light .navbar-brand,.navbar-light .navbar-brand:focus,.navbar-light .navbar-brand:hover{color:rgba(0,0,0,.8);}
-.navbar-light .navbar-nav .nav-link{color:rgba(0,0,0,.3);}
-.navbar-light .navbar-nav .nav-link:focus,.navbar-light .navbar-nav .nav-link:hover{color:rgba(0,0,0,.6);}
-.navbar-light .navbar-nav .nav-link.active,.navbar-light .navbar-nav .nav-link.active:focus,.navbar-light .navbar-nav .nav-link.active:hover{color:rgba(0,0,0,.8);}
+.navbar-light .navbar-nav .nav-link{color:black;}
+.navbar-light .navbar-nav .nav-link:focus,.navbar-light .navbar-nav .nav-link:hover{color:darkgreen}
+.navbar-light .navbar-nav .nav-link.active,.navbar-light .navbar-nav .nav-link.active:focus,.navbar-light .navbar-nav .nav-link.active:hover{color:darkmagenta;}
 .label{display:inline-block;}
 .label{padding:.25em .4em;font-size:75%;line-height:1;color:#fff;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25rem;}
 .label:empty{display:none;}
@@ -142,7 +142,7 @@ textarea{overflow:auto;}
 .post-page .comment-form .card-footer .comment-author-img{height:30px;width:30px;}
 .post-page .card .card-footer{font-size:.8rem;font-weight:300;}
 .post-page .card .comment-author-img{display:inline-block;vertical-align:middle;height:20px;width:20px;border-radius:30px;}
-.post-page .card .date-posted{display:inline-block;vertical-align:middle;margin-left:5px;color:#bbb;}
+.post-page .card .date-posted{display:inline-block;vertical-align:middle;margin-left:5px;color:black}
 img{border:0;}
 p{margin-bottom:1rem;}
 img{vertical-align:middle;}
