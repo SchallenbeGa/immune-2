@@ -18,7 +18,7 @@ class HTMXSignInController extends Controller
                 'navbar_active' => 'sign-in'
             ])
             .view('components.htmx.head', [
-                'page_title' => 'Sign In —'
+                'page_title' => 'login'
             ]);
     }
 

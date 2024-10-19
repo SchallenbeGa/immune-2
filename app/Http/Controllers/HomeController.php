@@ -10,13 +10,13 @@ class HomeController extends Controller
     public function index()
     {
         return view('home.index', [
-            'page_title' => 'Home —'
+            'page_title' => 'home'
         ]);
     }
     public function scan()
     {
         return view('home.scan', [
-            'page_title' => 'Home —'
+            'page_title' => 'scan'
         ]);
     }
 

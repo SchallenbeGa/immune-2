@@ -15,7 +15,7 @@ class HTMXSignUpController extends Controller
                 'navbar_active' => 'sign-up'
             ])
             .view('components.htmx.head', [
-                'page_title' => 'Sign Up —'
+                'page_title' => 'signup'
             ]);
     }
 

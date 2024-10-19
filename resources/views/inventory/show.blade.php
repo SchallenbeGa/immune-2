@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <div class="home-page">
   <div class="banner">
     <div class="container">
@@ -40,18 +39,6 @@
 </div>
 @endforeach
 @endauth
-<!-- Affichage du QR code correspondant à l'URL de l'ordinateur -->
-<div id="qr-code-container"></div>
-
-<script>
-    // Générer le QR code en utilisant le detailsUrl de l'ordinateur
-    const qrCodeContainer = document.getElementById('qr-code-container');
-    new QRCode(qrCodeContainer, {
-        text: "{{ $computer->detailsUrl }}",  // Utiliser l'URL de détails de l'ordinateur
-        width: 200,
-        height: 200
-    });
-</script>
 </div>
 </div>
 @endsection

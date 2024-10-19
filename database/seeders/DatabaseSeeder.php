@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Computer;
 use App\Models\User;
 use App\Models\Employee;
+use App\Models\EmployeeComputerHistory;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
@@ -22,6 +23,6 @@ class DatabaseSeeder extends Seeder
             'role' => 1
         ]);
 
-        // Computer::factory(800)->create();
+        EmployeeComputerHistory::factory(800)->create();
     }
 }

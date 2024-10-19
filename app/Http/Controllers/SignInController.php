@@ -14,7 +14,7 @@ class SignInController extends Controller
 
         return view('sign-in.index', [
             'navbar_active' => 'login',
-            'page_title' => 'login —'
+            'page_title' => 'login'
         ]);
     }
 

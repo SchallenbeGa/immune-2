@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmployeeComputerHistory extends Model
 {
+    use HasFactory;
     protected $fillable = ['computer_id', 'employee_id', 'assigned_at'];
 
     public function computer()

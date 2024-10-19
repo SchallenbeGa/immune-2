@@ -12,7 +12,7 @@ class SignUpController extends Controller
     {
         return view('sign-up.index', [
             'navbar_active' => 'sign-up',
-            'page_title' => 'Sign Up —'
+            'page_title' => 'signup'
         ]);
     }
 

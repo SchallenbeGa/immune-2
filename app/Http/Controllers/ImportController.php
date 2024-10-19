@@ -8,6 +8,16 @@ use App\Models\Computer;
 
 class ImportController extends Controller
 {
+    public function index()
+    {
+        $user = auth()->user();
+
+        return view('import.index', [
+            'navbar_active' => 'settings',
+            'user' => $user,
+            'page_title' => 'Import settings —'
+        ]);
+    }
     public function show($id)
     {
         // Trouver le PC avec l'utilisateur associé

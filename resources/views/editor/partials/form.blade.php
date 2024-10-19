@@ -62,7 +62,7 @@ hx-target="#app-body"
               @endif
             >
           </fieldset>
-          <button  class="btn btn-lg btn-primary pull-xs-right">
+          <button class="btn btn-lg btn-primary pull-xs-right">
             Publish Article
           </button>
           

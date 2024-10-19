@@ -6,13 +6,12 @@
   </div>
  
   <div class="container page">
-    <div class="">
 
-      <div class="col" id="main">
+      <div id="main">
         
-  
-
+      <div class="row">
         @include('home.partials.form-message')
+    
         @include('home.partials.import')
         <hr>
         <br>
@@ -22,14 +21,18 @@
        
         ></div>
        -->
-       <button id="exportBtn">Export to CSV</button>
-       <button id="printBtn">Print All QR Codes</button>
+       <div class="col-md-12 col-xs-12" style="margin-bottom:1rem;">
+       <button class="btn btn-lg btn-primary" id="exportBtn">Export to CSV</button>
+       <button class="btn btn-lg btn-primary" id="printBtn">Print All QR Codes</button>
+       </div>
+       <div class="col-md-12 col-xs-12">
        <div id="qr-codes-container" style="display:none;"></div>
-       <button id="get-data-btn">Générer QR Codes</button>
+       <button id="get-data-btn" style="display:none;">Générer QR Codes</button>
        <div id="qr-container"></div>
 
        <div id="computer-table"></div>
        <div id="qr-codes"></div>
+</div>
     </div>
   </div>
 </div>
@@ -65,7 +68,24 @@
                         return qrCodeContainer; // Afficher le QR code dans la colonne
                     }
                 }
-        ]
+        ],
+    });
+    table.on("rowClick", function(e, row){
+        var rowData = row.getData();
+    
+        // Récupérer le lien contenu dans la colonne "link"
+        var link = rowData.detailUrl;
+
+        // Vérifier si le lien est valide
+        if(link){
+            // Ouvrir le lien dans la même fenêtre
+            window.location.href = link;
+            
+            // Si vous préférez ouvrir le lien dans un nouvel onglet, vous pouvez utiliser:
+            // window.open(link, '_blank');
+        } else {
+            console.error("Lien non valide ou manquant pour cette ligne.");
+        }
     });
     function generateQRCode(url, callback) {
    

@@ -10,9 +10,7 @@
            makes a sticky, sweet treat with just a hint
            of salt that you'll keep coming back for.">
     <title>{{ $page_title ?? '' }}</title>
-    <link href="https://unpkg.com/tabulator-tables@5.3.4/dist/css/tabulator.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://unpkg.com/luxon@2.3.0/build/global/luxon.min.js"></script>
   <script src="https://unpkg.com/tabulator-tables@5.3.4/dist/js/tabulator.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   </head>

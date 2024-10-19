@@ -11,7 +11,7 @@
       <div class="col" id="main">
         
       <div id="qr-reader"></div>
-    <button id="start-scan">Start Scan</button>
+    <button class="btn btn-lg btn-primary pull-xs-right" id="start-scan">Start Scan</button>
 
     <div id="computer-details">
         <h2>Computer Details:</h2>

@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\Employee;
+use App\Models\Computer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class ComputerFactory extends Factory
+class EmployeeComputerHistoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,16 +18,17 @@ class ComputerFactory extends Factory
      */
     public function definition(): array
     {// Vérifier s'il y a des utilisateurs dans la base de données
-        
+       
+        $employee = Employee::factory()->create();
+        $computer = Computer::factory()->create([
+            'employee_id' => $employee->id
+        ]);
         return [
-            'reference' => $this->faker->unique()->uuid, // Référence aléatoire
-            'employee_id' => '1', // Attribuer un utilisateur aléatoire
+            'employee_id' => $employee->id,
+            'computer_id' => $computer->id,
+            'assigned_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
-            'garantie' =>"valide",
-          'localisation'=>"ny",
-          'date_achat'=>now(),
-          'date_fin_garantie'=>now(), 
         ];
     }
 }
