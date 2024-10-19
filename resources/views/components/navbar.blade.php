@@ -12,7 +12,7 @@
     </a>
   </li>
   <li class="nav-item">
-  <a class="nav-link @if (!isset($navbar_active) || $navbar_active == 'analyse') active @endif" href="{{ route('analyse.index') }}">analyse</a>
+  <a class="nav-link @if ($navbar_active == 'analyse') active @endif" href="{{ route('analyse.index') }}">analyse</a>
   </li>
   @guest
   <li class="nav-item">
