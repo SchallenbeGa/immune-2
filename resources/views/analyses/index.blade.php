@@ -39,7 +39,8 @@
     </style>
 
     <div class="container">
-        <h1>Résultats d'analyse par date</h1>
+   
+        <h1>Résultats d'analyse par date (fr)</h1>
         <a href="{{ route('structure.index') }}" class="btn btn-secondary">Voir la structure du projet</a>
 
         <div id="date-list">
@@ -91,7 +92,7 @@
                                 analysisItem.classList.add('analysis-item');
 
                                 analysisItem.innerHTML = `
-                                    <h4>Fichier:<a href="/analyses/${analysis.project_file_id}">
+                                    <h4 style="line-break: anywhere;">Fichier:<a href="/analyses/${analysis.project_file_id}">
                             ${analysis.file_name}
                         </a> </h4> <!-- Affiche uniquement le nom du fichier -->
                                     <p><strong>Action:</strong> ${analysis.action_performed}</p>
