@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
             'role' => 1
         ]);
 
-        EmployeeComputerHistory::factory(800)->create();
+        EmployeeComputerHistory::factory(10000)->create();
     }
 }
