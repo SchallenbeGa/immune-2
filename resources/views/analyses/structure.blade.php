@@ -41,7 +41,7 @@
             <div class="files" id="{{ sha1($folder) }}">
                 @foreach ($fileList as $file)
                     <div class="file-item">
-                    <a href="{{ route('analyses.file', $file->id) }}">
+                    <a style="line-break: anywhere;" href="{{ route('analyses.file', $file->id) }}">
                             {{ $file->file_name }}
                         </a>
                         <span>({{ $file->file_size }} octets, modifié le {{ \Carbon\Carbon::parse($file->last_modified)->format('d/m/Y H:i:s') }})</span>
