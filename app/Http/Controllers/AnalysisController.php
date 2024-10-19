@@ -42,6 +42,6 @@ class AnalysisController extends Controller
     public function showAnalyses($fileId)
     {
         $file = ProjectFile::with('analyses')->findOrFail($fileId); // Récupérer le fichier avec ses analyses
-        return view('analyses.file_analyses', compact('file'));
+        return view('analyses.file_analyses',[ 'navbar_active' => 'analyse'], compact('file'));
     }
 }
