@@ -15,6 +15,7 @@ use App\Http\Controllers\Htmx\HTMXSignInController;
 use App\Http\Controllers\Htmx\HTMXSignUpController;
 use App\Http\Controllers\Htmx\HTMXArticleController;
 use App\Http\Controllers\Htmx\HTMXSettingsController;
+use App\Http\Controllers\AnalysisController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,11 @@ use App\Http\Controllers\Htmx\HTMXSettingsController;
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/global-feed', [HomeController::class, 'index']);
+
+Route::get('/structure', [AnalysisController::class, 'showStructure'])->name('structure.index');
+Route::get('/analyse', [AnalysisController::class, 'index'])->name('analyse.index');
+Route::get('/analyse/{date}', [AnalysisController::class, 'showByDate'])->name('analyse.showByDate');
+Route::get('/analyses/{file}', [AnalysisController::class, 'showAnalyses'])->name('analyses.file');
 
 Route::get('/your-feed', [HomeController::class, 'yourFeed'])->middleware('auth');
 Route::get('/tag-feed/{tag}', [HomeController::class, 'tags']);

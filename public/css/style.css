@@ -108,7 +108,7 @@ textarea{overflow:auto;resize:vertical;}
 .post-page .card .card-footer{font-size:.8rem;font-weight:300;}
 .post-page .card .comment-author-img{display:inline-block;vertical-align:middle;height:20px;width:20px;border-radius:30px;}
 .post-page .card .date-posted{display:inline-block;vertical-align:middle;margin-left:5px;color:black}
-p{margin-bottom:1rem;margin-top:0;}
+p{margin-bottom:1rem;margin-top:0;line-break: anywhere;}
 *,::after,::before{box-sizing:inherit;}
 button,textarea{touch-action:manipulation;color:inherit;font:inherit;margin:0;margin:0;line-height:inherit;border-radius:0;}
 button:focus{outline:dotted 1px;outline:-webkit-focus-ring-color auto 5px;}
@@ -197,3 +197,74 @@ a:focus{outline:dotted thin;outline:-webkit-focus-ring-color auto 5px;outline-of
 .page-item.active .page-link,.page-item.active .page-link:focus,.page-item.active .page-link:hover{z-index:2;color:#fff;cursor:default;background-color:#757575;border-color:#757575;}
 .page-link{position:relative;padding:.5rem .75rem;margin-left:-1px;line-height:1.5;color:#757575;text-decoration:none;background-color:#fff;border:1px solid #ddd;}
 .page-link:focus,.page-link:hover{color:#3d8b3d;background-color:#eceeef;border-color:#ddd;}
+
+
+/* Style de la table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Style des en-têtes */
+table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Style des lignes du corps de la table */
+table th, table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dddddd;
+}
+
+/* Effet de survol sur les lignes */
+table tbody tr:hover {
+    background-color: #f3f3f3;
+}
+
+/* Couleur alternée des lignes impaires */
+table tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+/* Responsive: assurer que la table s'adapte bien aux écrans étroits */
+@media screen and (max-width: 600px) {
+    table {
+        border: 0;
+    }
+
+    table thead {
+        display: none;
+    }
+
+    table, table tbody, table tr, table td {
+        display: block;
+        width: 100%;
+    }
+
+    table tr {
+        margin-bottom: 15px;
+    }
+
+    table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
+}
