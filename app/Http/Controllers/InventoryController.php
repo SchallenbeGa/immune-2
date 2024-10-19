@@ -38,6 +38,13 @@ class InventoryController extends Controller
         $computer = $computer->append('detailUrl');
         return response()->json($computer);
     }
+    public function getComputersCount(){
+         // Récupérer toutes les machines avec les utilisateurs associés
+         $computersCount = Computer::count();
+ 
+         // Retourner les données sous forme de JSON
+         return response($computersCount." entries");
+    }
     public function getComputers()
     {
         // Récupérer toutes les machines avec les utilisateurs associés

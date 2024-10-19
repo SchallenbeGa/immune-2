@@ -12,6 +12,8 @@
     <title>{{ $page_title ?? '' }}</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://unpkg.com/tabulator-tables@5.3.4/dist/js/tabulator.min.js"></script>
+  <script src="{{ asset('js/htmx.js') }}"></script>
+  <script src="{{ asset('js/htmx-head-support.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   </head>
   <body hx-ext="head-support">
@@ -35,9 +37,6 @@
     </footer>
 
     <div id="htmx-redirect"></div>
-
-    <script src="{{ asset('js/htmx.js') }}"></script>
-    <script src="{{ asset('js/htmx-head-support.js') }}"></script>
    
   </body>
 </html>

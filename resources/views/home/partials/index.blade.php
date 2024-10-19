@@ -29,7 +29,7 @@
        <div id="qr-codes-container" style="display:none;"></div>
        <button id="get-data-btn" style="display:none;">Générer QR Codes</button>
        <div id="qr-container"></div>
-
+       <p id="count">loading..</p>
        <div id="computer-table"></div>
        <div id="qr-codes"></div>
 </div>
@@ -39,7 +39,7 @@
 
 
 <script>
-  
+    htmx.ajax('GET', '/computers/count', '#count')
     var table = new Tabulator("#computer-table", {
         ajaxURL: "{{ route('computers.json') }}", // URL pour charger les données JSON
         height: "500px", // Hauteur du tableau
