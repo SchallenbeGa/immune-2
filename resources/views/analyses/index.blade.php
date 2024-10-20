@@ -47,7 +47,8 @@
     <a href="{{ route('sites.index') }}" class="btn btn-secondary">view sites</a>
     <a href="{{ route('command.history.index') }}" class="btn btn-secondary">view commands</a>
     <a href="{{ route('structure.index') }}" class="btn btn-secondary">view structure</a>
-
+    @auth
+    @if (auth()->user()->role>2)
     <h1>generate</h1>
         @if(session('success'))
             <div class="alert alert-success">
@@ -73,7 +74,8 @@
             </div>
             <button type="submit" class="btn btn-primary" style="margin-top:1rem">Générer</button>
         </form>
-    
+        @endif
+        @endauth
         <h1>results</h1>
      
         <div id="date-list">
