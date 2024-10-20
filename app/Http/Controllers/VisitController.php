@@ -15,7 +15,7 @@ class VisitController extends Controller
     public function index()
     {
         // Récupérer toutes les visites de la base de données
-        $visits = Visit::orderBy('created_at', 'desc')->get();
+        $visits = Visit::orderBy('created_at', 'desc')->paginate(10);
 
         // Retourner la vue avec les visites
         return view('visits.index', compact('visits'));
