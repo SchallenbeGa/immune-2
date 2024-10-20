@@ -12,24 +12,18 @@ class CommandHistoryController extends Controller
         // Récupérer l'historique des commandes
         $histories = CommandHistory::orderBy('created_at', 'desc')->paginate(10);
        // Lire les 100 dernières lignes des logs
-       $logFilePath = storage_path('logs/laravel.log');
-       $logs = [];
+        // Lire les 100 dernières lignes des logs
+        $logFilePath = storage_path('logs/laravel.log');
+        $logs = [];
 
-       if (file_exists($logFilePath)) {
-           // Lire le fichier de log et récupérer les 100 dernières lignes
-           $file = new \SplFileObject($logFilePath);
-           $file->seek(PHP_INT_MAX); // Aller à la fin du fichier
+        if (file_exists($logFilePath)) {
+            // Lire toutes les lignes du fichier
+            $allLogs = file($logFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-           $lineCount = 0;
+            // Obtenir les 100 dernières lignes
+            $logs = array_slice($allLogs, -100);
+        }
 
-           while ($file->key() >= 0 && $lineCount < 100) {
-               $logs[] = $file->current();
-               $file->prev();
-               $lineCount++;
-           }
-
-           $logs = array_reverse($logs); // Inverser pour avoir les lignes les plus anciennes en haut
-       }
 
         return view('command_history.index', compact('histories', 'logs'));
     }
