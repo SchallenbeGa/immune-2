@@ -27,7 +27,14 @@ class CommandHistoryController extends Controller
 
         return view('command_history.index', compact('histories', 'logs'));
     }
+    public function pullUpdate()
+    {
+        // Exécuter la commande artisan 'git:pull-update'
+        Artisan::call('git:pull-update');
 
+        // Retourner une réponse après exécution
+        return redirect()->back()->with('success', 'Mise à jour Git effectuée avec succès.');
+    }
     public function show(CommandHistory $commandHistory)
     {
         return view('command_history.show', compact('commandHistory'));

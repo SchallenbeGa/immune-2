@@ -2,6 +2,17 @@
 
 @section('content')
 <div class="container">
+@if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- Formulaire pour exécuter la commande Git Pull Update -->
+    <form action="{{ route('git.pull.update') }}" method="POST" class="mt-4">
+        @csrf
+        <button type="submit" class="btn btn-primary">Mettre à jour le projet (Git Pull)</button>
+    </form>
     <h1>Historique des Commandes</h1>
 
     <table class="table table-striped">

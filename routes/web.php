@@ -38,6 +38,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');;
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('role:3')
     ->name('dashboard.index');
+Route::post('/git/pull-update', [CommandHistoryController::class, 'pullUpdate'])->name('git.pull.update');
+
 Route::get('/sites', [SiteController::class, 'index'])->name('sites.index');
 Route::post('/sites', [SiteController::class, 'store'])->name('sites.store');
 Route::get('/sites/{site}', [SiteController::class, 'show'])->name('sites.show');
