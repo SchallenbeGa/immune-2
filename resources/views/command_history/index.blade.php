@@ -40,10 +40,8 @@
     </div>
 
     <h2 class="mt-5">Logs d'Erreur</h2>
-    <div class="card">
-        <div class="card-body">
-            <textarea>{{ implode("\n", $logs) }}</textarea>
-        </div>
-    </div>
+    <textarea class="form-control" rows="10" readonly>
+        {{ implode("\n", $logs) }}
+    </textarea>
 </div>
 @endsection
