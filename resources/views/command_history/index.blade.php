@@ -38,10 +38,11 @@
     <div class="d-flex justify-content-center">
         {{ $histories->links() }}
     </div>
-
+    @auth
     <h2 class="mt-5">Logs</h2>
     <textarea class="form-control" rows="10" readonly>
         {{ implode("\n", $logs) }}
     </textarea>
+    @endauth
 </div>
 @endsection

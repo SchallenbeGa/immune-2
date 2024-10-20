@@ -41,10 +41,10 @@
     <div class="container">
     @auth
     @if (auth()->user()->role>2)
-    <a href="{{ route('command.history.index') }}" class="btn btn-secondary">view commands</a>
     <a href="{{ route('dashboard.index') }}" class="btn btn-secondary">view visits</a>
     @endif
     @endauth
+    <a href="{{ route('command.history.index') }}" class="btn btn-secondary">view commands</a>
     <a href="{{ route('structure.index') }}" class="btn btn-secondary">view structure</a>
 
     <h1>generate</h1>
