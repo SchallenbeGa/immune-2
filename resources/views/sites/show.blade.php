@@ -10,7 +10,9 @@
     <h1>Détails du site : {{ $site->name }}</h1>
 
     <div class="mb-3">
+        @auth
         <p><strong>URL :</strong> <a href="{{ $site->url }}" target="_blank">{{ $site->url }}</a></p>
+        @endauth
         <p><strong>Statut actuel :</strong> 
             @if ($site->status)
                 <span class="text-success">En ligne</span>
