@@ -38,10 +38,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');;
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('role:3')
     ->name('dashboard.index');
-Route::post('/git/pull-update', [CommandHistoryController::class, 'pullUpdate'])->name('git.pull.update');
+Route::post('/git/pull-update', [CommandHistoryController::class, 'pullUpdate'])->middleware('auth')->name('git.pull.update');
 
 Route::get('/sites', [SiteController::class, 'index'])->name('sites.index');
-Route::post('/sites', [SiteController::class, 'store'])->name('sites.store');
+Route::post('/sites', [SiteController::class, 'store'])->name('sites.store')->middleware('auth');
 Route::get('/sites/{site}', [SiteController::class, 'show'])->name('sites.show');
 Route::get('/command-history', [CommandHistoryController::class, 'index'])->name('command.history.index');
 Route::get('/command-history/{commandHistory}', [CommandHistoryController::class, 'show'])->name('command.history.show');
