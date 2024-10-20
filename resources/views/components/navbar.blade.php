@@ -58,7 +58,7 @@
   </li>
   @endif
 
-  <li class="nav-item">
+  <!-- <li class="nav-item">
     <a id="nav-link-settings"
     aria-label="user's setting page"
       href="/settings"
@@ -69,7 +69,7 @@
     >
       settings
     </a>
-  </li>
+  </li> -->
   <!-- <li class="nav-item">
     <a id="nav-link-profile"
       href="/users/{{ auth()->user()->username }}"
