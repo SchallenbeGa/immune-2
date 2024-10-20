@@ -90,7 +90,7 @@ class SiteController extends Controller
     $outputPath = public_path('screenshots/' . $fileName);
 
     // Exécuter le script Node.js avec les paramètres (URL du site et chemin de sortie)
-    $command = "node $scriptPath {$site->url} $outputPath";
+    $command = "/opt/alt/alt-nodejs20/root/usr/bin/node $scriptPath {$site->url} $outputPath";
     exec($command, $output, $return_var);
 
     if ($return_var === 0) {
