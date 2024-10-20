@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CommandHistory;
 use Illuminate\Http\Request;
+use Artisan;
 
 class CommandHistoryController extends Controller
 {
