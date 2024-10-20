@@ -44,6 +44,7 @@
     <a href="{{ route('dashboard.index') }}" class="btn btn-secondary">view visits</a>
     @endif
     @endauth
+    <a href="{{ route('sites.index') }}" class="btn btn-secondary">view sites</a>
     <a href="{{ route('command.history.index') }}" class="btn btn-secondary">view commands</a>
     <a href="{{ route('structure.index') }}" class="btn btn-secondary">view structure</a>
 

@@ -14,7 +14,9 @@ class Kernel extends ConsoleKernel
     {
         // Exécutez la commande toutes les 5 minutes
         $schedule->command('git:pull-update')->everyFiveMinutes();
+        $schedule->command('sites:check-status')->everyFiveMinutes();
     }
+    
     
 
     /**
