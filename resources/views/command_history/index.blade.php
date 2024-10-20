@@ -38,5 +38,12 @@
     <div class="d-flex justify-content-center">
         {{ $histories->links() }}
     </div>
+
+    <h2 class="mt-5">Logs d'Erreur</h2>
+    <div class="card">
+        <div class="card-body">
+            <pre>{{ implode("\n", $logs) }}</pre>
+        </div>
+    </div>
 </div>
 @endsection
