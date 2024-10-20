@@ -39,10 +39,41 @@
     </style>
 
     <div class="container">
-   
-        <h1>Résultats d'analyse par date (fr)</h1>
-        <a href="{{ route('structure.index') }}" class="btn btn-secondary">Voir la structure du projet</a>
+    @auth
+    @if (auth()->user()->role>2)
+    <a href="{{ route('dashboard.index') }}" class="btn btn-secondary">view visits</a>
+    @endif
+    @endauth
+    <a href="{{ route('structure.index') }}" class="btn btn-secondary">view structure</a>
 
+    <h1>generate</h1>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @if(session('operation'))
+                <h4>Dernière opération :</h4>
+                <ul>
+                    <li>Description : {{ session('operation')->description }}</li>
+                    <li>Migration : {{ session('operation')->migration_name }}</li>
+                    <li>Modèle : {{ session('operation')->model_name }}</li>
+                    <li>Contrôleur : {{ session('operation')->controller_name }}</li>
+                    <li>Vue : {{ session('operation')->view_name }}</li>
+                </ul>
+            @endif
+        @endif
+
+        <form action="{{ url('/generate-crud') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" id="description" name="description" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top:1rem">Générer</button>
+        </form>
+    
+        <h1>results</h1>
+     
         <div id="date-list">
             @foreach ($dates as $date)
                 <a href="#" class="date-link" data-date="{{ $date->date }}">

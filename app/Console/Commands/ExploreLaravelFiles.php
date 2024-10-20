@@ -15,27 +15,7 @@ class ExploreLaravelFiles extends Command
     public function handle()
     {
         $this->scanAndUpdateStructure();
-        $directories = [
-            app_path(), // App folder: Controllers, Models
-            resource_path('views'), // Views
-            base_path('routes'), // Routes
-            base_path('database/migrations'), // Migrations
-        ];
-
-        foreach ($directories as $directory) {
-            // Utiliser la commande 'find' pour lister tous les fichiers dans le répertoire
-            $files = shell_exec("find $directory -type f");
-
-            // Convertir la sortie shell en un tableau
-            $fileArray = explode(PHP_EOL, trim($files));
-
-            foreach ($fileArray as $file) {
-                if (!empty($file)) {
-                    // Lire le contenu de chaque fichier et l'analyser
-                    $this->processFile($file);
-                }
-            }
-        }
+    
     }
     public function scanAndUpdateStructure()
     {
@@ -49,6 +29,12 @@ class ExploreLaravelFiles extends Command
 
         foreach ($directories as $directory) {
             $this->scanDirectory($directory);
+            $files = shell_exec("find $directory -type f");
+
+            // Convertir la sortie shell en un tableau
+            $fileArray = explode(PHP_EOL, trim($files));
+
+           
         }
 
         return "Structure mise à jour avec succès.";
@@ -58,8 +44,8 @@ class ExploreLaravelFiles extends Command
     {
         // Parcourir tous les fichiers dans le répertoire donné
         $files = File::allFiles($directory);
-
         foreach ($files as $file) {
+          
             // Obtenir les informations du fichier
             $filePath = $file->getPathname();  // Chemin complet du fichier
             $fileName = $file->getFilename();  // Nom du fichier
@@ -77,18 +63,18 @@ class ExploreLaravelFiles extends Command
                 ]);
             } else {
                 // Ajouter un nouveau fichier dans la base de données
-                ProjectFile::create([
+                $p = ProjectFile::create([
                     'file_name' => $fileName,
                     'file_path' => $filePath,
                     'file_size' => $fileSize,
                     'last_modified' => $lastModified,
                 ]);
             }
+            $this->processFile($file,$p->id);
         }
     }
-    public function processFile($file)
+    public function processFile($file,$id)
     {
-        if (file_exists($file)) {
             // Lire le contenu du fichier
              $this->info($file);
             $content = file_get_contents($file);
@@ -110,10 +96,9 @@ class ExploreLaravelFiles extends Command
                     // Générer des recommandations pour chaque morceau via l'API ChatGPT
                     $recommendation = $this->generateRecommendation($chunk);
                     $this->info($index);
-                    $file_pr = ProjectFile::where('file_path', $file)->first();
                     // Enregistrer les recommandations dans la base de données
                     FileRecommandation::create([
-                        'project_file_id' =>$file_pr->id,
+                        'project_file_id' =>$id,
                         'file_path' => $file . " (partie ".$index.")",
                         'action_performed' => 'Analyse du contenu du fichier ('.$index.')',
                         'recommendation' => $recommendation,
@@ -122,7 +107,6 @@ class ExploreLaravelFiles extends Command
                     $this->info("Partie $index du fichier analysée et recommandée : " . $file);
                 }
             }
-        }
     }
 
     public function generateRecommendation($content)

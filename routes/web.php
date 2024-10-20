@@ -16,6 +16,10 @@ use App\Http\Controllers\Htmx\HTMXSignUpController;
 use App\Http\Controllers\Htmx\HTMXArticleController;
 use App\Http\Controllers\Htmx\HTMXSettingsController;
 use App\Http\Controllers\AnalysisController;
+use App\Http\Controllers\CrudController; 
+use App\Http\Controllers\VisitController;
+use App\Http\Controllers\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,9 +32,15 @@ use App\Http\Controllers\AnalysisController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index']);
-Route::get('/global-feed', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');;
 
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('role:3')
+    ->name('dashboard.index');
+
+Route::get('/global-feed', [HomeController::class, 'index']);
+Route::post('/generate-crud', [CrudController::class, 'generate']);
 Route::get('/structure', [AnalysisController::class, 'showStructure'])->name('structure.index');
 Route::get('/analyse', [AnalysisController::class, 'index'])->name('analyse.index');
 Route::get('/analyse/{date}', [AnalysisController::class, 'showByDate'])->name('analyse.showByDate');
