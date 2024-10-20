@@ -39,7 +39,7 @@
         {{ $histories->links() }}
     </div>
 
-    <h2 class="mt-5">Logs d'Erreur</h2>
+    <h2 class="mt-5">Logs</h2>
     <textarea class="form-control" rows="10" readonly>
         {{ implode("\n", $logs) }}
     </textarea>
