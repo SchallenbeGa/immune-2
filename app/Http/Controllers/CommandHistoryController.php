@@ -26,7 +26,7 @@ class CommandHistoryController extends Controller
         // }
 
 
-        return view('command_history.index', compact('histories', 'logs'));
+        return view('command_history.index',['navbar_active'=>'analyse'], compact('histories', 'logs'));
     }
     public function pullUpdate()
     {
@@ -38,6 +38,6 @@ class CommandHistoryController extends Controller
     }
     public function show(CommandHistory $commandHistory)
     {
-        return view('command_history.show', compact('commandHistory'));
+        return view('command_history.show',['navbar_active'=>'analyse'],compact('commandHistory'));
     }
 }

@@ -19,7 +19,7 @@ class SiteController extends Controller
         ->groupBy(function($status) {
             return $status->created_at->format('Y-m-d'); // Grouper par date
         });
-        return view('sites.index', compact('sites','offlineStatuses'));
+        return view('sites.index',['navbar_active'=>'analyse'], compact('sites','offlineStatuses'));
     }
 
     // Ajoute un site
@@ -76,7 +76,7 @@ class SiteController extends Controller
         $statuses = $site->statuses()->orderBy('created_at', 'desc')->get();
        
     
-        return view('sites.show', compact('site', 'statuses'));
+        return view('sites.show',['navbar_active'=>'analyse'], compact('site', 'statuses'));
     }
     public function captureScreenshot(Site $site)
 {
