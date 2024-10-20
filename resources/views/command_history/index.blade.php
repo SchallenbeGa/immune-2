@@ -42,7 +42,7 @@
     <h2 class="mt-5">Logs d'Erreur</h2>
     <div class="card">
         <div class="card-body">
-            <pre>{{ implode("\n", $logs) }}</pre>
+            <textarea>{{ implode("\n", $logs) }}</textarea>
         </div>
     </div>
 </div>
