@@ -41,6 +41,7 @@
     <div class="container">
     @auth
     @if (auth()->user()->role>2)
+    <a href="{{ route('command.history.index') }}" class="btn btn-secondary">view commands</a>
     <a href="{{ route('dashboard.index') }}" class="btn btn-secondary">view visits</a>
     @endif
     @endauth

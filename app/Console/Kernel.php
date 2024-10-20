@@ -10,10 +10,12 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Exécutez la commande toutes les 5 minutes
+        $schedule->command('git:pull-update')->everyFiveMinutes();
     }
+    
 
     /**
      * Register the commands for the application.

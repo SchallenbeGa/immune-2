@@ -19,7 +19,7 @@ use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\CrudController; 
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\CommandHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +38,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');;
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('role:3')
     ->name('dashboard.index');
-
+Route::get('/command-history', [CommandHistoryController::class, 'index'])->name('command.history.index');
+Route::get('/command-history/{commandHistory}', [CommandHistoryController::class, 'show'])->name('command.history.show');
 Route::get('/global-feed', [HomeController::class, 'index']);
 Route::post('/generate-crud', [CrudController::class, 'generate']);
 Route::get('/structure', [AnalysisController::class, 'showStructure'])->name('structure.index');
