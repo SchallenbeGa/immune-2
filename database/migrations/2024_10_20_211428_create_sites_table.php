@@ -15,6 +15,7 @@ return new class extends Migration
         $table->id();
         $table->string('url');
         $table->string('name')->nullable();
+        $table->string('screenshot_path')->nullable();
         $table->boolean('status')->default(true); // 1: Site is up, 0: Site is down
         $table->timestamps();
     });

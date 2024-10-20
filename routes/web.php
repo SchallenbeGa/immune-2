@@ -41,6 +41,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::post('/git/pull-update', [CommandHistoryController::class, 'pullUpdate'])->middleware('auth')->name('git.pull.update');
 
 Route::get('/sites', [SiteController::class, 'index'])->name('sites.index');
+Route::get('/sites/{site}/screenshot', [SiteController::class, 'captureScreenshot'])->middleware('auth')->name('sites.screenshot');
 Route::post('/sites', [SiteController::class, 'store'])->name('sites.store')->middleware('auth');
 Route::get('/sites/{site}', [SiteController::class, 'show'])->name('sites.show');
 Route::get('/command-history', [CommandHistoryController::class, 'index'])->name('command.history.index');

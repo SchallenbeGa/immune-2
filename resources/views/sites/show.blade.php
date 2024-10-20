@@ -2,6 +2,11 @@
 
 @section('content')
 <div class="container">
+@if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <h1>Détails du site : {{ $site->name }}</h1>
 
     <div class="mb-3">
@@ -45,12 +50,18 @@
             </tbody>
         </table>
     @endif
+    @auth
+    <a href="{{ route('sites.screenshot', $site->id) }}" class="btn btn-primary">Capturer l'image du site</a>
 
+    @if ($site->screenshot_path)
     <h2>Capture d'écran du site</h2>
     <div>
-        <img src="https://api.screenshotmachine.com?key=YOUR_API_KEY&url={{ $site->url }}&dimension=1024x768" alt="Capture du site" class="img-fluid">
+        <img style="max-width: 100%;" src="{{ asset($site->screenshot_path) }}" alt="Capture du site" class="img-fluid">
     </div>
-
-    <a href="{{ route('sites.index') }}" class="btn btn-primary mt-4">Retour à la liste des sites</a>
+@else
+    <p>Aucune capture d'écran disponible.</p>
+@endif
+@endauth
+    <a href="{{ route('sites.index') }}" style="margin-top:1rem;" class="btn btn-primary mt-4">Retour à la liste des sites</a>
 </div>
 @endsection

@@ -78,4 +78,30 @@ class SiteController extends Controller
     
         return view('sites.show', compact('site', 'statuses'));
     }
+    public function captureScreenshot(Site $site)
+{
+    // Chemin du script Node.js
+    $scriptPath = base_path('scripts/screenshot.js');
+
+    // Générer un nom de fichier unique pour la capture d'écran
+    $fileName = 'screenshot_' . $site->id . '_' . time() . '.png';
+
+    // Chemin pour enregistrer l'image dans le répertoire 'public/screenshots'
+    $outputPath = public_path('screenshots/' . $fileName);
+
+    // Exécuter le script Node.js avec les paramètres (URL du site et chemin de sortie)
+    $command = "node $scriptPath {$site->url} $outputPath";
+    exec($command, $output, $return_var);
+
+    if ($return_var === 0) {
+        // Sauvegarder le chemin de la capture dans la base de données si nécessaire
+        $site->screenshot_path = 'screenshots/' . $fileName;
+        $site->save();
+
+        return redirect()->back()->with('success', 'Capture d\'écran réalisée avec succès.');
+    } else {
+        return redirect()->back()->with('error', 'Erreur lors de la capture d\'écran.');
+    }
+}
+
 }

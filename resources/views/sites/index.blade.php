@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Surveillance des Sites</h1>
-
+    @auth
     <!-- Formulaire d'ajout de site -->
     <form action="{{ route('sites.store') }}" method="POST">
         @csrf
@@ -17,12 +17,15 @@
         </div>
         <button type="submit" style="margin-top:1rem;" class="btn btn-primary">Ajouter le site</button>
     </form>
-
+    @endauth
     <h2 class="mt-5">Sites surveillés</h2>
     <ul>
         @foreach ($sites as $site)
             <li>
-                <a href="{{ route('sites.show', $site) }}">{{ $site->name }} ({{ $site->url }})</a>
+                <a href="{{ route('sites.show', $site) }}">{{ $site->name }} 
+                    @auth
+                     ({{ $site->url }})
+                      @endauth</a>
                 @if($site->status)
                     <span class="text-success">En ligne</span>
                 @else

@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Site extends Model
 {
-    protected $fillable = ['url', 'name', 'status'];
+    protected $fillable = ['url', 'name', 'status','screenshot_path'];
 
     public function statuses()
     {

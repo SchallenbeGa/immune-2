@@ -17,13 +17,13 @@ class CommandHistoryController extends Controller
         $logFilePath = storage_path('logs/laravel.log');
         $logs = [];
 
-        if (file_exists($logFilePath)) {
-            // Lire toutes les lignes du fichier
-            $allLogs = file($logFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        // if (file_exists($logFilePath)) {
+        //     // Lire toutes les lignes du fichier
+        //     $allLogs = file($logFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-            // Obtenir les 100 dernières lignes
-            $logs = array_slice($allLogs, -100);
-        }
+        //     // Obtenir les 100 dernières lignes
+        //     $logs = array_slice($allLogs, -100);
+        // }
 
 
         return view('command_history.index', compact('histories', 'logs'));
