@@ -16,7 +16,12 @@ return new class extends Migration
         $table->string('url');
         $table->string('name')->nullable();
         $table->string('screenshot_path')->nullable();
-        $table->boolean('status')->default(true); // 1: Site is up, 0: Site is down
+        $table->string('type')->default('http');
+        $table->string('response')->nullable();
+        $table->string('port')->nullable();
+        $table->string('header')->nullable();
+        $table->string('method')->default('get');
+        $table->string('status')->default('200');
         $table->timestamps();
     });
 }

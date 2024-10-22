@@ -270,3 +270,56 @@ table tbody tr:nth-of-type(odd) {
         text-align: left;
     }
 }
+/* status */
+/*! CSS Used from: https://status.gabriel0.com/css/bootstrap.min.css */
+svg:not(:root){overflow:hidden;}
+@media print{
+*,:after,:before{color:#000!important;text-shadow:none!important;background:0 0!important;-webkit-box-shadow:none!important;box-shadow:none!important;}
+}
+*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+/*! CSS Used from: https://status.gabriel0.com/css/font-awesome/css/all.css */
+.fas{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:var(--fa-display,inline-block);font-style:normal;font-variant:normal;line-height:1;text-rendering:auto;}
+.fas{font-family:"Font Awesome 6 Pro";}
+.fa-edit:before{content:"\f044";}
+.fa-trash:before{content:"\f1f8";}
+.fas{font-weight:900;}
+/*! CSS Used from: https://status.gabriel0.com/themes/light.css */
+.service-container{padding:16px;border:2px solid rgba(0, 0, 0, 0.1);border-radius:4px;}
+.shared-partial.uptime-90-days-wrapper{margin-top:8px;margin-bottom:0px;}
+.shared-partial.uptime-90-days-wrapper svg{margin:0;padding:0;height:34px;width:100%;overflow:hidden;}
+.draggable{cursor:move;}
+.service-name{font-size:1.6rem;}
+.component-status{font-size:1.4rem;float:right;display:inline-block;cursor:pointer;font-weight:bold;}
+.status-text-normal{color:#2fcc66;}
+.shared-partial.uptime-90-days-wrapper .legend{display:flex;display:-ms-flexbox;flex-direction:row;justify-content:space-between;margin-top:4px;}
+.shared-partial.uptime-90-days-wrapper .legend .legend-item.light{color:#333;opacity:0.5;flex:0 0 auto;font-size:.875rem;position:relative;}
+.shared-partial.uptime-90-days-wrapper .legend .spacer{background:#333;opacity:0.3;flex:1;margin:0.75rem 1rem 0 1rem;height:1px;}
+.shared-partial.uptime-90-days-wrapper .uptime-percent,.legend-item-uptime-value{color:#333;}
+.service-container>div{margin-bottom:12px;}
+.service-container>div:last-child{margin-bottom:0px;}
+.availability-time-line-graphic .uptime-day:hover{fill:rgba(0, 0, 0, 0.3);}
+.force-link{color:#337ab7;text-decoration:none;}
+.force-link:hover{color:#23527c;text-decoration:underline;}
+.text-small{font-size:1.4rem;}
+.hover-text{cursor:pointer;}
+/*! CSS Used fontfaces */
+@font-face{font-family:"Font Awesome 6 Pro";font-style:normal;font-weight:300;font-display:block;src:url(https://status.gabriel0.com/css/font-awesome/webfonts/fa-light-300.woff2) format("woff2"),url(https://status.gabriel0.com/css/font-awesome/webfonts/fa-light-300.ttf) format("truetype");}
+@font-face{font-family:"Font Awesome 6 Pro";font-style:normal;font-weight:400;font-display:block;src:url(https://status.gabriel0.com/css/font-awesome/webfonts/fa-regular-400.woff2) format("woff2"),url(https://status.gabriel0.com/css/font-awesome/webfonts/fa-regular-400.ttf) format("truetype");}
+@font-face{font-family:"Font Awesome 6 Pro";font-style:normal;font-weight:900;font-display:block;src:url(https://status.gabriel0.com/css/font-awesome/webfonts/fa-solid-900.woff2) format("woff2"),url(https://status.gabriel0.com/css/font-awesome/webfonts/fa-solid-900.ttf) format("truetype");}
+@font-face{font-family:"Font Awesome 6 Pro";font-style:normal;font-weight:100;font-display:block;src:url(https://status.gabriel0.com/css/font-awesome/webfonts/fa-thin-100.woff2) format("woff2"),url(https://status.gabriel0.com/css/font-awesome/webfonts/fa-thin-100.ttf) format("truetype");}
+
+.floating-text {
+    width: 400px;
+    line-height: 2.5rem;
+    font-size: 1.6rem;
+    background-color: #f1f1f1;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 16px;
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    z-index: 999;
+    display: none;
+}

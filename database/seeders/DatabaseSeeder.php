@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\Article;
+use App\Models\Site;
 use App\Models\Comment;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -18,35 +19,45 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $users = User::factory()->create([
-            'email' => 'test@email.com'
+            'email' => 'test@email.com',
+            'role' => 3,
+            'password' => 'toor'
+        ]);
+        Site::factory()->create([
+            'name' => 'netbanking',
+            'url' => 'https://netbanking.bcn.ch/authen/login?execution=e1s1',
+        ]);
+        Site::factory()->create([
+            'name' => 'netbanking-a',
+            'url' => 'https://netbanking-a.bcn.ch/authen/login?execution=e1s1',
         ]);
 
-        $users = User::factory()->count(20)->create();
+        // $users = User::factory()->count(20)->create();
 
-        foreach ($users as $user) {
-            $user->followers()->attach($users->random(rand(0, 5)));
-        }
+        // foreach ($users as $user) {
+        //     $user->followers()->attach($users->random(rand(0, 5)));
+        // }
 
-        $articles = Article::factory()
-            ->count(30)
-            ->state(new Sequence(fn() => [
-                'user_id' => $users->random(),
-            ]))
-            ->create();
+        // $articles = Article::factory()
+        //     ->count(30)
+        //     ->state(new Sequence(fn() => [
+        //         'user_id' => $users->random(),
+        //     ]))
+        //     ->create();
 
-        $tags = Tag::factory()->count(20)->create();
+        // $tags = Tag::factory()->count(20)->create();
 
-        foreach ($articles as $article) {
-            $article->tags()->attach($tags->random(rand(0, 6)));
-            $article->favoritedUsers()->attach($users->random(rand(0, 8)));
-        }
+        // foreach ($articles as $article) {
+        //     $article->tags()->attach($tags->random(rand(0, 6)));
+        //     $article->favoritedUsers()->attach($users->random(rand(0, 8)));
+        // }
 
-        Comment::factory()
-            ->count(60)
-            ->state(new Sequence(fn() => [
-                'article_id' => $articles->random(),
-                'user_id' => $users->random(),
-            ]))
-            ->create();
+        // Comment::factory()
+        //     ->count(60)
+        //     ->state(new Sequence(fn() => [
+        //         'article_id' => $articles->random(),
+        //         'user_id' => $users->random(),
+        //     ]))
+        //     ->create();
     }
 }

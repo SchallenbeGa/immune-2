@@ -17,9 +17,11 @@ class CheckSitesStatus extends Command
         $controller = new SiteController();
 
         foreach ($sites as $site) {
-            $controller->checkSite($site);
+            // $controller->checkSite($site);
+            $controller->CheckServices($site);
         }
 
         $this->info('Vérification du statut des sites terminée.');
     }
+    
 }

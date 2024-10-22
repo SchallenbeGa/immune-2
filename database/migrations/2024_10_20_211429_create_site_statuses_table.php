@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('site_statuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained()->onDelete('cascade');
-            $table->boolean('status'); // 1: Site is up, 0: Site is down
+            $table->integer('http_status')->nullable();
+            $table->boolean('status');
             $table->text('message')->nullable();
             $table->timestamps();
         });
