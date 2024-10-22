@@ -353,6 +353,28 @@ function GetServices() {
     }
     return $services;
 }
+public function update(Request $request, Site $site)
+{
+    // Validation des données
+    $request->validate([
+        'url' => 'required|url',
+        'name' => 'required|string|max:255',
+        'status' => 'nullable|string',
+        'screenshot_path' => 'nullable|string',
+        'response' => 'nullable|string',
+        'type' => 'nullable|string',
+        'port' => 'nullable|integer',
+        'header' => 'nullable|string',
+        'method' => 'required|in:GET,POST,PUT,DELETE'
+    ]);
+
+    // Mise à jour du site
+    $site->update($request->all());
+
+    // Rediriger avec un message de succès
+    return redirect()->route('sites.show', $site->id)
+                     ->with('success', 'Le site a été mis à jour avec succès.');
+}
 
 
 public function CheckServices($service) {

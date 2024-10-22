@@ -5,8 +5,76 @@
   src="https://code.jquery.com/jquery-3.7.1.slim.js"
   integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc="
   crossorigin="anonymous"></script>
+<!-- Styles for modal -->
+<style>
+ .modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scrolling if needed */
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  }
+
+  .modal-content {
+    background-color: #fff;
+    margin: 5% auto; /* 5% from the top and centered */
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%; /* Full width on small screens */
+    max-width: 600px; /* Max width for larger screens */
+    max-height: 90%; /* Prevent content from overflowing the screen */
+    overflow-y: auto; /* Enable scrolling inside the modal */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  
+</style>
+
 <div class="container">
-    <h1>Surveillance des Sites</h1>
+    <h1>JooobCheck</h1>
     @auth
     <!-- Formulaire d'ajout de site -->
     <form action="{{ route('sites.store') }}" method="POST">
@@ -38,13 +106,83 @@
         <button type="submit" style="margin-top:1rem;" class="btn btn-primary">Ajouter le site</button>
     </form>
     @endauth
-    <h2 class="mt-5">Sites surveillés</h2>
    
     <div class="floating-text"></div>
     <div class="service-container"></div>
-     
+     @foreach ($sites as $site)
+   <!-- Button to trigger modal -->
+<button id="openModalButton" style="margin:1rem;" class="btn">Modifier {{$site->name}}</button>
 
-    <h1>Sites hors ligne par date</h1>
+<!-- Modal -->
+<div id="editSiteModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Modifier le site</h2>
+    <form id="editSiteForm" action="{{ route('sites.update', $site->id) }}" method="POST">
+      @csrf
+      @method('PUT')
+
+      <div class="form-group">
+        <label for="name">Nom</label>
+        <input type="text" id="name" name="name" value="{{ $site->name }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="url">URL</label>
+        <input type="url" id="url" name="url" value="{{ $site->url }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Statut</label>
+        <input type="text" id="status" name="status" value="{{ $site->status }}">
+      </div>
+
+      <div class="form-group">
+        <label for="screenshot_path">Chemin de la capture d'écran</label>
+        <input type="text" id="screenshot_path" name="screenshot_path" value="{{ $site->screenshot_path }}">
+      </div>
+
+      <div class="form-group">
+        <label for="response">Réponse</label>
+        <textarea id="response" name="response">{{ $site->response }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="type">Type</label>
+        <input type="text" id="type" name="type" value="{{ $site->type }}">
+      </div>
+
+      <div class="form-group">
+        <label for="port">Port</label>
+        <input type="number" id="port" name="port" value="{{ $site->port }}">
+      </div>
+
+      <div class="form-group">
+        <label for="header">Header</label>
+        <textarea id="header" name="header">{{ $site->header }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="method">Méthode</label>
+        <select id="method" name="method">
+          <option value="GET" {{ $site->method == 'GET' ? 'selected' : '' }}>GET</option>
+          <option value="POST" {{ $site->method == 'POST' ? 'selected' : '' }}>POST</option>
+          <option value="PUT" {{ $site->method == 'PUT' ? 'selected' : '' }}>PUT</option>
+          <option value="DELETE" {{ $site->method == 'DELETE' ? 'selected' : '' }}>DELETE</option>
+        </select>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="closeModalButton" class="btn-secondary">Annuler</button>
+        <button type="submit" class="btn-primary">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+     @endforeach
+
+    <h1>hors ligne par date</h1>
 
 @if ($offlineStatuses->isEmpty())
     <p>Aucun site n'a été hors ligne récemment.</p>
@@ -69,6 +207,38 @@
 @endif
 
 </div>
+<script>
+  // Get the modal
+  var modal = document.getElementById("editSiteModal");
+
+  // Get the button that opens the modal
+  var openModalButton = document.getElementById("openModalButton");
+
+  // Get the <span> element that closes the modal
+  var closeModalButton = document.getElementsByClassName("close")[0];
+  var closeModalButtonFooter = document.getElementById("closeModalButton");
+
+  // When the user clicks the button, open the modal
+  openModalButton.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  closeModalButton.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  closeModalButtonFooter.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
 <script>
     function CalculateDate(from, days) {
     var split = from.split('.');
