@@ -108,7 +108,7 @@
     @endauth
    
     <div class="floating-text"></div>
-    <div class="service-container"></div>
+    <div class="service-container" style="max-width: 706px;"></div>
      @foreach ($sites as $site)
    <!-- Button to trigger modal -->
 <button id="openModalButton" style="margin:1rem;" class="btn">Modifier {{$site->name}}</button>
