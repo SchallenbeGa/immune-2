@@ -6,7 +6,7 @@
         <h1 class="text-xs-center">Login</h1>
         <div id="sign-in-form-messages"></div>
 
-        <form method="POST" hx-post="/htmx/sign-in" hx-target="#app-body">
+        <form method="POST" hx-indicator="#spinner" hx-post="/htmx/sign-in" hx-target="#app-body">
           @include('sign-in.partials.form-fields')
         </form>
       </div>

@@ -1,7 +1,7 @@
 <div id="form-message"></div>
 
 <form id="article-comment-form" class="card comment-form"
-  hx-post="/htmx/articles/{{ $article->slug }}/comments" 
+  hx-indicator="#spinner" hx-post="/htmx/articles/{{ $article->slug }}/comments" 
   hx-target="#article-comments-wrapper" hx-swap="afterbegin show:top"
   @if (isset($oob_swap))
     hx-swap-oob="true"

@@ -3,7 +3,7 @@
 <form
   action="/import"
   method="POST"
-  hx-post="/htmx/import"
+  hx-indicator="#spinner" hx-post="/htmx/import"
   id="import-form"
   enctype="multipart/form-data"
   @if (isset($oob_swap) && $oob_swap)
@@ -18,7 +18,7 @@
 <form
   action="/import/csv"
   method="POST"
-  hx-post="/htmx/import/csv"
+  hx-indicator="#spinner" hx-post="/htmx/import/csv"
   id="import-form"
   enctype="multipart/form-data"
   @if (isset($oob_swap) && $oob_swap)

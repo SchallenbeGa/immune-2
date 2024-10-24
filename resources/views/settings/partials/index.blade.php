@@ -11,7 +11,7 @@
       </div>
 
       <div class="col-md-6 col-md-offset-3">
-        <button class="btn btn-outline-danger" hx-post="/htmx/logout">
+        <button class="btn btn-outline-danger" hx-indicator="#spinner" hx-post="/htmx/logout">
           Or click here to logout.
         </button>
       </div>

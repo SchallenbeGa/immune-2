@@ -1,50 +1,4 @@
-<style>
-    /* Spinner */
-#spinne {
-    display:none;
-    border: 16px solid #f3f3f3; /* Light gray */
-    border-top: 16px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 2s linear infinite;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000; /* S'assurer qu'il est au-dessus du reste */
-}
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-/* Style de base pour le menu */
-.dropdown-menu {
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    padding: 10px;
-    position: absolute;
-    top: 50px; /* Ajuste selon la position de ton bouton */
-    left: 0;
-    z-index: 1000;
-    width: 200px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-}
-
-/* Ajuste les boutons à l'intérieur du menu */
-.dropdown-menu button {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-/* Cache le menu lorsqu'il est masqué */
-.dropdown-menu.hidden {
-    display: none;
-}
-
-</style>
 <div class="home-page">
   <div class="banner">
     <div class="container">
@@ -91,10 +45,8 @@
     </div>
   </div>
 </div>
-
-
 <script>
-    // Sélectionne le bouton "Importation" et le menu
+     // Sélectionne le bouton "Importation" et le menu
 const importBtn = document.getElementById('importBtn');
 const importMenu = document.getElementById('importMenu');
 
@@ -115,8 +67,8 @@ window.addEventListener('click', function(event) {
     }
 });
 
-    htmx.ajax('GET', '/computers/count', '#count')
-    const spinner = document.getElementById('spinne');
+htmx.ajax('GET', '/computers/count', '#count')
+let spinner = document.getElementById('spinne');
 
 // Fonction pour afficher le spinner
 function showSpinner() {
@@ -132,7 +84,8 @@ function hideSpinner() {
 
 // Affiche le spinner avant le chargement des données
 showSpinner();
-    var table = new Tabulator("#computer-table", {
+
+var table = new Tabulator("#computer-table", {
         ajaxURL: "{{ route('computers.json') }}", 
         height: "500px", // Hauteur du tableau
         layout: "fitColumns", // Ajuster les colonnes à la largeur du tableau
@@ -254,3 +207,4 @@ showSpinner();
         });
 }
 </script>
+

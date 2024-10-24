@@ -1,7 +1,7 @@
 <form
   action="/settings"
   method="POST"
-  hx-post="/htmx/settings"
+  hx-indicator="#spinner" hx-post="/htmx/settings"
   id="settings-form"
   
   @if (isset($oob_swap) && $oob_swap)
@@ -23,7 +23,7 @@
   <fieldset class="form-group">
     <input class="form-control form-control-lg" type="password" placeholder="Password" name="password">
   </fieldset>
-  <button class="btn btn-lg btn-primary pull-xs-right" hx-post="/htmx/settings">
+  <button class="btn btn-lg btn-primary pull-xs-right" hx-indicator="#spinner" hx-post="/htmx/settings">
     Update Settings
   </button>
 </form>

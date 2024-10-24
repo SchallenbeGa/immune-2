@@ -2,9 +2,9 @@
 <form method="post"
 
 @if (isset($article))
-  hx-post="/htmx/editor/{{ $article->slug }}"
+  hx-indicator="#spinner" hx-post="/htmx/editor/{{ $article->slug }}"
 @else
-  hx-post="/htmx/editor"
+  hx-indicator="#spinner" hx-post="/htmx/editor"
 @endif
 
 hx-target="#app-body"
