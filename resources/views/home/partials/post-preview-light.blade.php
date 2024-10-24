@@ -18,7 +18,7 @@
         hx-target="#app-body"
         class="preview-link"
       >
-        <p>{{ $article->description }}</p>
+        {{ $article->description }}
 
       
       </a>
