@@ -49,7 +49,7 @@
 
 // Délégation d'événement : On attache l'écouteur sur le conteneur parent
 document.getElementById("app-body").addEventListener("click", function(event) {
-    if (event.target.tagName === "H1" || event.target.tagName === "A") {
+    if (event.target.tagName === "H1" || (event.target.tagName === "A" && event.target.hasAttribute("hx-get"))) {
         event.preventDefault(); // Empêche le comportement par défaut du lien
         scrollToTop(); // Appelle la fonction pour défiler vers le haut
     }
