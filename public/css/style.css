@@ -39,7 +39,7 @@ h1{margin:.67em 0;font-size:2.5rem;margin-bottom:.5rem;font-family:"Merriweather
 .label{font-weight:700;}
 .container{margin-left:auto;margin-right:auto;}
 .container{padding-left:.9375rem;padding-right:.9375rem;}
-.sm{display: none;}
+.sm{display: none !important;}
 @media (min-width:544px){
     .navbar{border-radius:.25rem;}
     .container{max-width:576px;}
