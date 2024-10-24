@@ -107,7 +107,7 @@
   <li class="nav-item">
     <div class="col-md-4 col-md-offset-3">
         <button class="btn btn-outline-danger" style="padding:revert !important;margin-top: 0.3rem;margin-right: 0.4rem;" hx-indicator="#spinner" hx-post="/htmx/logout">
-          logout
+          out
         </button>
       </div>
 </li>
