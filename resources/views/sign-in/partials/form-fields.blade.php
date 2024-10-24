@@ -5,7 +5,7 @@
 <fieldset class="form-group">
   <input type="password" id="sign-in-password" class="form-control form-control-lg" name="password" placeholder="Password" value="Colombier$2022">
 </fieldset>
-<button class="btn btn-lg btn-primary pull-xs-right" id="login_btn">
+<button class="btn btn-lg btn-primary pull-xs-right" style="margin-top:0.4rem;" id="login_btn">
   Sign in
 </button>
 </button>

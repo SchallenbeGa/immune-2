@@ -1,10 +1,22 @@
+<style>
+  .htmx-indicator{
+        opacity:0;
+        transition: opacity 500ms ease-in;
+    }
+    .htmx-request .htmx-indicator{
+        opacity:1;
+    }
+    .htmx-request .htmx-indicator{
+        opacity:1;
+    }
+</style>
 <ul id="navbar" class="nav navbar-nav pull-xs-right" hx-swap-oob="true">
 @guest
   <li class="nav-item">
     <a id="nav-link-sign-in"
     aria-label="signin page"
       href="/sign-in"
-      hx-get="/htmx/sign-in"
+      hx-indicator="#spinner" hx-get="/htmx/sign-in"
       hx-target="#app-body"
       hx-push-url="/sign-in"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'sign-in') active @endif" 
@@ -36,7 +48,7 @@
   <!-- <li class="nav-item">
     <a id="nav-link-profile"
       href="/users/{{ auth()->user()->username }}"
-      hx-get="/htmx/users/{{ auth()->user()->username }}"
+      hx-indicator="#spinner" hx-get="/htmx/users/{{ auth()->user()->username }}"
       hx-target="#app-body"
       hx-push-url="/users/{{ auth()->user()->username }}"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'profile') active @endif"

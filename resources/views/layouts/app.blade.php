@@ -20,8 +20,8 @@
     <nav class="navbar navbar-light">
       <div class="container">
         <a class="navbar-brand" 
-          href="/">inventory0</a>
-          
+          href="/">inventory0 <img id="spinner" style="height: 16px;" class="htmx-indicator" src="/assets/images/audio.svg"/></a>
+         
         @include('components.navbar')
       </div>
     </nav>

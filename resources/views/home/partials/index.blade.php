@@ -1,3 +1,50 @@
+<style>
+    /* Spinner */
+#spinne {
+    display:none;
+    border: 16px solid #f3f3f3; /* Light gray */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* S'assurer qu'il est au-dessus du reste */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* Style de base pour le menu */
+.dropdown-menu {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 10px;
+    position: absolute;
+    top: 50px; /* Ajuste selon la position de ton bouton */
+    left: 0;
+    z-index: 1000;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* Ajuste les boutons à l'intérieur du menu */
+.dropdown-menu button {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Cache le menu lorsqu'il est masqué */
+.dropdown-menu.hidden {
+    display: none;
+}
+
+</style>
 <div class="home-page">
   <div class="banner">
     <div class="container">
@@ -11,8 +58,9 @@
         
       <div class="row">
         @include('home.partials.form-message')
-    
+        <div id="importMenu" class="dropdown-menu" style="display: none;">
         @include('home.partials.import')
+        </div>
         <hr>
         <br>
         <!-- <div id="inventory-preview-light"
@@ -22,14 +70,21 @@
         ></div>
        -->
        <div class="col-md-12 col-xs-12" style="margin-bottom:1rem;">
-       <button class="btn btn-lg btn-primary" id="exportBtn">Export to CSV</button>
-       <button class="btn btn-lg btn-primary" id="printBtn">Print All QR Codes</button>
-       </div>
+    <!-- Bouton pour afficher le menu d'importation -->
+    <button class="btn btn-lg btn-primary" style="margin:0.2rem;" id="importBtn">Importation</button>
+
+    <!-- Menu qui apparaît lorsqu'on clique sur le bouton "Importation" -->
+    
+        <button class="btn btn-primary" style="margin:0.2rem;" id="exportBtn">Export to CSV</button>
+        <button class="btn btn-primary" style="margin:0.2rem;" id="printBtn">Print All QR Codes</button>
+    </div>
+
        <div class="col-md-12 col-xs-12">
        <div id="qr-codes-container" style="display:none;"></div>
        <button id="get-data-btn" style="display:none;">Générer QR Codes</button>
        <div id="qr-container"></div>
        <p id="count">loading..</p>
+       <div id="spinne"></div>
        <div id="computer-table"></div>
        <div id="qr-codes"></div>
 </div>
@@ -39,9 +94,46 @@
 
 
 <script>
+    // Sélectionne le bouton "Importation" et le menu
+const importBtn = document.getElementById('importBtn');
+const importMenu = document.getElementById('importMenu');
+
+// Gérer l'affichage et le masquage du menu lors du clic
+importBtn.addEventListener('click', function() {
+    // Vérifie si le menu est déjà visible ou non
+    if (importMenu.style.display === 'none' || importMenu.style.display === '') {
+        importMenu.style.display = 'block'; // Affiche le menu
+    } else {
+        importMenu.style.display = 'none'; // Masque le menu
+    }
+});
+
+// Optionnel : Fermer le menu si l'utilisateur clique en dehors de celui-ci
+window.addEventListener('click', function(event) {
+    if (!importBtn.contains(event.target) && !importMenu.contains(event.target)) {
+        importMenu.style.display = 'none'; // Masque le menu si on clique en dehors
+    }
+});
+
     htmx.ajax('GET', '/computers/count', '#count')
+    const spinner = document.getElementById('spinne');
+
+// Fonction pour afficher le spinner
+function showSpinner() {
+    spinner.style.display = 'block';
+    document.getElementById('spinner').classList.add("htmx-request");
+}
+
+// Fonction pour cacher le spinner
+function hideSpinner() {
+    spinner.style.display = 'none';
+    document.getElementById('spinner').classList.remove("htmx-request");
+}
+
+// Affiche le spinner avant le chargement des données
+showSpinner();
     var table = new Tabulator("#computer-table", {
-        ajaxURL: "{{ route('computers.json') }}", // URL pour charger les données JSON
+        ajaxURL: "{{ route('computers.json') }}", 
         height: "500px", // Hauteur du tableau
         layout: "fitColumns", // Ajuster les colonnes à la largeur du tableau
         paginationSize: 10, // Nombre de lignes par page
@@ -69,6 +161,10 @@
                     }
                 }
         ],
+        ajaxResponse: function(url, params, response) {
+            hideSpinner(); // Cache le spinner après le chargement
+        return response; // Renvoie la réponse des données
+    },
     });
     table.on("rowClick", function(e, row){
         var rowData = row.getData();
