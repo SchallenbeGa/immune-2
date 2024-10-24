@@ -56,9 +56,8 @@ h1{margin:.67em 0;font-size:2.5rem;margin-bottom:.5rem;font-family:"Merriweather
 @media (max-width:500px){
     .navbar-brand{padding-top: .425rem;
         padding-bottom: .425rem;
-        padding-left: 0;
-    display: none;}
-    .sm{display: inline;}
+        padding-left: 0;}
+   
     .row{display:block;}
 }
 
