@@ -7,6 +7,11 @@
   crossorigin="anonymous"></script>
 <!-- Styles for modal -->
 <style>
+  @media (min-width: 500px) {
+    .col-md-9{
+    margin-left: 15%;
+    }
+  }
  .modal {
     display: none;
     position: fixed;
@@ -18,7 +23,6 @@
     overflow: auto; /* Enable scrolling if needed */
     background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
   }
-  .container{max-width: 576px !important;}
   .modal-content {
     background-color: #fff;
     margin: 5% auto; /* 5% from the top and centered */
@@ -75,8 +79,6 @@
 
 <div class="container">
     @auth
-<!-- Bouton pour ouvrir le modal -->
-<button id="openModalBtn" data-modal="siteModal" style="margin-bottom:1rem;" class="open-modal-btn btn btn-primary">Ajouter un site</button>
 
 <!-- Modal -->
 <div id="siteModal" class="modal">
@@ -117,10 +119,11 @@
     @endauth
    
     <div class="floating-text"></div>
+    <div class="col-md-9">
     <div class="service-container" style="max-width: 706px;"></div>
+    </div>
      @foreach ($sites as $site)
    <!-- Button to trigger modal -->
-<button id="openModalButton" data-modal="editSiteModal{{$site->id}}" style="margin:1rem;" class="btn open-modal-btn">Modifier {{$site->name}}</button>
 
 <!-- Modal -->
 <div id="editSiteModal{{$site->id}}" class="modal">
@@ -190,6 +193,8 @@
 </div>
 
      @endforeach
+<!-- Bouton pour ouvrir le modal -->
+<button id="openModalBtn" data-modal="siteModal" style="margin:1rem;" class="open-modal-btn btn btn-primary">Ajouter un site</button>
 
     <h1>hors ligne par date</h1>
 
@@ -216,41 +221,6 @@
 @endif
 
 </div>
-<script>
- // Sélectionne tous les boutons qui ouvrent un modal
-const openModalBtns = document.querySelectorAll(".open-modal-btn");
-
-// Sélectionne tous les boutons de fermeture (les éléments avec la classe "close")
-const closeModalBtns = document.querySelectorAll(".modal .close");
-
-// Ouvrir le modal correspondant lorsque l'utilisateur clique sur un bouton
-openModalBtns.forEach(btn => {
-    btn.addEventListener("click", function() {
-        const modalId = btn.getAttribute("data-modal"); // Récupère l'ID du modal à ouvrir
-        const modal = document.getElementById(modalId); // Sélectionne le modal par son ID
-        modal.style.display = "flex"; // Affiche le modal
-    });
-});
-
-// Fermer le modal lorsqu'on clique sur le bouton de fermeture (le "X")
-closeModalBtns.forEach(btn => {
-    btn.addEventListener("click", function() {
-        const modal = btn.closest(".modal"); // Trouve le modal parent de ce bouton de fermeture
-        modal.style.display = "none"; // Cache le modal
-    });
-});
-
-// Fermer le modal quand l'utilisateur clique en dehors du contenu
-window.addEventListener("click", function(event) {
-    const modals = document.querySelectorAll(".modal");
-    modals.forEach(modal => {
-        if (event.target == modal) {
-            modal.style.display = "none"; // Cache le modal
-        }
-    });
-});
-
-</script>
 <script>
     function CalculateDate(from, days) {
     var split = from.split('.');
@@ -389,7 +359,7 @@ console.log("Nombre de jours distincts:", uniqueDays.size);
     var chartHtml = `<div id="service-${id}" data-id="${id}">
         <span class="service-name draggable">
             <span> <a href="/sites/${id}">${name}
-                  </a></span>&nbsp;&nbsp;
+                  </a></span>&nbsp;&nbsp;<button id="openModalButton" data-modal="editSiteModal${id}" style="margin:1rem;" class="btn open-modal-btn">Modifier</button>
             <?php echo isset($_SESSION['user']) ? '<span title="edit" class="force-link text-small hover-text" onclick="EditService(${id});"><i class="fas fa-edit"></i></span>&nbsp;' : ''; ?>
             <?php echo isset($_SESSION['user']) ? '<span title="delete" class="force-link text-small hover-text" onclick="DeleteService(${id});"><i class="fas fa-trash"></i></span>' : ''; ?>
         </span>
@@ -446,6 +416,37 @@ console.log("Nombre de jours distincts:", uniqueDays.size);
         $(".floating-text").hide();
     });
 }
+// Sélectionne tous les boutons qui ouvrent un modal
+const openModalBtns = document.querySelectorAll(".open-modal-btn");
 
+// Sélectionne tous les boutons de fermeture (les éléments avec la classe "close")
+const closeModalBtns = document.querySelectorAll(".modal .close");
+
+// Ouvrir le modal correspondant lorsque l'utilisateur clique sur un bouton
+openModalBtns.forEach(btn => {
+    btn.addEventListener("click", function() {
+        const modalId = btn.getAttribute("data-modal"); // Récupère l'ID du modal à ouvrir
+        const modal = document.getElementById(modalId); // Sélectionne le modal par son ID
+        modal.style.display = "flex"; // Affiche le modal
+    });
+});
+
+// Fermer le modal lorsqu'on clique sur le bouton de fermeture (le "X")
+closeModalBtns.forEach(btn => {
+    btn.addEventListener("click", function() {
+        const modal = btn.closest(".modal"); // Trouve le modal parent de ce bouton de fermeture
+        modal.style.display = "none"; // Cache le modal
+    });
+});
+
+// Fermer le modal quand l'utilisateur clique en dehors du contenu
+window.addEventListener("click", function(event) {
+    const modals = document.querySelectorAll(".modal");
+    modals.forEach(modal => {
+        if (event.target == modal) {
+            modal.style.display = "none"; // Cache le modal
+        }
+    });
+});
 </script>
 @endsection
