@@ -74,7 +74,6 @@
 </style>
 
 <div class="container">
-    <h1>JooobCheck</h1>
     @auth
 <!-- Bouton pour ouvrir le modal -->
 <button id="openModalBtn" data-modal="siteModal" style="margin-bottom:1rem;" class="open-modal-btn btn btn-primary">Ajouter un site</button>
