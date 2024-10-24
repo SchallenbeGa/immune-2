@@ -1,5 +1,5 @@
 html{position:relative;min-height:100vh;padding-bottom:100px;font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;box-sizing:border-box;font-size:16px;-ms-overflow-style:scrollbar;-webkit-tap-highlight-color:transparent;}
-.navbar-brand{font-family:"Titillium Web",sans-serif;font-size:1.5rem!important;padding-top:0!important;margin-right:2rem!important;color:#757575!important;}
+.navbar-brand{font-size:1.5rem!important;padding-top:0!important;margin-right:2rem!important;color:#757575!important;}
 .nav-link:hover{transition:.1s all;}
 .nav-pills.outline-active .nav-link{border-radius:0;border:none;border-bottom:2px solid transparent;background:0 0;color:#aaa;}
 .nav-pills.outline-active .nav-link:hover{color:#555;}
