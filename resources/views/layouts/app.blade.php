@@ -19,6 +19,11 @@
           hx-push-url="/"
           hx-indicator="#spinner" hx-get="/htmx/home" 
           hx-target="#app-body"> gabriel0 </a>
+          <a class="navbar-brand-sm" 
+          href="/"
+          hx-push-url="/"
+          hx-indicator="#spinner" hx-get="/htmx/home" 
+          hx-target="#app-body"> g0 </a>
           <img id="spinner" style="margin-top:0.5rem;" class="htmx-indicator" src="/assets/images/bars.svg"/>
         @include('components.navbar')
       </div>
