@@ -39,7 +39,11 @@ h1{margin:.67em 0;font-size:2.5rem;margin-bottom:.5rem;font-family:"Merriweather
 .label{font-weight:700;}
 .container{margin-left:auto;margin-right:auto;}
 .container{padding-left:.9375rem;padding-right:.9375rem;}
-.sm{display: none !important;}
+.sm{display: none;font-family: "Titillium Web", sans-serif;
+    font-size: 1.5rem !important;
+    padding-top: 0 !important;
+    margin-right: 2rem !important;
+    color: #757575 !important;}
 @media (min-width:544px){
     .navbar{border-radius:.25rem;}
     .container{max-width:576px;}
@@ -48,9 +52,10 @@ h1{margin:.67em 0;font-size:2.5rem;margin-bottom:.5rem;font-family:"Merriweather
 @media (min-width:1200px){.container{max-width:1140px;}}
 .row{display:flex;flex-wrap:wrap;}
 .col-md-3,.col-md-6,.col-md-9{position:relative;min-height:1px;padding-left:.9375rem;padding-right:.9375rem;}
+@media (max-width:390px){.sm{display: none !important;}}
 @media (max-width:500px){
     .navbar-brand{display: none;}
-    .sm{display: block !important;}
+    .sm{display: inline;}
     .row{display:block;}
 }
 
