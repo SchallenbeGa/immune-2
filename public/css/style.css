@@ -235,9 +235,16 @@ table tbody tr:hover {
 table tbody tr:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
-
+.navbar{
+    z-index:2;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    background-color: white;
+}
 /* Responsive: assurer que la table s'adapte bien aux écrans étroits */
 @media screen and (max-width: 600px) {
+   
     table {
         border: 0;
     }
