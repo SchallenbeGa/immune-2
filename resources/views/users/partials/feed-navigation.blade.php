@@ -4,7 +4,7 @@
       <a class="nav-link {{ $item['is_active'] ? 'active' : '' }}"
         href="{{ $item['url'] }}"
         hx-push-url="{{ $item['url'] }}"
-        hx-get="{{ $item['hx_get_url'] }}"
+        hx-indicator="#spinner" hx-get="{{ $item['hx_get_url'] }}"
         hx-trigger="click"
         hx-target="#user-post-preview"
       >

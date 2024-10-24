@@ -1,15 +1,33 @@
+<style>  
+.nav-link img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+    .htmx-indicator{
+        opacity:0;
+        transition: opacity 500ms ease-in;
+    }
+    .htmx-request .htmx-indicator{
+        opacity:1;
+    }
+    .htmx-request .htmx-indicator{
+        opacity:1;
+    }</style>
 <ul id="navbar" class="nav navbar-nav pull-xs-right" hx-swap-oob="true">
   <li class="nav-item">
     <a id="nav-link-home"
     aria-label="homepage"
       href="/"
-      hx-get="/htmx/home"
+      hx-indicator="#spinner" hx-get="/htmx/home"
       hx-target="#app-body"
       hx-push-url="/"
       class="nav-link @if (!isset($navbar_active) || $navbar_active == 'home') active @endif" 
     >
-      home
+      home 
     </a>
+    
   </li>
   <li class="nav-item">
   <a class="nav-link @if (isset($navbar_active) && $navbar_active == 'analyse') active @endif" href="{{ route('analyse.index') }}">analyse</a>
@@ -19,7 +37,8 @@
     <a id="nav-link-sign-in"
     aria-label="signin page"
       href="/sign-in"
-      hx-get="/htmx/sign-in"
+       hx-indicator="#spinner"
+      hx-indicator="#spinner" hx-get="/htmx/sign-in"
       hx-target="#app-body"
       hx-push-url="/sign-in"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'sign-in') active @endif" 
@@ -31,7 +50,8 @@
     <a id="nav-link-sign-up"
     aria-label="signup page"
       href="/sign-up"
-      hx-get="/htmx/sign-up"
+       hx-indicator="#spinner"
+      hx-indicator="#spinner" hx-get="/htmx/sign-up"
       hx-target="#app-body"
       hx-push-url="/sign-up"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'sign-up') active @endif" 
@@ -47,7 +67,8 @@
     <a id="nav-link-editor"
     aria-label="new article page"
       href="/editor"
-      hx-get="/htmx/editor"
+       hx-indicator="#spinner"
+      hx-indicator="#spinner" hx-get="/htmx/editor"
       hx-target="#app-body"
       hx-push-url="/editor"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'editor') active @endif"
@@ -62,7 +83,7 @@
     <a id="nav-link-settings"
     aria-label="user's setting page"
       href="/settings"
-      hx-get="/htmx/settings"
+      hx-indicator="#spinner" hx-get="/htmx/settings"
       hx-target="#app-body"
       hx-push-url="/settings"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'settings') active @endif"
@@ -73,7 +94,7 @@
   <!-- <li class="nav-item">
     <a id="nav-link-profile"
       href="/users/{{ auth()->user()->username }}"
-      hx-get="/htmx/users/{{ auth()->user()->username }}"
+      hx-indicator="#spinner" hx-get="/htmx/users/{{ auth()->user()->username }}"
       hx-target="#app-body"
       hx-push-url="/users/{{ auth()->user()->username }}"
       class="nav-link @if (isset($navbar_active) && $navbar_active == 'profile') active @endif"
@@ -83,7 +104,7 @@
   </li> -->
   <li class="nav-item">
     <div class="col-md-4 col-md-offset-3">
-        <button class="btn btn-outline-danger" hx-post="/htmx/logout">
+        <button class="btn btn-outline-danger" style="padding:revert !important;margin-top: 0.3rem;margin-right: 0.4rem;" hx-indicator="#spinner" hx-post="/htmx/logout">
           logout
         </button>
       </div>

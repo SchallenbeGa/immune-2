@@ -6,7 +6,7 @@
           <a class="page-link"
             href="{{ str_replace('htmx/home/', '', $paginator->path()) }}?page={{ $i }}"
             hx-push-url="{{ str_replace('htmx/home/', '', $paginator->path()) }}?page={{ $i }}"
-            hx-get="{{ $paginator->path() }}?page={{ $i }}"
+            hx-indicator="#spinner" hx-get="{{ $paginator->path() }}?page={{ $i }}"
           >{{ $i }}</a>
         </li>
       @endfor

@@ -2,7 +2,7 @@
   @foreach ($popularTags as $tag)
     <a class="label label-pill label-default"
       href="/tag-feed/{{ str()->slug($tag->name) }}"
-      hx-get="/htmx/home/tag-feed/{{ str()->slug($tag->name) }}"
+      hx-indicator="#spinner" hx-get="/htmx/home/tag-feed/{{ str()->slug($tag->name) }}"
       hx-target="#feed-post-preview"
       hx-push-url="/tag-feed/{{ str()->slug($tag->name) }}"
     >{{ $tag->name }}</a>

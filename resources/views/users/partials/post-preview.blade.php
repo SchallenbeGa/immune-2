@@ -4,7 +4,7 @@
       <div class="post-meta">
         <a href="/users/{{ $article->user->username }}"
           hx-push-url="/users/{{ $article->user->username }}"
-          hx-get="/htmx/users/{{ $article->user->username }}"
+          hx-indicator="#spinner" hx-get="/htmx/users/{{ $article->user->username }}"
           hx-target="#app-body"
         >
         
@@ -22,7 +22,7 @@
       </div>
       <a href="/articles/{{ $article->slug }}"
         hx-push-url="/articles/{{ $article->slug }}"
-        hx-get="/htmx/articles/{{ $article->slug }}"
+        hx-indicator="#spinner" hx-get="/htmx/articles/{{ $article->slug }}"
         hx-target="#app-body"
         class="preview-link"
       >

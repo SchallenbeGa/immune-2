@@ -24,9 +24,9 @@
         
         <div id="user-post-preview"
           @if (isset($load_favorites))
-            hx-get="/htmx/users/{{ $user->username }}/favorites"
+            hx-indicator="#spinner" hx-get="/htmx/users/{{ $user->username }}/favorites"
           @else
-            hx-get="/htmx/users/{{ $user->username }}/articles"
+            hx-indicator="#spinner" hx-get="/htmx/users/{{ $user->username }}/articles"
           @endif
           
           hx-trigger="load"

@@ -49,9 +49,10 @@ h1{margin:.67em 0;font-size:2.5rem;margin-bottom:.5rem;font-family:"Merriweather
 .col-md-3,.col-md-6,.col-md-9{position:relative;min-height:1px;padding-left:.9375rem;padding-right:.9375rem;}
 @media (max-width:500px){
     .row{display:block;}
-   
+    .navbar-brand{display:none;}
 }
 @media (min-width:500px){
+
 .col-md-3{flex:0 0 25%;max-width:25%;}
 .col-md-6{flex:0 0 50%;max-width:50%;}
 .col-md-9{flex:0 0 75%;max-width:75%;}

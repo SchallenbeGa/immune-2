@@ -31,7 +31,7 @@
         <hr>
       <div id="feed-post-preview-light"
           hx-trigger="load"
-          hx-get="/htmx/home/light-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
+          hx-indicator="#spinner" hx-get="/htmx/home/light-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
         ></div>
       </div>
     </div>
@@ -66,7 +66,7 @@
     </div>
 
     <div>
-      <div class="col-md-9" hx-get="/htmx/articles/{{ $article->slug }}/comments" hx-trigger="load"></div>
+      <div class="col-md-9" hx-indicator="#spinner" hx-get="/htmx/articles/{{ $article->slug }}/comments" hx-trigger="load"></div>
     </div>
 
   </div>

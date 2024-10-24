@@ -17,9 +17,9 @@
         <a class="navbar-brand" 
           href="/"
           hx-push-url="/"
-          hx-get="/htmx/home" 
-          hx-target="#app-body">gabriel0</a>
-          
+          hx-indicator="#spinner" hx-get="/htmx/home" 
+          hx-target="#app-body"> gabriel0 </a>
+          <img id="spinner" style="margin-top:0.5rem;" class="htmx-indicator" src="/img/bars.svg"/>
         @include('components.navbar')
       </div>
     </nav>
@@ -48,5 +48,6 @@
         window.location.reload(); // Refresh the page
     }, sessionLifetimeInSeconds * 1000); // Convert seconds to milliseconds for setTimeout
 </script>
+
   </body>
 </html>

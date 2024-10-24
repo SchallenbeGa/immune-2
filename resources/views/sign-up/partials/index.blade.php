@@ -8,7 +8,7 @@
           <a 
             href="/sign-in"
             hx-push-url="/sign-in"
-            hx-get="/htmx/sign-in" 
+            hx-indicator="#spinner" hx-get="/htmx/sign-in" 
             hx-target="#app-body"
           >
             Have an account?
@@ -17,7 +17,7 @@
 
         <div id="sign-up-form-messages"></div>
 
-        <form method="POST" hx-post="/htmx/sign-up" hx-target="#app-body">
+        <form method="POST" hx-post="/htmx/sign-up" hx-indicator="#spinner" hx-target="#app-body">
           @include('sign-up.partials.form-fields')
         </form>
       </div>

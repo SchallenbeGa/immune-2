@@ -19,11 +19,11 @@
           hx-trigger="load"
 
           @if (isset($tag))
-            hx-get="/htmx/home/tag-feed/{{ $tag->name }}{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
+            hx-indicator="#spinner" hx-get="/htmx/home/tag-feed/{{ $tag->name }}{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
           @elseif (isset($personal))
-            hx-get="/htmx/home/your-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
+            hx-indicator="#spinner" hx-get="/htmx/home/your-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
           @else
-            hx-get="/htmx/home/global-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
+            hx-indicator="#spinner" hx-get="/htmx/home/global-feed{{ isset(request()->page) ? '?page=' . request()->page : '' }}"
           @endif
         ></div>
 
@@ -36,7 +36,7 @@
 
           <div id="popular-tag-list" class="tag-list"
             hx-trigger="load"
-            hx-get="/htmx/home/tag-list"
+            hx-indicator="#spinner" hx-get="/htmx/home/tag-list"
           ></div>
         </div>
       </div>

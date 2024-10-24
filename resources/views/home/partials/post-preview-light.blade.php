@@ -14,7 +14,7 @@
       </div>
       <a href="/articles/{{ $article->slug }}"
         hx-push-url="/articles/{{ $article->slug }}"
-        hx-get="/htmx/articles/{{ $article->slug }}"
+        hx-indicator="#spinner" hx-get="/htmx/articles/{{ $article->slug }}"
         hx-target="#app-body"
         class="preview-link"
       >
