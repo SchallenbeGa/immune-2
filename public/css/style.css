@@ -39,6 +39,7 @@ h1{margin:.67em 0;font-size:2.5rem;margin-bottom:.5rem;font-family:"Merriweather
 .label{font-weight:700;}
 .container{margin-left:auto;margin-right:auto;}
 .container{padding-left:.9375rem;padding-right:.9375rem;}
+.sm{display: none;}
 @media (min-width:544px){
     .navbar{border-radius:.25rem;}
     .container{max-width:576px;}
@@ -49,10 +50,10 @@ h1{margin:.67em 0;font-size:2.5rem;margin-bottom:.5rem;font-family:"Merriweather
 .col-md-3,.col-md-6,.col-md-9{position:relative;min-height:1px;padding-left:.9375rem;padding-right:.9375rem;}
 @media (max-width:500px){
     .navbar-brand{display: none;}
-    .navbar-brand-sm{display: block;}
+    .sm{display: block !important;}
     .row{display:block;}
 }
-.navbar-brand-sm{display: none;}
+
 @media (min-width:500px){
 
 .col-md-3{flex:0 0 25%;max-width:25%;}

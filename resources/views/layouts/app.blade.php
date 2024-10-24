@@ -19,7 +19,7 @@
           hx-push-url="/"
           hx-indicator="#spinner" hx-get="/htmx/home" 
           hx-target="#app-body"> gabriel0 </a>
-          <a class="navbar-brand-sm" 
+          <a class="navbar-brand sm" 
           href="/"
           hx-push-url="/"
           hx-indicator="#spinner" hx-get="/htmx/home" 
