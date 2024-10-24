@@ -46,7 +46,7 @@ class DashboardController extends Controller
         // Nombre de visites par navigateur, pays, et date pour les graphiques
         $visitsByBrowser = Visit::selectRaw('user_agent, COUNT(*) as count')->groupBy('user_agent')->get();
         $visitsByCountry = Visit::selectRaw('country, COUNT(*) as count')->groupBy('country')->get();
-        $visitsByDate = Visit::selectRaw('DATE(created_at) as date, COUNT(*) as count')->groupBy('date')->orderBy('date', 'desc')->get();
+        $visitsByDate = Visit::selectRaw('DATE(created_at) as date, COUNT(*) as count')->groupBy('date')->orderBy('date', 'asc')->get();
 
         return view('dashboard.index',['navbar_active'=>'analyse'], compact('visits', 'visitsByBrowser', 'visitsByCountry', 'visitsByDate', 'browser', 'os', 'country', 'search'));
     }

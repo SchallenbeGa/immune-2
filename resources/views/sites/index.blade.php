@@ -18,7 +18,7 @@
     overflow: auto; /* Enable scrolling if needed */
     background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
   }
-
+  .container{max-width: 576px !important;}
   .modal-content {
     background-color: #fff;
     margin: 5% auto; /* 5% from the top and centered */
@@ -76,45 +76,55 @@
 <div class="container">
     <h1>JooobCheck</h1>
     @auth
-    <!-- Formulaire d'ajout de site -->
-    <form action="{{ route('sites.store') }}" method="POST">
-        @csrf
-        <div class="mb-3">
-            <label for="name" class="form-label">Nom du site</label>
-            <input type="text" name="name" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="url" class="form-label">URL</label>
-            <input type="url" name="url" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="type" class="form-label">Type (HTTP,ICMP)</label>
-            <input type="type" name="type" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="port" class="form-label">Port</label>
-            <input type="port" name="port" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="method" class="form-label">Method</label>
-            <input type="method" name="method" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="header" class="form-label">Header</label>
-            <input type="header" name="header" class="form-control">
-        </div>
-        <button type="submit" style="margin-top:1rem;" class="btn btn-primary">Ajouter le site</button>
-    </form>
+<!-- Bouton pour ouvrir le modal -->
+<button id="openModalBtn" data-modal="siteModal" style="margin-bottom:1rem;" class="open-modal-btn btn btn-primary">Ajouter un site</button>
+
+<!-- Modal -->
+<div id="siteModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <!-- Formulaire d'ajout de site -->
+        <form action="{{ route('sites.store') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="name" class="form-label">Nom du site</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="url" class="form-label">URL</label>
+                <input type="url" name="url" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="type" class="form-label">Type (HTTP,ICMP)</label>
+                <input type="type" name="type" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="port" class="form-label">Port</label>
+                <input type="port" name="port" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="method" class="form-label">Method</label>
+                <input type="method" name="method" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="header" class="form-label">Header</label>
+                <input type="header" name="header" class="form-control">
+            </div>
+            <button type="submit" style="margin:1rem;" class="btn btn-primary">Ajouter le site</button>
+        </form>
+    </div>
+</div>
+
     @endauth
    
     <div class="floating-text"></div>
     <div class="service-container" style="max-width: 706px;"></div>
      @foreach ($sites as $site)
    <!-- Button to trigger modal -->
-<button id="openModalButton" style="margin:1rem;" class="btn">Modifier {{$site->name}}</button>
+<button id="openModalButton" data-modal="editSiteModal{{$site->id}}" style="margin:1rem;" class="btn open-modal-btn">Modifier {{$site->name}}</button>
 
 <!-- Modal -->
-<div id="editSiteModal" class="modal">
+<div id="editSiteModal{{$site->id}}" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Modifier le site</h2>
@@ -208,36 +218,39 @@
 
 </div>
 <script>
-  // Get the modal
-  var modal = document.getElementById("editSiteModal");
+ // Sélectionne tous les boutons qui ouvrent un modal
+const openModalBtns = document.querySelectorAll(".open-modal-btn");
 
-  // Get the button that opens the modal
-  var openModalButton = document.getElementById("openModalButton");
+// Sélectionne tous les boutons de fermeture (les éléments avec la classe "close")
+const closeModalBtns = document.querySelectorAll(".modal .close");
 
-  // Get the <span> element that closes the modal
-  var closeModalButton = document.getElementsByClassName("close")[0];
-  var closeModalButtonFooter = document.getElementById("closeModalButton");
+// Ouvrir le modal correspondant lorsque l'utilisateur clique sur un bouton
+openModalBtns.forEach(btn => {
+    btn.addEventListener("click", function() {
+        const modalId = btn.getAttribute("data-modal"); // Récupère l'ID du modal à ouvrir
+        const modal = document.getElementById(modalId); // Sélectionne le modal par son ID
+        modal.style.display = "flex"; // Affiche le modal
+    });
+});
 
-  // When the user clicks the button, open the modal
-  openModalButton.onclick = function() {
-    modal.style.display = "block";
-  }
+// Fermer le modal lorsqu'on clique sur le bouton de fermeture (le "X")
+closeModalBtns.forEach(btn => {
+    btn.addEventListener("click", function() {
+        const modal = btn.closest(".modal"); // Trouve le modal parent de ce bouton de fermeture
+        modal.style.display = "none"; // Cache le modal
+    });
+});
 
-  // When the user clicks on <span> (x), close the modal
-  closeModalButton.onclick = function() {
-    modal.style.display = "none";
-  }
+// Fermer le modal quand l'utilisateur clique en dehors du contenu
+window.addEventListener("click", function(event) {
+    const modals = document.querySelectorAll(".modal");
+    modals.forEach(modal => {
+        if (event.target == modal) {
+            modal.style.display = "none"; // Cache le modal
+        }
+    });
+});
 
-  closeModalButtonFooter.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
 </script>
 <script>
     function CalculateDate(from, days) {

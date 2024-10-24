@@ -11,12 +11,13 @@
             <canvas id="browserChart"></canvas>
         </div>
         <div class="col">
+            <canvas id="dateChart"></canvas>
+        </div>
+        <div class="col">
             <canvas id="countryChart"></canvas>
         </div>
 
-        <div class="col">
-            <canvas id="dateChart"></canvas>
-        </div>
+        
     </div>
       <!-- Formulaire de filtrage et recherche -->
       <form method="GET" action="{{ route('dashboard.index') }}" class="mb-4">
