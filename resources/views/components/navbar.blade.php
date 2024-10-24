@@ -29,9 +29,11 @@
     </a>
     
   </li>
+  @auth
   <li class="nav-item">
   <a class="nav-link @if (isset($navbar_active) && $navbar_active == 'analyse') active @endif" href="{{ route('analyse.index') }}">analyse</a>
   </li>
+  @endauth
   @guest
   <li class="nav-item">
     <a id="nav-link-sign-in"
